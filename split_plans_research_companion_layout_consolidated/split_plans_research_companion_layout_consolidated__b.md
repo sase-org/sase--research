@@ -67,7 +67,7 @@ assuming a fixed directory, and let research stay lazy — only `--ensure` when 
 needed. Deprecated `sdd.storage` / `sdd.version_controlled` keys are ignored and stripped;
 `sase doctor` reports where to remove them.
 
-![Split companion layout](split_companion_layout_smoke_20260711_infographic.png)
+![Split companion layout](../202607/split_companion_layout_smoke_20260711_infographic.png)
 
 ## Sources
 

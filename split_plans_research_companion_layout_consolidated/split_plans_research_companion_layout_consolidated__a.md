@@ -9,7 +9,7 @@ artifacts near the source checkout without mixing their lifecycles:
 - `sase--plans` owns monthly plans, prompt snapshots, and bead state.
 - `sase--research` owns monthly research reports and generated media, and is materialized when research is needed.
 
-![Split plans/research companion layout](split_plans_research_companion_layout_infographic.png)
+![Split plans/research companion layout](../202607/split_plans_research_companion_layout_infographic.png)
 
 ## Smoke-test observations
 
