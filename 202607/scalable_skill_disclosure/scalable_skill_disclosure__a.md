@@ -53,7 +53,7 @@ The analysis used:
 - the current effective catalog and `sase skill log --json`;
 - official OpenAI and Agent Skills documentation; and
 - the earlier July 7 report,
-  [Progressive Disclosure of xprompt Skill Descriptions](./xprompt_skill_description_progressive_disclosure.md).
+  [Progressive Disclosure of xprompt Skill Descriptions](../xprompt_skill_description_progressive_disclosure.md).
 
 Use counts below are directional, not a perfect popularity measure. The log is cumulative, includes two uses of the
 retired `sase_artifact` name, and some foundational skills now set `log_skill_use: false`; their historical events
@@ -477,7 +477,7 @@ research does not modify memory.
 - [Agent Skills description optimization](https://agentskills.io/skill-creation/optimizing-descriptions)
 - [OpenAI: Build skills](https://developers.openai.com/plugins/build/skills)
 - [OpenAI/ChatGPT: Build skills](https://learn.chatgpt.com/docs/build-skills)
-- [Earlier SASE progressive-disclosure research](./xprompt_skill_description_progressive_disclosure.md)
+- [Earlier SASE progressive-disclosure research](../xprompt_skill_description_progressive_disclosure.md)
 
 ## Recommended solution
 

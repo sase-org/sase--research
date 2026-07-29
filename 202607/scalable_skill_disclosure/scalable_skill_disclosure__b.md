@@ -21,7 +21,7 @@ deploys nowhere.** Bundling today's set cuts the Level-1 listing by ~33% (~43% w
 real payoff is the derivative: skill #19 onward costs ~0 instead of ~170 characters.
 
 This report supersedes the recommendation in
-[`xprompt_skill_description_progressive_disclosure.md`](./xprompt_skill_description_progressive_disclosure.md)
+[`xprompt_skill_description_progressive_disclosure.md`](../xprompt_skill_description_progressive_disclosure.md)
 (2026-07-07), which proposed a flat two-tier catalog behind one `sase_skill_find` skill. That report's analysis of
 runtime budgets and prior art still holds; what changed is (a) new evidence about how the deferral unit affects recall,
 and (b) three verified facts about the current tree and the Claude runtime that were not in scope then. None of its
@@ -392,7 +392,7 @@ Research literature:
 
 Prior sase research:
 
-- [`xprompt_skill_description_progressive_disclosure.md`](./xprompt_skill_description_progressive_disclosure.md)
+- [`xprompt_skill_description_progressive_disclosure.md`](../xprompt_skill_description_progressive_disclosure.md)
   (2026-07-07)
 
 Repo anchors (verified 2026-07-29; line numbers will drift): `src/sase/main/_init_skills_sources.py`,
