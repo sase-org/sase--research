@@ -19,7 +19,7 @@ jumpers — so they become contract features rather than Patch features.
 `4170150` (`v0.27.2`, opened via `/sase_repo`). Every defect and behavioural claim below
 was re-verified by executing code in workspace `sase_12` after `just install`, not
 inferred from reading. This report supersedes and extends
-[`artifacts_pane_contract.md`](artifacts_pane_contract/artifacts_pane_contract.md)
+[`artifacts_pane_contract.md`](../artifacts_pane_contract/artifacts_pane_contract.md)
 (2026-08-12, written at `888453d39`); §1 records exactly what changed underneath it,
 because roughly half of that report's defect inventory has since been fixed and one of
 its central recommendations — keep Patch out — is the thing the owner has now overruled.
