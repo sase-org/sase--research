@@ -16,9 +16,9 @@ shells**?
 `41701509f` (`v0.27.2`), and the live Proc store. This report revisits and supersedes the
 obsolete parts of:
 
-- [`detached_proc_convergence`](detached_proc_convergence/detached_proc_convergence.md),
-- [`sase_shell_named_procs`](sase_shell_named_procs/sase_shell_named_procs.md), and
-- [`monitor_command_substrate`](monitor_command_substrate/monitor_command_substrate.md).
+- [`detached_proc_convergence`](../detached_proc_convergence/detached_proc_convergence.md),
+- [`sase_shell_named_procs`](../sase_shell_named_procs/sase_shell_named_procs.md), and
+- [`monitor_command_substrate`](../monitor_command_substrate/monitor_command_substrate.md).
 
 The Proc rename has now landed, but the behavioral convergence has not. The current
 repository still has an ACE-owned callable Proc runtime, three Proc kinds, and a wholly
