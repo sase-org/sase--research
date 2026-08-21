@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts__a.md",
+  "rows": [
+    {
+      "created_at": "2026-08-21T15:52:12Z",
+      "created_by": "research.0u.final",
+      "description": "Consolidates the Codex research report",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts.md",
+      "target_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts__a.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}

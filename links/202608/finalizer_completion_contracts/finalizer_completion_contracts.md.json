@@ -1,0 +1,50 @@
+{
+  "artifact_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts.md",
+  "rows": [
+    {
+      "created_at": "2026-08-21T15:52:12Z",
+      "created_by": "research.0u.final",
+      "description": "Consolidates the Codex research report",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts.md",
+      "target_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts__a.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-08-21T15:52:14Z",
+      "created_by": "research.0u.final",
+      "description": "Consolidates the Grok research report",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts.md",
+      "target_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts__b.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-08-21T15:52:15Z",
+      "created_by": "research.0u.final",
+      "description": "Analyzes the shipped pluggable finalizer protocol",
+      "origin": "manual",
+      "relation": "related",
+      "schema_version": 2,
+      "source_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts.md",
+      "target_ref": "bead:sase-rn",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-08-21T15:52:17Z",
+      "created_by": "research.0u.final",
+      "description": "Accounts for the ongoing unconditional finalizer epic",
+      "origin": "manual",
+      "relation": "related",
+      "schema_version": 2,
+      "source_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts.md",
+      "target_ref": "bead:sase-rr",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
