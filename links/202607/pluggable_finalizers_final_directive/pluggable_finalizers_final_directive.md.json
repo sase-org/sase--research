@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202607/pluggable_finalizers_final_directive/pluggable_finalizers_final_directive.md",
+  "rows": [
+    {
+      "created_at": "2026-08-21T15:18:57Z",
+      "created_by": "research.0u.cdx",
+      "description": "Need earlier enumerated finalizer use cases so the new report focuses on genuinely new applications rather than repeating prior architecture ideas",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.0u.cdx",
+      "target_ref": "research:202607/pluggable_finalizers_final_directive/pluggable_finalizers_final_directive.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
