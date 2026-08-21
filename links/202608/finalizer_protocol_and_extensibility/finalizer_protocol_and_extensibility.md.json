@@ -11,6 +11,17 @@
       "source_ref": "agent:research.0u.cdx",
       "target_ref": "research:202608/finalizer_protocol_and_extensibility/finalizer_protocol_and_extensibility.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-08-21T15:36:27Z",
+      "created_by": "research.0u.cld",
+      "description": "uses the host-owned protocol design as the capability baseline",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/sase_native_finalizer_use_cases.md",
+      "target_ref": "research:202608/finalizer_protocol_and_extensibility/finalizer_protocol_and_extensibility.md",
+      "uses": 1
     }
   ],
   "schema_version": 2

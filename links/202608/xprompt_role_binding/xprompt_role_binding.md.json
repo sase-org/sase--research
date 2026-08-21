@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/xprompt_role_binding/xprompt_role_binding.md",
+  "rows": [
+    {
+      "created_at": "2026-08-21T15:36:38Z",
+      "created_by": "research.0u.cld",
+      "description": "role tags are the natural binding point for completion profiles",
+      "origin": "manual",
+      "relation": "related",
+      "schema_version": 2,
+      "source_ref": "research:202608/sase_native_finalizer_use_cases.md",
+      "target_ref": "research:202608/xprompt_role_binding/xprompt_role_binding.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
