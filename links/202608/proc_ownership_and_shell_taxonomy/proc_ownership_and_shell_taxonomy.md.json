@@ -1,0 +1,28 @@
+{
+  "artifact_ref": "research:202608/proc_ownership_and_shell_taxonomy/proc_ownership_and_shell_taxonomy.md",
+  "rows": [
+    {
+      "created_at": "2026-08-22T15:58:41Z",
+      "created_by": "research.0w.cld",
+      "description": "Need current proc-shell taxonomy before proposing stand-alone proc shells",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.0w.cld",
+      "target_ref": "research:202608/proc_ownership_and_shell_taxonomy/proc_ownership_and_shell_taxonomy.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-08-22T16:10:21Z",
+      "created_by": "research.0w.cld",
+      "description": "Stand-alone proc shells are the one-shell case the taxonomy left off the critical path",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/stand_alone_proc_shells.md",
+      "target_ref": "research:202608/proc_ownership_and_shell_taxonomy/proc_ownership_and_shell_taxonomy.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
