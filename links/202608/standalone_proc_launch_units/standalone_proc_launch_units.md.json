@@ -13,6 +13,17 @@
       "uses": 1
     },
     {
+      "created_at": "2026-08-22T16:32:15Z",
+      "created_by": "research.0x.cld",
+      "description": "Need launch-unit research as the primary context for a %if conditional launch directive",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.0x.cld",
+      "target_ref": "research:202608/standalone_proc_launch_units/standalone_proc_launch_units.md",
+      "uses": 1
+    },
+    {
       "created_at": "2026-08-22T16:43:33Z",
       "created_by": "research.0x.cdx",
       "description": "Reuses and reconciles the standalone proc report's typed launch-unit, fenced-code, interpreter, and dependency recommendations for conditional preflight predicates",
@@ -31,6 +42,17 @@
       "relation": "derives-from",
       "schema_version": 2,
       "source_ref": "file:explicit:5ba5dd565051f8e13a935433",
+      "target_ref": "research:202608/standalone_proc_launch_units/standalone_proc_launch_units.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-08-22T16:42:42Z",
+      "created_by": "research.0x.cld",
+      "description": "extends typed launch units, CodeValue, and wait-then-admit order for %if",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/xprompt_if_directive.md",
       "target_ref": "research:202608/standalone_proc_launch_units/standalone_proc_launch_units.md",
       "uses": 1
     }
