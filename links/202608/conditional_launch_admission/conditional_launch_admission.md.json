@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/conditional_launch_admission/conditional_launch_admission.md",
+  "rows": [
+    {
+      "created_at": "2026-08-22T16:58:09Z",
+      "created_by": "research.0x.final",
+      "description": "Extends the typed launch-unit and fenced CodeValue architecture with conditional admission",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/conditional_launch_admission/conditional_launch_admission.md",
+      "target_ref": "research:202608/standalone_proc_launch_units/standalone_proc_launch_units.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
