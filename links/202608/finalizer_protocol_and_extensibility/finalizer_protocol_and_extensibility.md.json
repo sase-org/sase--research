@@ -33,6 +33,28 @@
       "source_ref": "research:202608/finalizer_bugs_and_capability_upgrades.md",
       "target_ref": "research:202608/finalizer_protocol_and_extensibility/finalizer_protocol_and_extensibility.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-08-23T13:29:58Z",
+      "created_by": "research.0y.cdx",
+      "description": "Need the accepted finalizer protocol rationale and extension constraints for the tasks-finalizer recommendation",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.0y.cdx",
+      "target_ref": "research:202608/finalizer_protocol_and_extensibility/finalizer_protocol_and_extensibility.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-08-23T13:38:26Z",
+      "created_by": "research.0y.cdx",
+      "description": "Applies the established finalizer protocol to late task-bead review",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/task_types_finalizer_migration.md",
+      "target_ref": "research:202608/finalizer_protocol_and_extensibility/finalizer_protocol_and_extensibility.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
