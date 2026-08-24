@@ -1,15 +1,15 @@
 {
-  "artifact_ref": "research:202608/artifact_link_adoption_and_quality.md",
+  "artifact_ref": "research:202608/ref_provider_contract/ref_provider_contract.md",
   "rows": [
     {
-      "created_at": "2026-08-24T18:27:54Z",
+      "created_at": "2026-08-24T18:15:58Z",
       "created_by": "research.11.cdx",
-      "description": "Extends the original artifact-graph design with adoption measurements and workflow integration",
-      "origin": "manual",
-      "relation": "derives-from",
+      "description": "Compare artifact-link recommendations with the provider-contract research",
+      "origin": "read",
+      "relation": "read",
       "schema_version": 2,
-      "source_ref": "research:202608/artifact_link_adoption_and_quality.md",
-      "target_ref": "research:202608/artifact_link_graph/artifact_link_graph.md",
+      "source_ref": "agent:research.11.cdx",
+      "target_ref": "research:202608/ref_provider_contract/ref_provider_contract.md",
       "uses": 1
     },
     {
