@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/artifact_link_graph/artifact_link_graph.md",
+  "rows": [
+    {
+      "created_at": "2026-08-24T12:41:47Z",
+      "created_by": "research.10.cdx",
+      "description": "Evaluate typed artifact identity and relations as seed ADRs",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.10.cdx",
+      "target_ref": "research:202608/artifact_link_graph/artifact_link_graph.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
