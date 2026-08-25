@@ -19,7 +19,7 @@
       "origin": "manual",
       "relation": "derives-from",
       "schema_version": 2,
-      "source_ref": "research:202608/stand_alone_proc_shells.md",
+      "source_ref": "research:202608/standalone_proc_launch_units/standalone_proc_launch_units__a.md",
       "target_ref": "research:202608/proc_ownership_and_shell_taxonomy/proc_ownership_and_shell_taxonomy.md",
       "uses": 1
     },

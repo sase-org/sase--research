@@ -8,7 +8,7 @@
       "origin": "manual",
       "relation": "related",
       "schema_version": 2,
-      "source_ref": "research:202608/sase_native_finalizer_use_cases.md",
+      "source_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts__b.md",
       "target_ref": "research:202608/xprompt_role_binding/xprompt_role_binding.md",
       "uses": 1
     },

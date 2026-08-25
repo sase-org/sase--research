@@ -52,7 +52,7 @@
       "origin": "manual",
       "relation": "derives-from",
       "schema_version": 2,
-      "source_ref": "research:202608/xprompt_if_directive.md",
+      "source_ref": "research:202608/conditional_launch_admission/conditional_launch_admission__b.md",
       "target_ref": "research:202608/standalone_proc_launch_units/standalone_proc_launch_units.md",
       "uses": 1
     },

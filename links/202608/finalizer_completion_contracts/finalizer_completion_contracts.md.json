@@ -52,7 +52,7 @@
       "origin": "manual",
       "relation": "derives-from",
       "schema_version": 2,
-      "source_ref": "research:202608/finalizer_bugs_and_capability_upgrades.md",
+      "source_ref": "research:202608/finalizer_integrity_and_capabilities/finalizer_integrity_and_capabilities__b.md",
       "target_ref": "research:202608/finalizer_completion_contracts/finalizer_completion_contracts.md",
       "uses": 1
     },
