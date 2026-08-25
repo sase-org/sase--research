@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/standalone_agent_cli_mode/standalone_agent_cli_mode.md",
+  "rows": [
+    {
+      "created_at": "2026-08-25T21:26:52Z",
+      "created_by": "research.14.image",
+      "description": "Need the consolidated findings as source material for the requested infographic",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.14.image",
+      "target_ref": "research:202608/standalone_agent_cli_mode/standalone_agent_cli_mode.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
