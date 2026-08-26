@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202607/sase_beads_leverage_20260725/sase_beads_leverage_20260725__a.md",
+  "rows": [
+    {
+      "created_at": "2026-08-26T03:41:00Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: sase_beads_leverage_20260725__a.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202607/sase_beads_leverage_20260725/sase_beads_leverage_20260725.md",
+      "target_ref": "research:202607/sase_beads_leverage_20260725/sase_beads_leverage_20260725__a.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
