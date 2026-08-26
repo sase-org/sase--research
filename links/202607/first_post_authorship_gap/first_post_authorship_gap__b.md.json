@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202607/first_post_authorship_gap/first_post_authorship_gap__b.md",
+  "rows": [
+    {
+      "created_at": "2026-08-26T03:40:52Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: first_post_authorship_gap__b.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202607/first_post_authorship_gap/first_post_authorship_gap.md",
+      "target_ref": "research:202607/first_post_authorship_gap/first_post_authorship_gap__b.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}

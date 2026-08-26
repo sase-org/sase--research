@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202607/agent_family_unification_consolidated/agent_family_unification_consolidated__a.md",
+  "rows": [
+    {
+      "created_at": "2026-08-26T03:40:52Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: agent_family_unification_consolidated__a.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202607/agent_family_unification_consolidated/agent_family_unification_consolidated.md",
+      "target_ref": "research:202607/agent_family_unification_consolidated/agent_family_unification_consolidated__a.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
