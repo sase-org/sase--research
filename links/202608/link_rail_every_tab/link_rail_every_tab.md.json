@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/link_rail_every_tab/link_rail_every_tab.md",
+  "rows": [
+    {
+      "created_at": "2026-08-26T17:21:02Z",
+      "created_by": "research.16.image",
+      "description": "Create a faithful infographic of the consolidated Link Rail design research",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.16.image",
+      "target_ref": "research:202608/link_rail_every_tab/link_rail_every_tab.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
