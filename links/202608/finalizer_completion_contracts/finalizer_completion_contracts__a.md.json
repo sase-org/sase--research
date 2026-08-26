@@ -4,7 +4,7 @@
     {
       "created_at": "2026-08-21T15:52:12Z",
       "created_by": "research.0u.final",
-      "description": "Consolidates the Codex research report",
+      "description": "research-swarm lineage: finalizer_completion_contracts__a.md is a consolidation source on disk",
       "origin": "manual",
       "relation": "derives-from",
       "schema_version": 2,

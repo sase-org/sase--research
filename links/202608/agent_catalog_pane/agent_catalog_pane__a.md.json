@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/agent_catalog_pane/agent_catalog_pane__a.md",
+  "rows": [
+    {
+      "created_at": "2026-08-26T03:41:16Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: agent_catalog_pane__a.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/agent_catalog_pane/agent_catalog_pane.md",
+      "target_ref": "research:202608/agent_catalog_pane/agent_catalog_pane__a.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}

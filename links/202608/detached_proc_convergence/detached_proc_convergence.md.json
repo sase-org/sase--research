@@ -22,6 +22,28 @@
       "source_ref": "research:202608/standalone_proc_launch_units/standalone_proc_launch_units__a.md",
       "target_ref": "research:202608/detached_proc_convergence/detached_proc_convergence.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-08-26T03:41:16Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: detached_proc_convergence__a.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/detached_proc_convergence/detached_proc_convergence.md",
+      "target_ref": "research:202608/detached_proc_convergence/detached_proc_convergence__a.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-08-26T03:41:16Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: detached_proc_convergence__b.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/detached_proc_convergence/detached_proc_convergence.md",
+      "target_ref": "research:202608/detached_proc_convergence/detached_proc_convergence__b.md",
+      "uses": 1
     }
   ],
   "schema_version": 2

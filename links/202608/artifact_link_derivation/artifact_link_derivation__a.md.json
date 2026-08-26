@@ -22,6 +22,17 @@
       "source_ref": "research:202608/artifact_link_derivation/artifact_link_derivation__a.md",
       "target_ref": "research:202608/ref_provider_contract/ref_provider_contract.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-08-26T03:41:16Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: artifact_link_derivation__a.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/artifact_link_derivation/artifact_link_derivation.md",
+      "target_ref": "research:202608/artifact_link_derivation/artifact_link_derivation__a.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
