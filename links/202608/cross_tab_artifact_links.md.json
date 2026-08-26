@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/cross_tab_artifact_links.md",
+  "rows": [
+    {
+      "created_at": "2026-08-26T16:59:03Z",
+      "created_by": "research.16.cld",
+      "description": "the aggregate-staleness defect this report found while measuring; section 1.4 carries the measurements and section 6.2 records that it blocks the Agents-tab adapter",
+      "origin": "manual",
+      "relation": "related",
+      "schema_version": 2,
+      "source_ref": "research:202608/cross_tab_artifact_links.md",
+      "target_ref": "bead:sase-ua",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
