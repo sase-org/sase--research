@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/ace_refresh_loop_and_link_rail_regression/ace_refresh_loop_and_link_rail_regression__b.md",
+  "rows": [
+    {
+      "created_at": "2026-08-28T11:29:11Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: ace_refresh_loop_and_link_rail_regression__b.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202608/ace_refresh_loop_and_link_rail_regression/ace_refresh_loop_and_link_rail_regression.md",
+      "target_ref": "research:202608/ace_refresh_loop_and_link_rail_regression/ace_refresh_loop_and_link_rail_regression__b.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
