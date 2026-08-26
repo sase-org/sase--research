@@ -11,6 +11,17 @@
       "source_ref": "agent:research.16.image",
       "target_ref": "research:202608/link_rail_every_tab/link_rail_every_tab.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-08-26T20:37:20Z",
+      "created_by": "research.19.cdx",
+      "description": "Need the consolidated Link Rail research that informed the in-progress sase-ug epic, to identify overlap and preserve compatible navigation semantics",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.19.cdx",
+      "target_ref": "research:202608/link_rail_every_tab/link_rail_every_tab.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
