@@ -1,0 +1,28 @@
+{
+  "artifact_ref": "research:backcompat_lifecycle_governance/backcompat_lifecycle_governance.md",
+  "rows": [
+    {
+      "created_at": "2026-08-26T03:41:58Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: backcompat_lifecycle_governance__a.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:backcompat_lifecycle_governance/backcompat_lifecycle_governance.md",
+      "target_ref": "research:backcompat_lifecycle_governance/backcompat_lifecycle_governance__a.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-08-26T03:41:58Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: backcompat_lifecycle_governance__b.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:backcompat_lifecycle_governance/backcompat_lifecycle_governance.md",
+      "target_ref": "research:backcompat_lifecycle_governance/backcompat_lifecycle_governance__b.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
