@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/link_traversing_pager/link_traversing_pager.md",
+  "rows": [
+    {
+      "created_at": "2026-08-26T21:08:28Z",
+      "created_by": "research.19.image",
+      "description": "Use the consolidated pager research as the source for the requested infographic",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.19.image",
+      "target_ref": "research:202608/link_traversing_pager/link_traversing_pager.md",
+      "uses": 2
+    }
+  ],
+  "schema_version": 2
+}
