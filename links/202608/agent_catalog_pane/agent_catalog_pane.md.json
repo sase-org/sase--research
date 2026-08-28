@@ -30,7 +30,7 @@
       "origin": "manual",
       "relation": "derives-from",
       "schema_version": 2,
-      "source_ref": "research:202608/cross_tab_artifact_links.md",
+      "source_ref": "research:202608/link_rail_every_tab/link_rail_every_tab__b.md",
       "target_ref": "research:202608/agent_catalog_pane/agent_catalog_pane.md",
       "uses": 1
     }
