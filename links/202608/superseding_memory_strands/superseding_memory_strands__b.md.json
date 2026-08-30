@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202608/superseding_memory_strands/superseding_memory_strands__b.md",
+  "rows": [
+    {
+      "created_at": "2026-08-30T16:33:16Z",
+      "created_by": "research.1e.final",
+      "description": "Lead researcher consolidating two reports on memory-strand supersession; need researcher B's full findings",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1e.final",
+      "target_ref": "research:202608/superseding_memory_strands/superseding_memory_strands__b.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
