@@ -121,7 +121,7 @@ memory webs exist as flat descriptors plus sibling strand directories. This is e
 that a plain `status: superseded` convention would be too easy to misuse.
 
 The prior research report
-[`decision_web_seed_adrs.md`](decision_web_seed_adrs.md) correctly anticipated a small
+[`decision_web_seed_adrs.md`](../decision_web_seed_adrs.md) correctly anticipated a small
 supersession chain for ADRs, but it also recommended waiting until decision strands
 became artifacts before using the artifact relation. The current implementation now has
 more native memory-link machinery than that report assumed, which changes the best
@@ -370,4 +370,4 @@ navigation.
 - `src/sase/memory/selector_render.py`
 - `src/sase/xprompts/skills/sase_memory_write.md`
 - `docs/artifact_links.md`
-- [`decision_web_seed_adrs.md`](decision_web_seed_adrs.md)
+- [`decision_web_seed_adrs.md`](../decision_web_seed_adrs.md)
