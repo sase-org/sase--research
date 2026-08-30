@@ -7,7 +7,7 @@ this, each in its own way. Constraint: **at most seven characters, shorter is be
 
 **Method.** Facts verified against the repo at `d64219f03`, PyPI's JSON API, GitHub, and
 DNS on 2026-08-30. Every count below is reproducible with the command shown. This report
-follows the method of [`naming_the_change_unit.md`](naming_the_change_unit/naming_the_change_unit.md):
+follows the method of [`naming_the_change_unit.md`](../naming_the_change_unit/naming_the_change_unit.md):
 state the constraints, verify them, then rank.
 
 ---
