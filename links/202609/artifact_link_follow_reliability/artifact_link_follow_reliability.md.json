@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/artifact_link_follow_reliability/artifact_link_follow_reliability.md",
+  "rows": [
+    {
+      "created_at": "2026-09-02T18:52:05Z",
+      "created_by": "research.1.image",
+      "description": "Need the consolidated findings to design the requested infographic",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1.image",
+      "target_ref": "research:202609/artifact_link_follow_reliability/artifact_link_follow_reliability.md",
+      "uses": 5
+    }
+  ],
+  "schema_version": 2
+}
