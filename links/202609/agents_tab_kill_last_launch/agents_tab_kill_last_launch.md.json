@@ -1,0 +1,28 @@
+{
+  "artifact_ref": "research:202609/agents_tab_kill_last_launch/agents_tab_kill_last_launch.md",
+  "rows": [
+    {
+      "created_at": "2026-09-03T20:53:21Z",
+      "created_by": "l",
+      "description": "Context and inspiration for planning the ,X kill-last-launch leader keymap on the Agents tab",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:l",
+      "target_ref": "research:202609/agents_tab_kill_last_launch/agents_tab_kill_last_launch.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-09-03T21:00:53Z",
+      "created_by": "l",
+      "description": "consolidated research report whose recommended design this plan implements",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "plan:202609/kill_and_edit_last_launch.md",
+      "target_ref": "research:202609/agents_tab_kill_last_launch/agents_tab_kill_last_launch.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
