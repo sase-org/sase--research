@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/sase_collaboration_architecture.md",
+  "rows": [
+    {
+      "created_at": "2026-09-04T15:58:28Z",
+      "created_by": "research.7.cdx",
+      "description": "Uses the proposed same-user tailnet fleet control plane as one layer of the collaboration architecture",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202609/sase_collaboration_architecture.md",
+      "target_ref": "research:202609/tailnet_agent_fleet/tailnet_agent_fleet.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
