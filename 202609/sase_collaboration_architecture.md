@@ -1,4 +1,867 @@
-# SASE collaboration architecture
+---
+create_time: 2026-09-04
+updated_time: 2026-09-04
+status: research
+---
+
+# A Collaboration Architecture For SASE
+
+**Research question:** How should SASE support multiple users, on multiple machines
+(including several users on one machine), developing the same codebase concurrently
+through a PR workflow? What is `agents_sync` actually buying, and should it be kept,
+changed, or removed?
+
+**Scope and evidence:** `sase` @ `a81bc8d59`, `sase-github` @ `5aa3225`, and the live
+state of this machine (`kellys_mbp`) on 2026-09-04. Every number in §3 and §5 was
+measured directly against the local checkouts, the `sase--agents` sidecar clone at
+`~/.sase/projects/gh_sase-org__sase/repos/agents`, and read-only CLI probes
+(`sase agent sync --check --json`, `sase bead show`, `sase repo list`). Prior art read
+and cited: `research:202609/tailnet_agent_fleet/tailnet_agent_fleet.md`,
+`research:202609/athena_agent_sync_repair/athena_agent_sync_repair.md`,
+`research:202609/stitch_timeout_hardening/stitch_timeout_hardening.md`,
+`research:202608/fork_contributor_harness/fork_contributor_harness.md`,
+`research:202607/shared_sdd_clone_consolidated.md`.
+
+---
+
+## Executive summary
+
+**Collaboration in SASE is shared authorship of durable artifacts with routed
+attention. It is not shared visibility into each other's running agents.** Those are
+different problems with different consistency requirements, different trust boundaries,
+and different failure modes — and the single most expensive mistake in the current
+design is that `agents_sync` conflates them.
+
+Three claims drive everything below:
+
+1. **SASE is already ~80% of a good multi-user system, and the missing 20% is not
+   synchronization — it is the review loop and an identity join key.** Beads, plans,
+   research, memory, and the primary repo already live in shared git repos with
+   multi-writer conflict resolution, event-sourced storage, cross-host advisory claims,
+   and publication verification. What is missing is small and specific: SASE cannot
+   ingest a single inbound review comment
+   (`sase-github/src/sase_github/workspace_plugin.py:224` still returns `False` for
+   `ws_supports_reviewer_comments`), has no `username` field on a bead, and keeps its
+   Patch records — the local record of every PR — in machine-local
+   `~/.sase/projects/<key>/<key>.sase`.
+
+2. **`agents_sync`'s import leg should be removed, not fixed.** It is 6 weeks old,
+   ~9,400 lines across 32 modules, and on this machine it has imported **zero** v2
+   hoods while accumulating **1,375 pending hoods / 8,015 pending runs** for `sase`
+   plus 81/272 for `bob-cli`. Its publication leg has produced 3,758 commits (3,012 in
+   the last 30 days, ~100/day), 79,386 tracked files, and a 108 MiB pack — to deliver,
+   when it works, *dismissed rows in another machine's Agents tab*. The value it does
+   deliver (the prompt archive, `@agent:` pages, commit and bead provenance) is
+   artifact-shaped and survives the amputation intact.
+
+3. **The single-writer agents sidecar is already a production failure source at N=1,
+   and collaboration multiplies it.** `stitch_timeout_hardening` found a finalizer
+   SIGKILLed while blocked on `.git/index.lock` in the `agents` sidecar — "which,
+   unlike `beads`, `plans`, and `linked`, exists **once per project** and is shared by
+   every concurrent agent on the host." Adding users to a design that publishes
+   synchronously to one shared remote on the commit-critical path makes commit latency
+   a function of team size.
+
+**Recommended solution (detail in §7, §11):** adopt one rule — *cross a user boundary
+as an artifact, never as a process* — and then (a) narrow `agents_sync` to a
+publish-only, off-critical-path artifact publisher, deleting the import leg in favor of
+lazy resolution and explicit `sase agent import`; (b) add a project roster and a
+`username` join key so beads, patches, and claims can name a person; (c) implement the
+inbound half of the review loop for GitHub, feeding the existing provider-neutral
+`COMMENTS` → CRS machinery that is already built and idle; (d) route cross-user
+attention onto GitHub review requests and bead assignment rather than building a new
+gate transport; and (e) keep the tailnet host daemon strictly single-user — it is the
+right answer to *your machines* and the wrong answer to *your team*.
+
+---
+
+## 1. What "collaboration" should mean when the unit of work is an agent
+
+### 1.1 Six distinct things people mean by the word
+
+Bundling these is why "collaboration support" tends to produce expensive machinery that
+nobody uses. They are ordered by how much shared mechanism they actually require.
+
+| # | Meaning | Real requirement | Status today |
+| --- | --- | --- | --- |
+| 1 | **Shared codebase, parallel work** | Non-colliding change units; isolated workspaces | ✅ Works. Workspaces are per-SASE-home; git handles the rest |
+| 2 | **Shared backlog** — we agree on what to do and who has it | A multi-writer issue store with claims and assignment | ⚠️ Beads are ~90% there; assignee is an *agent name*, not a person |
+| 3 | **Shared understanding** — plans, research, decisions, memory | Durable, addressable, reviewable documents | ✅ Works. Sidecars + in-repo `sase/memory/` |
+| 4 | **Review** — I read your change and you act on my feedback | Inbound review ingestion, review state, an agent that applies feedback | ❌ **Outbound only.** The inbound half is unimplemented |
+| 5 | **Routed attention** — "someone must decide X, and that someone is you" | Person-addressed, claimable decisions | ❌ Gates are machine-local and single-user |
+| 6 | **Shared process** — I watch/drive your running agents | A cross-trust-boundary live control plane | ❌ And it should stay that way (§6.2) |
+
+Items 1–5 are collaboration. Item 6 is a different feature that *looks* like
+collaboration, and the existing partial implementation of it (`agents_sync`'s import
+leg) is what is expensive and not useful.
+
+### 1.2 The three planes
+
+Every piece of SASE state falls into exactly one of three planes, and the plane
+determines its correct transport.
+
+**Plane 1 — The artifact plane.** Durable, content-addressed or name-addressed,
+immutable-or-append-mostly, reviewable, valid when the machine that produced it is
+offline or destroyed. Beads, plans, research reports, memory notes, decision records,
+prompt archives, stitches, PRs, code. Correct transport: **git, with a merge/conflict
+policy per store.** Partition-tolerant by construction. This is the only plane that
+should cross a user boundary.
+
+**Plane 2 — The process plane.** Live agent runs, runner slots, workspace claims, PIDs,
+tmux sessions, in-flight chats, kill/retry. Authoritative *only* on its owning host,
+meaningless when that host is down, and dangerous to act on from stale state. Correct
+transport: **a per-host daemon with snapshots, cursors, idempotent name-addressed
+mutations, and explicit staleness** — exactly what `tailnet_agent_fleet` specifies. This
+plane may cross a *machine* boundary within one user. It must not cross a *user*
+boundary.
+
+**Plane 3 — The attention plane.** "A human must decide something." Gates,
+notifications, questions, plan approvals, review requests, triage. Latency-sensitive,
+short-lived, addressed to a *person* rather than to a machine or a repository. Today
+this plane exists only inside one SASE home (`~/.sase/interaction_requests/`,
+`~/.sase/notifications/notifications.jsonl`), with Telegram and the mobile gateway as
+same-user remote projections.
+
+### 1.3 The load-bearing rule
+
+> **Cross a user boundary as an artifact, never as a process.**
+
+Corollaries:
+
+- If a teammate needs to know something, it must be expressible as a durable record
+  they can read months later without your laptop being on. That constraint is a
+  feature: it forces the thing to be reviewable.
+- A teammate never needs your PID, your workspace number, your runner slots, or your
+  chat transcript. They need your *change*, your *reasoning*, and your *claim on the
+  work*.
+- Process-plane fidelity across machines is a legitimate, separate feature — for **one
+  user's own machines**. Do not pay for it twice, and do not extend it across a trust
+  boundary where mutation authority becomes a security question rather than a UX one.
+
+`agents_sync` violates this rule in one specific place: it ships process history over
+the artifact plane (fine, that is what a prompt archive is) and then **rehydrates it
+back into the process plane** on the receiving side — as local agent artifacts,
+dismissed bundles, saved-family revival groups, and permanent name-registry claims.
+Every hard problem the subsystem has (name collisions, transactional import,
+quarantine, v1→v2 adoption, registry squatting) lives in that rehydration step and
+nowhere else.
+
+---
+
+## 2. What SASE already has (verified)
+
+The surprising finding of this research is how much of the multi-user substrate is
+already built, and how little of the remaining gap is about synchronization.
+
+### 2.1 The shared plane is real and already multi-writer
+
+All four project sidecars are ordinary GitHub repos under the same org as the primary
+repo, so org membership is already the access-control model:
+
+```text
+sase-org/sase            primary
+sase-org/sase--plans     plans + the canonical bead store
+sase-org/sase--beads     generated bead pages
+sase-org/sase--research  research reports (this document)
+sase-org/sase--agents    agent hoods, prompt archive, chats
+```
+
+Beads in particular are further along than they look for multi-user work:
+
+- **Event-sourced storage** with a generated `issues.jsonl` compatibility projection
+  sorted by issue ID "for clean diffs" — an append-mostly shape that merges well.
+- **Concurrent-mint conflict resolution** that *relocates* one of two colliding beads
+  rather than failing, deterministically from store contents rather than from whoever
+  syncs first (`src/sase/bead/conflict_resolver.py`, `relocation.py`).
+- **Cross-host advisory claims**: the runner writes `claimed`, commits, and publishes
+  synchronously best-effort "so other hosts can see the claim," with a
+  `bead_claim_checks` reconciler as the backstop and an explicit rule that a claim is
+  never released unless the owning agent is provably dead.
+- **Publication verification**: every bead mutation that commits re-checks that the
+  commit was actually pushed, and *fails the command* with an operator diagnostic if
+  not — because "a bead mutation that is committed but never pushed... is destroyed"
+  when the numbered workspace is evicted.
+
+That last one is the single best piece of multi-writer engineering in the tree. It is
+the correct posture for authoritative shared state and should be the template.
+
+### 2.2 The mirror pattern is already the right collaboration primitive
+
+The `external_mirror` AXE lane (15-minute interval) already runs both halves of a
+"the shared system is the truth, the local record is a projection" design:
+
+- `external_issue_mirror` diffs each project's tracker against local beads on
+  `external_ref` and creates `small`/`open` task beads for uncovered issues, with
+  bounded per-pass writes (≤25 creations, ≤50 notes) and per-tracker exponential
+  backoff.
+- `external_pr_mirror` lists remote PRs in every state, discards SASE's own tracked
+  workflow markers, applies author/base/head/title/state filters, and **adopts the
+  remaining PRs as local Patches** — including other people's.
+
+This is already the shape of the answer for item 4 in §1.1. A teammate's PR can already
+become a first-class local Patch. What is missing is everything that would let you *do*
+something with it.
+
+### 2.3 Identity is half-built
+
+`id.username` + `id.machine_name` is a well-specified, explicitly-owned, globally-unique
+identity that "should normally be the user's GitHub username," and the agents wire
+already uses `<username>.<machine_name>.<name>` global names with idempotent
+qualification. Duplicate agent names across machines are structurally impossible.
+
+The gap is that **nothing else in SASE uses `username`.** A bead carries three
+unrelated identity spellings and no user join key:
+
+```text
+$ sase bead show sase-w3.6
+Owner: bryanbugyi34@gmail.com          # git author email
+Assignee: sase-w3.6                    # a bead id used as an agent name
+CREATED BY
+  bbugyi200.apollo.b                   # a global agent name
+  → .../agents/bbugyi200.kellys_mbp.bbugyi200.apollo.b/README.md
+```
+
+Note the link: an already-global name (`bbugyi200.apollo.b`) was globalized a second
+time, producing `bbugyi200.kellys_mbp.bbugyi200.apollo.b`. **That page does not exist**
+— verified: zero paths in the sidecar match `bbugyi200.*.bbugyi200.*`, and neither
+`agents/bbugyi200.apollo.b` nor the double-qualified path is present. Every bead created
+by an apollo agent carries a dead provenance link today. This is the same
+identity-versus-display conflation `athena_agent_sync_repair` identified as the
+architectural fault beneath that incident, and it is now leaking into shared artifacts.
+
+### 2.4 Same-machine multi-user is a capacity problem, not a correctness problem
+
+Two OS users on one machine get two independent `$SASE_HOME`s, two workspace roots, and
+two distinct `<username>.<machine>` namespaces — so nothing collides. What *does*
+collide is the machine itself: `max_running_agents` and the `runner_slots` pool are
+per-SASE-home, so two users on one box can each admit their configured maximum and
+jointly oversubscribe the hardware. `two-speed-verification` already establishes that
+host capacity — not test speed — is SASE's binding constraint, so this is the failure
+mode that matters. It needs a machine-level (not home-level) admission guard, not a new
+sync mechanism.
+
+---
+
+## 3. Critique of `agents_sync`
+
+### 3.1 Measured cost
+
+| Dimension | Measurement |
+| --- | --- |
+| Source | 20,645 lines, 83 modules (2.3% of `src/sase`) |
+| Tests | 14,705 lines |
+| Age | First commit 2026-07-22; 111 commits, **all within 90 days** |
+| Fix ratio | 36 of 111 commits are `fix` (32%) for a 6-week-old subsystem |
+| Sidecar commits | 3,758 total; **3,012 in the last 30 days** (~100/day) |
+| Commit mix (30d) | 1,363 `sync from`, 1,643 `archive prompt` |
+| Tracked files | 79,386 |
+| Pack size | 108.22 MiB |
+| Agent pages | 10,488 (10,229 from `athena`, 259 from `kellys_mbp`) |
+| Chat transcripts | 7,353 |
+| Prompt archives | 4,948 |
+| Import-leg code | ~5,598 src + ~3,770 test lines across 32 modules |
+
+The publisher asymmetry is diagnostic: `athena` has published 2,011 hoods and 10,229
+agent pages; `kellys_mbp` has published 5 hoods and 259 pages. The subsystem is
+dominated by a batch machine mass-publishing per-run pages that nothing reads.
+
+### 3.2 Measured value
+
+```text
+$ sase agent sync --check --json
+sase     behind=0 ahead=0 pending=1375   runs pending: 8015
+bob-cli  behind=1 ahead=0 pending=81     runs pending:  272
+```
+
+**1,375 hoods / 8,015 runs have been sitting unimported for the `sase` project alone.**
+`athena_agent_sync_repair` established (and this probe confirms the shape of) the reason:
+this machine imported only the lossy legacy v1 payload, whose 651 `origin: import_v1`
+registry entries then made every v2 hood import fail with
+`ImportedNameCollisionError`. Zero v2 imports have ever been applied here.
+
+The important part is not that it broke. It is that **it broke, stayed broken across
+1,375 accumulated packages, and nobody noticed from use** — the badge was noticed from a
+screenshot. That is about as strong a signal as one gets that the import leg's output is
+not load-bearing.
+
+And when it does work, the output is: foreign runs materialized as **terminal, dismissed
+agent artifacts** (source `active`/`waiting`/`stopped` all collapse to `STOPPED`), plus a
+saved-family group revivable from the Agents tab. Useful once in a while. Not worth a
+continuously-reconciling replication engine.
+
+Two further quality signals from the same report: ~35% of published v2 run pages
+(3,247 of 9,183) carry no `prompt.md` at all, and the dismissed-bundle writer
+serializes only a narrow projection, so `agent_family`, `artifacts_dir`, `model`,
+`llm_provider`, and `reasoning_effort` land as `null`. The replicated record is both
+incomplete at the source and degraded at the sink.
+
+### 3.3 The category error
+
+The publication leg builds artifacts. The import leg builds **processes** — local agent
+artifacts, dismissed bundles, revival groups, and *permanent name-registry claims* in
+the same namespace live local agents allocate from. That last one is why a foreign
+machine's history can wedge your local name allocation, and why `athena.7n--code`
+parses as hood `athena`, family `athena.7n`: provenance was encoded as a dotted prefix
+in the topology namespace.
+
+Compare with how every other artifact reference works. `@plan:`, `@research:`,
+`@bead:`, `@stitch:` all resolve by *reading the sidecar checkout you already have*.
+None of them materialize a local shadow copy in a live-object namespace. `@agent:`
+alone was given a replication engine — and it is the only one with collision, quarantine,
+transaction-recovery, and adoption machinery.
+
+### 3.4 The cost is not hypothetical — it is already breaking commits at N=1
+
+From `stitch_timeout_hardening` (2026-09-04): nine of twenty-five finalizer runs on
+apollo (36%) hit the wall-clock cap on Sep 3–4. **Seven died after the commit had
+already landed**, during post-commit tail work; one was "visibly stuck on
+`.git/index.lock` in the `agents` sidecar — which, unlike `beads`, `plans`, and
+`linked`, exists **once per project** and is shared by every concurrent agent on the
+host."
+
+This is a direct consequence of the documented design: the commit path "records an
+outbox request for the exact hood and immediately drains it under the bounded agents
+lock, so the commit does not return until the hood is published and pushed." A durable
+outbox exists precisely so that publication *can* be deferred — and then the commit path
+drains it synchronously anyway, putting a shared-lock, network-push, whole-hood
+re-render on the critical path of every commit.
+
+With N users pushing to one `sase--agents` remote, this gets worse in two compounding
+ways: the local `index.lock` contention becomes remote non-fast-forward contention, and
+the documented recovery is "a non-fast-forward rejection triggers **one**
+pull/recompute/commit/push retry." One retry is not a concurrency-control strategy for
+five writers.
+
+### 3.5 What is genuinely worth keeping
+
+Not everything here is waste. The following are artifact-plane and valuable:
+
+- **The prompt archive** (`prompts/<YYYYMM>/<name>.md`, 4,948 entries). Durable,
+  addressable, human-readable provenance for "what was this agent actually asked?",
+  with `PLAN`/`AGENTS`/`ARTIFACTS` header links and durable `@`-reference staging. This
+  is the best thing the subsystem produces and it is exactly the record a *teammate*
+  wants six months later.
+- **`@agent:` pages** as citable artifacts for plans, beads, and patches — but see
+  §2.3; they must resolve, and today cross-machine ones do not.
+- **Content-addressed `files/objects/sha256/`** for prompt attachments. Correct design:
+  identical bytes publish once, clean tracked files link to hosted blobs instead of
+  being duplicated.
+- **Commit ↔ agent ↔ bead provenance.** The `SASE_AGENT` footer, the family page as the
+  durable home of a family's commits, and bead `created_by` links are the audit trail
+  that makes agent-authored code reviewable at all. In a team, this stops being a nicety
+  and becomes the mechanism by which a reviewer knows *what instruction produced this
+  diff*.
+
+### 3.6 Verdict
+
+**Change it, aggressively — keep publication, delete import.** Specifically:
+
+| Component | Verdict | Why |
+| --- | --- | --- |
+| Prompt archive | **Keep** | Highest-value artifact in the subsystem |
+| `files/objects/` CAS | **Keep** | Correct, cheap, dedupes by construction |
+| Commit/bead provenance links | **Keep + fix** | Currently emits dead double-qualified links (§2.3) |
+| `@agent:` page publication | **Keep, narrow** | Publish pages for runs with a durable reference (commit, plan approval, bead association, explicit citation) — not every run in every hood |
+| Chat publication | **Opt-in** | 7,353 transcripts; largest byte contributor; highest privacy surface in a shared repo |
+| Synchronous drain on commit path | **Remove** | Already causing finalizer kills at N=1; the outbox already provides the durability |
+| Full-hood reconcile every 10 min | **Remove** | Replace with outbox drain on an AXE lane |
+| **v2 import leg** | **Remove** | ~9,400 lines to produce dismissed rows; 0 successful imports; 1,375 pending |
+| Legacy v1 leg | **Remove** | Already sunsetting under the `v1-import-retired` decision |
+| Name-registry claims from imports | **Remove** | The root cause of the wedge; provenance must not occupy the live-name namespace |
+| Cross-machine family revival | **Keep as an explicit pull** | Real capability; does not require eager import (§6.5) |
+
+---
+
+## 4. The gaps that actually block collaboration
+
+### 4.1 The review loop is half-built — this is the #1 gap
+
+`fork_contributor_harness` found it and it is still true at `5aa3225`:
+
+```python
+# sase-github/src/sase_github/workspace_plugin.py:224
+def ws_supports_reviewer_comments(self, pr_url: str) -> bool | None:
+    """GitHub does not support reviewer comments via critique_comments."""
+```
+
+Verified today: the plugin contains **no** `gh pr review` call, no review-comment fetch,
+and no review-state handling of any kind.
+
+The asymmetry is stark. SASE can produce review feedback (mentors — LLM reviewers that
+match profiles against commits, emit structured `error`/`warning`/`suggestion` JSON, and
+feed an apply-agent through the `COMMENTS` → CRS workflow) but cannot **consume** it. The
+`COMMENTS`/CRS machinery is provider-neutral and fully built; the GitHub provider simply
+declines to feed it.
+
+That means today: a teammate reviews your PR on github.com, and SASE knows nothing. No
+comment lands in the Patch, no CRS agent is offered, no status transition reflects
+`CHANGES_REQUESTED`. The `Mailed → Submitted` lifecycle has no review state in it at
+all. **The most valuable single feature in this entire report is wiring inbound GitHub
+review comments into the CRS machinery that is already sitting idle**, because it turns
+a human reviewer's comment into an agent task automatically — which is the actual
+promise of agentic collaboration.
+
+Two related, already-diagnosed blockers: SASE creates no `upstream` remote for forked
+clones, so a fork-based project silently opens fork→fork PRs (`GH_REPO` is a measured
+one-env-var mitigation; the durable fix is `_clone_gh_repo` adding the remote), and a
+second GitHub identity is *mandatory* to test any of this because GitHub hard-blocks
+self-approval.
+
+### 4.2 The Patch is machine-local and mixes two planes
+
+Patches live in `~/.sase/projects/<key>/<key>.sase` — never shared. Verified locally:
+1 active Patch, 264 archived, entirely on this machine.
+
+Two separate problems:
+
+1. **Plane mixing.** The same file's project-metadata header carries a `RUNNING:` block
+   of live host process state:
+
+   ```text
+   RUNNING:
+     #10 | 25286 | ace(run)-260901_063906 | gh_sase-org__sase | 20260901063906 | PINNED
+     #12 | 62990 | ace(run)-260904_113036 | gh_sase-org__sase | 20260904113036
+   ```
+
+   PIDs and workspace numbers (plane 2) in a document about change units (plane 1). Any
+   attempt to share the ProjectSpec inherits this, and it is exactly the kind of
+   host-local state the agents-sidecar allowlist correctly excludes.
+
+2. **No shared view.** With Patches machine-local, two collaborators cannot see each
+   other's in-flight change units, dependency chains (`PARENT:`), or hook status.
+
+The fix is *not* to sync ProjectSpec files. It is to recognize that **the PR is already
+the shared record** and make the Patch a two-tier object: shared fields projected from
+the PR, private fields kept local. `external_pr_mirror` already implements the
+projection direction.
+
+### 4.3 Attention does not cross a user boundary
+
+Gates and notifications are `~/.sase/interaction_requests/` and
+`~/.sase/notifications/notifications.jsonl` — one SASE home, one person. Telegram and
+the mobile gateway are same-user remote projections of that inbox, not multi-user
+routing.
+
+In a team, the recurring question is "this decision is blocked on a human — which human,
+and how do they find out?" There is no answer today, and `gates-never-block` means the
+agent that raised the gate has already ended its turn, so the decision has to reach a
+person out-of-band.
+
+### 4.4 Write-path economics do not survive N writers
+
+Summarized from §3.4 and §2.1:
+
+| Store | Push policy | Concurrency safety | Verdict at N users |
+| --- | --- | --- | --- |
+| Beads (canonical event store) | Synchronous + **publication verification that fails the command** | Duplicate-ID relocation resolver; append-mostly JSONL | **Correct.** Keep synchronous; harden retry |
+| Agents sidecar | Synchronous drain on commit path, **one** non-fast-forward retry, one shared per-project clone | Bounded lock; whole-hood re-render | **Wrong.** Already failing at N=1 |
+| Plans / research | Ordinary commits | Human-authored, low rate | Fine |
+
+The distinction is principled and should be stated as policy: **synchronous
+push-and-verify is justified for authoritative state, and unjustified for projections.**
+A bead close that is lost is data loss. An agent page that publishes ninety seconds late
+is a cache miss.
+
+### 4.5 Everything else is fine
+
+Worth saying explicitly, because it constrains scope: workspaces, agent naming, memory,
+plans, research, artifact references, xprompts, and the primary-repo git workflow all
+work unmodified with N users. No change needed. The temptation to build a "collaboration
+system" should be resisted in favor of five targeted changes.
+
+---
+
+## 5. Alternatives considered and rejected
+
+### 5.1 A central SASE server / hosted service
+
+Every collaborator connects to one service holding beads, patches, agent state, and
+attention routing. Rejected: it introduces the one failure domain SASE currently does
+not have, requires operating infrastructure, breaks the offline-first property that
+makes the git plane work (`athena` has been offline for days and its history stays
+readable), and duplicates services the team already runs (GitHub). The
+`corpus-before-mechanism` decision applies directly: do not build retrieval or routing
+machinery ahead of a corpus that demonstrably needs it. At 2–5 collaborators there is no
+such corpus.
+
+### 5.2 CRDTs / operational sync for shared state
+
+Rejected as solving a problem SASE does not have. Bead events are append-mostly with a
+deterministic reducer and an existing relocation resolver for the one real conflict
+class (concurrent ID minting). Plans and research are human-authored prose reviewed
+through PRs — where merge conflicts are *desirable* signal. A CRDT layer would add a
+consistency model to state that is already convergent and remove the review step from
+documents whose whole purpose is being reviewed.
+
+### 5.3 Extend the tailnet host daemon across users
+
+Tempting, because `tailnet_agent_fleet` already specifies a supervised per-machine
+gateway with typed mutations, idempotency journals, and revision fencing — and Tailscale
+supports multi-user tailnets with per-user ACLs. **Rejected**, for four reasons:
+
+1. **It answers a question nobody asked.** No teammate needs to kill your agent. The
+   mutation surface (launch, kill, retry, answer-question, gate-approval) is
+   self-management, not collaboration.
+2. **It converts a UX problem into a security problem.** Within one user, a mis-scoped
+   token is an inconvenience. Across users it is an authorization boundary requiring a
+   real permission model, per-user audit, and a threat model for "teammate kills my
+   in-flight epic."
+3. **It requires reachability where collaboration must not.** Colleagues are on
+   different networks, asleep, on leave, or gone. Anything routed through their host
+   daemon disappears with them. Artifacts do not.
+4. **It repeats the `agents_sync` mistake at a higher cost.** Process state crossing a
+   user boundary is the exact category error §3.3 identifies — this time with a live
+   mutation channel instead of a git repo.
+
+The fleet daemon is a good design *for its stated scope*. Keep the scope.
+
+### 5.4 Keep `agents_sync` and scale it (the status quo)
+
+Fix the v1 wedge, add the missing manifests, keep replicating everything. Rejected on
+arithmetic: ~100 sidecar commits/day/user against one shared remote, with one
+non-fast-forward retry, a per-project single clone, and a synchronous drain on the
+commit-critical path that is *already* killing finalizers at N=1. Five users is 500
+commits/day into one repo whose working tree is already 79,386 files. The subsystem
+would need per-user sharding, an async publisher, and a real backoff strategy — which is
+most of the recommended work anyway, spent to preserve an import leg with zero
+demonstrated consumption.
+
+### 5.5 Share ProjectSpec files through a sidecar
+
+Rejected. It would publish PIDs and workspace numbers (§4.2), create a high-rate
+multi-writer store for a document with no merge semantics, and duplicate a record —
+the PR — that is already shared, already has review threads, and is already the thing
+CI and humans look at. Mirror from the PR instead.
+
+---
+
+## 6. Recommended architecture
+
+### 6.1 Shape
+
+```text
+                      THE ARTIFACT PLANE  (git · shared · offline-durable)
+   ┌──────────────────────────────────────────────────────────────────────────┐
+   │  sase-org/sase          code + sase/memory/  ← PRs, review, CODEOWNERS   │
+   │  sase-org/sase--plans   plans + canonical bead store (claims, assignee)  │
+   │  sase-org/sase--research   research reports                             │
+   │  sase-org/sase--agents  prompt archive + referenced agent pages + CAS    │
+   └──────────────────────────────────────────────────────────────────────────┘
+        ▲ authoritative, synchronous+verified      ▲ projection, async, off critical path
+        │ (beads)                                  │ (agents)
+   ─────┼──────────────────────────────────────────┼──────────────────────────────
+        │        alice                             │        bob
+   ┌────┴───────────────────────┐            ┌─────┴──────────────────────┐
+   │ PROCESS PLANE (per user)   │            │ PROCESS PLANE (per user)   │
+   │  mbp ─ host daemon ─┐      │            │  laptop ─ host daemon      │
+   │  apollo ─ host daemon┼ ACE │  ✗ never ✗ │  desktop ─ host daemon     │
+   │  athena ─ host daemon┘     │ ◀────────▶ │                            │
+   │  (tailnet, single-user)    │  no link   │  (tailnet, single-user)    │
+   └────────────────────────────┘            └────────────────────────────┘
+        │                                          │
+        └───────── ATTENTION PLANE ────────────────┘
+          within a user: gates, notifications, Telegram, mobile gateway
+          across users:  GitHub review requests + bead assignment (no new transport)
+```
+
+### 6.2 Plane-by-plane policy
+
+**Artifact plane.** The only cross-user channel. Two write classes with different
+policies:
+
+- *Authoritative* (beads): synchronous commit, push, and verify; fail loudly on
+  unpublished state. Already implemented; harden the retry loop (§6.6).
+- *Projection* (agent pages, prompt archives, bead pages): asynchronous, batched,
+  off any command's critical path, idempotent, safe to be minutes stale.
+
+**Process plane.** Strictly single-user. Build `tailnet_agent_fleet` as specified,
+with one amendment (§6.5): its offline-host story should rest on a **client-side
+per-host snapshot cache**, not on the git import leg. A cache is the right mechanism
+for "show me what I last saw"; git replication is an extraordinarily expensive way to
+obtain one, and it is the mechanism this report recommends deleting.
+
+**Attention plane.** Within a user, unchanged. Across users, **map onto substrates the
+team already shares** — GitHub review requests, `@mentions`, issue assignment, and bead
+`assignee` — rather than building a cross-user gate transport. This preserves
+`gates-never-block`, adds no failure domain, and gives every collaborator notifications
+on the channels they already watch (email, GitHub mobile). ACE's contribution is two
+*views*, not a transport: "reviews requested of me" and "beads assigned to me."
+
+### 6.3 Identity: one join key, three surfaces
+
+`id.username` becomes the person join key everywhere a person can appear.
+
+1. **A project roster in the shared plane** — `sase/collaborators.yml` in the
+   primary repo, so the roster is itself reviewed through a PR:
+
+   ```yaml
+   roster:
+     - username: bbugyi200        # SASE username, the join key
+       github: bbugyi200
+       display: Bryan Bugyi
+       role: maintainer
+     - username: someone_else
+       github: someone-else
+       role: contributor
+   ```
+
+   Reviewed, versioned, offline-readable, and it makes "who is on this project" a fact
+   rather than an inference from git history.
+
+2. **Beads gain a `username`-shaped assignee.** Today `assignee` holds an agent name
+   and `owner` holds a git email. Introduce a qualified spelling — `alice` for a person,
+   `alice/<agent-global-name>` for that person's agent — so `sase bead list --mine`,
+   "who has this," and the claim reconciler all work across users. **Safety rule: the
+   `bead_claim_checks` reconciler must never release a claim whose username is not the
+   local user's.** It currently releases only when it can resolve the owning agent's
+   artifact locally, which for a foreign claim it cannot — so today's behavior is
+   accidentally correct. Make it explicit before it is refactored.
+
+3. **Fix double-globalization.** `machine_hood` qualification is documented as
+   idempotent for the *local* owner; the bead-page renderer is applying it to names that
+   are already global for a *different* owner, producing dead links (§2.3). Every
+   provenance link in a shared artifact must be built from the canonical global name,
+   never re-qualified.
+
+### 6.4 Close the review loop (highest leverage)
+
+1. **Implement `ws_supports_reviewer_comments` for GitHub.** Fetch PR review comments
+   and threads (`gh api repos/{owner}/{repo}/pulls/{n}/comments`, plus reviews for
+   state), normalize into the existing structured comment JSON the mentors already
+   emit, and write them into the Patch `COMMENTS:` section keyed by reviewer. The CRS
+   apply-agent then works unchanged: **a human's review comment becomes an agent task.**
+   Store resolution state so a resolved thread stops re-proposing work.
+2. **Model review state in the Patch lifecycle.** `APPROVED` /
+   `CHANGES_REQUESTED` / `REVIEW_REQUIRED` alongside `STATUS:`, so `Mailed → Submitted`
+   respects it and ACE can show "blocked on review" versus "blocked on CI."
+3. **Generalize `external_pr_mirror` into the team case.** It already adopts other
+   people's PRs. Add author-scoped mirroring driven by the roster, so a teammate's PR
+   becomes a Patch you can run mentors against and open a review agent on. This is the
+   one place where SASE's agent machinery has an obvious, large, unique payoff in a team:
+   *your mentors review your teammate's PR before you read it.*
+4. **Fix the fork path**: add an `upstream` remote in `_clone_gh_repo` when
+   `gh repo view --json parent` reports one, and propagate it through
+   `ensure_git_clone_at` so numbered workspaces inherit it. `GH_REPO` is the measured
+   interim mitigation.
+5. **Provision the machine account** from `fork_contributor_harness` (classic PAT or
+   OAuth, never fine-grained). Two identities are mandatory: GitHub hard-blocks
+   self-approval, so none of the above can be tested end-to-end without it.
+
+### 6.5 `agents_sync`: publish-only, lazily resolved
+
+- **Delete the import leg** (`v2_import_*`, `incoming_cache*`, `v1_*` — ~9,400 lines,
+  32 modules) behind a sunset flag per `sase/memory/sase_flags.md`. Nothing is lost that
+  is not recoverable from the sidecar checkout on demand.
+- **Resolve `@agent:` refs lazily**, like `@plan:` and `@research:` — read the page out
+  of the sidecar clone at `~/.sase/projects/<key>/repos/agents`. Same UX, no local
+  materialization, no name-registry claims, no import transactions, no quarantine.
+- **Replace eager import with an explicit pull** for the one real capability: keep
+  cross-machine family revival as `sase agent import <agent-ref>`, reading revival
+  inputs from the sidecar at the moment the user asks for them. A user-initiated,
+  one-shot, foreground operation with a clear failure mode — instead of a continuously
+  reconciling engine whose failures accumulate silently to 1,375.
+- **Narrow publication** to runs with a durable reference: a commit, an approved plan, a
+  bead association, or an explicit `@agent:` citation. `athena`'s 10,229 pages become a
+  small fraction of that. Everything else stays local, where it already is.
+- **Make chats opt-in** (`agents_sync.publish_chats: false` by default). 7,353
+  transcripts is both the byte bulk and, in a *team* repo, the largest privacy surface —
+  and the docs are explicit that publishing exposes data to everyone who can read the
+  remote.
+- **Move publication off the commit-critical path.** The durable outbox already exists;
+  let an AXE lane drain it. This is independently the recommendation of
+  `stitch_timeout_hardening` ("remove bootstrap and publication work from the
+  commit-critical path"). Keep the *bead* store synchronous and verified.
+
+Projected effect (a projection, not a measurement): sidecar commits from ~100/day to
+roughly the prompt-archive rate; tracked files from 79,386 toward the low thousands;
+~9,400 lines of the most conflict-prone code in the tree deleted; and the commit path
+loses a shared-lock network push.
+
+### 6.6 Write-path hardening for N writers
+
+- **Beads**: keep synchronous push + publication verification. Add bounded exponential
+  backoff with jitter in place of the single retry, and add a `.gitattributes` union
+  merge driver for the append-only `events/**` streams and the ID-sorted `issues.jsonl`
+  projection so ordinary concurrent appends never reach the conflict resolver at all.
+  Reserve the relocation resolver for genuine ID collisions.
+- **Agents sidecar**: asynchronous drain, batched, with backoff. Because it is a
+  projection, a rejected push is a retry, never a user-visible failure.
+- **Machine-level admission**: a host-scoped runner-slot guard so two SASE homes on one
+  machine cannot jointly oversubscribe it (§2.4).
+- **Bead ID minting**: the relocation resolver is a good backstop, but per-writer
+  minting ranges (or a username-derived discriminator on the counter) would make most
+  collisions structurally impossible. Worth doing only if measurement shows relocations
+  actually occurring — otherwise it is mechanism ahead of corpus.
+
+---
+
+## 7. The explicit answer: keep / change / remove
+
+**Change it — by removing half of it.**
+
+- **Remove:** the v2 import leg, the legacy v1 leg, import-created name-registry claims,
+  full-hood 10-minute reconciliation, and the synchronous drain on the commit path.
+- **Keep:** the prompt archive, the content-addressed file store, commit/bead/agent
+  provenance links, and `@agent:` pages.
+- **Change:** publish only referenced runs; chats opt-in; publication asynchronous and
+  batched; `@agent:` resolves lazily from the sidecar clone; cross-machine revival
+  becomes an explicit `sase agent import`.
+
+The one-line rationale: **`agents_sync` is a good artifact publisher wrapped around a
+bad process replicator.** Keep the publisher. Delete the replicator. What remains is
+smaller, faster, cheaper, survives a second user, and loses no capability that anyone has
+been observed to use.
+
+---
+
+## 8. Phasing
+
+Each phase is independently useful, independently revertible, and behind a feature flag
+per `sase/memory/sase_flags.md`.
+
+| Phase | Deliverable | Why here |
+| --- | --- | --- |
+| **0** | Move agents publication off the commit-critical path (AXE-lane outbox drain). Fix double-globalized provenance links. | Pure win at N=1; already causing finalizer kills; unblocks everything else |
+| **1** | Lazy `@agent:` resolution from the sidecar clone + `sase agent import <ref>` for explicit revival | Preserves the capability the import leg exists for, without the engine |
+| **2** | Sunset and delete the v2/v1 import legs and their registry claims | Safe once Phase 1 covers the use case; removes ~9,400 lines |
+| **3** | Narrow publication to referenced runs; chats opt-in | Cuts sidecar growth an order of magnitude before a second user arrives |
+| **4** | `sase/collaborators.yml`; `username` join key on beads; foreign-claim safety rule in `bead_claim_checks` | Identity must land before anything can be addressed to a person |
+| **5** | **Inbound GitHub review comments → Patch `COMMENTS` → CRS**; review state in the Patch lifecycle | The highest-leverage collaboration feature; needs the machine account to test |
+| **6** | Roster-driven `external_pr_mirror`; run mentors on a teammate's PR | Where SASE's agent machinery pays off uniquely in a team |
+| **7** | Split `RUNNING:` out of ProjectSpec; two-tier Patch (PR-projected shared fields, local private fields) | Cleans the plane mixing; makes the Patch honest about what is shared |
+| **8** | ACE views: "reviews requested of me", "beads assigned to me"; machine-level admission guard | Attention surfacing without a new transport |
+| **9** | Bead write-path hardening: union merge driver, backoff | Do when measurement shows contention, not before |
+
+Phases 0–3 are subtractive and pay for themselves immediately, at N=1, before any second
+user exists. Phases 4–6 are the actual collaboration feature. Phases 7–9 are polish and
+scale.
+
+---
+
+## 9. What would reopen this decision
+
+- **More than ~8–10 active collaborators**, or a sustained shared-store write rate where
+  git push contention becomes the binding constraint rather than review throughput. At
+  that point the beads store wants a real backend, not a better merge driver.
+- **A genuine need to run agents on someone else's hardware** — a shared build farm, a
+  team-owned high-capacity machine (cf. `temporary_high_capacity_test_machine`). That is
+  a multi-tenant scheduler, a different feature, and it would justify a cross-user
+  control plane with a real permission model.
+- **Cross-user agent-to-agent coordination** — one person's agent blocking on another
+  person's agent. A genuinely different topology; the same threshold
+  `tailnet_agent_fleet` names for reconsidering a broker.
+- **A non-GitHub VCS host becoming primary**, which would break the "route attention
+  through GitHub" recommendation in §6.2 and force a native attention transport.
+- **Evidence that the import leg was actually load-bearing.** If cross-machine dismissed
+  history turns out to be used regularly (§10, Q1), Phase 2 should be re-scoped to keep
+  a much thinner import that materializes *only* referenced runs on demand.
+
+---
+
+## 10. Open questions for the user
+
+1. **Has cross-machine agent revival ever actually been used?** Phase 1 preserves the
+   capability, but the answer determines whether `sase agent import` needs to be
+   pleasant or merely present.
+2. **Should the `sase--agents` sidecar be private?** The docs are explicit that
+   publishing exposes prompts, chats, and output variables to everyone who can read the
+   remote. That is a very different risk at N=1 (your own repo) than at N=5 (a team repo
+   whose prompts may quote customer data). Recommendation: private by default for any
+   project with a roster of more than one.
+3. **Do collaborators share a `sase.yml`, or does each bring their own?** Mentor
+   profiles, file hooks, and commit hooks are arguably project policy (shared, reviewed)
+   rather than personal preference. The deep-merge system already supports both; the
+   question is which layer owns what once more than one person is affected by the answer.
+4. **Is "my mentors review your PR" desirable, or intrusive?** Phase 6 is the highest
+   unique value in this report, but automated LLM review of a teammate's PR is a social
+   decision before it is a technical one. It may want to be opt-in per reviewer, or to
+   post to your own Patch rather than to the PR.
+5. **Should the tailnet fleet ever show a *teammate's* hosts in read-only mode?** This
+   report says no (§5.3). If the answer is "yes, eventually," the wire model should
+   reserve a place for it now, because retrofitting an authorization boundary is much
+   harder than designing one in.
+
+---
+
+## 11. Recommended solution
+
+**Adopt one rule — *cross a user boundary as an artifact, never as a process* — and
+implement it by shrinking `agents_sync` to a publisher, adding an identity join key, and
+closing the review loop.**
+
+Concretely, in priority order:
+
+1. **Move agents-sidecar publication off the commit-critical path** and fix the
+   double-globalized provenance links. Both are bugs today, at one user, on one machine.
+2. **Make `@agent:` resolve lazily from the sidecar clone**, like every other artifact
+   reference, and provide `sase agent import <ref>` for explicit cross-machine revival.
+3. **Delete the v2 and v1 import legs** (~9,400 lines, 32 modules) and the name-registry
+   claims they create. Narrow publication to runs with a durable reference; make chat
+   publication opt-in.
+4. **Add `sase/collaborators.yml` and a `username` join key** on beads, patches, and claims,
+   with an explicit rule that the claim reconciler never releases a foreign claim.
+5. **Implement inbound GitHub review comments** into the Patch `COMMENTS` section and
+   the existing CRS apply-agent, model review state in the Patch lifecycle, fix the fork
+   `upstream` remote, and provision the machine account so the loop can be tested.
+6. **Route cross-user attention onto GitHub review requests and bead assignment**, and
+   surface both in ACE. Build no new gate transport.
+7. **Keep the tailnet host daemon strictly single-user**, and give it a client-side
+   per-host snapshot cache for offline rendering instead of depending on the git import
+   leg this report removes.
+
+This is a net *reduction* in system size that leaves SASE meaningfully more capable in a
+team: it deletes the subsystem that has produced 32% fix commits, 1,375 stalled imports,
+and at least one class of finalizer failure, and it spends a fraction of that budget on
+the one loop that actually makes agentic collaboration work — a teammate's review comment
+becoming an agent's task.
+
+---
+
+## 12. Sources
+
+**Repo evidence** (verified 2026-09-04 against `sase` @ `a81bc8d59`, `sase-github` @
+`5aa3225`): `src/sase/agents_sync/` (83 modules; import leg `v2_import_*`,
+`incoming_cache*`, `v1_*`), `src/sase/bead/` (`conflict_resolver.py`, `relocation.py`,
+`claims.py`, `_db_schema.py`, `sync.py`), `src/sase/default_config.yml:270-273`
+(`agents_sync` cadence), `sase-github/src/sase_github/workspace_plugin.py:224`,
+`~/.sase/projects/gh_sase-org__sase/gh_sase-org__sase.sase` (`RUNNING:` block),
+`~/.sase/projects/gh_sase-org__sase/repos/agents` (3,758 commits / 79,386 files /
+108.22 MiB / 10,488 agent pages / 7,353 chats / 4,948 prompts),
+`sase agent sync --check --json` (1,375 + 81 pending hoods), `sase bead show sase-w3.6`
+(dead provenance link).
+
+**Docs:** `docs/agents_sidecar.md`, `docs/beads.md`, `docs/change_spec.md`,
+`docs/project_spec.md`, `docs/configuration.md` (Owner Identity, `external_mirror`),
+`docs/axe.md` (`external_mirror` lane), `docs/mentors.md`, `docs/vcs.md`,
+`docs/notifications.md`.
+
+**Prior research:** `research:202609/tailnet_agent_fleet/tailnet_agent_fleet.md`,
+`research:202609/athena_agent_sync_repair/athena_agent_sync_repair.md`,
+`research:202609/stitch_timeout_hardening/stitch_timeout_hardening.md`,
+`research:202608/fork_contributor_harness/fork_contributor_harness.md`,
+`research:202607/shared_sdd_clone_consolidated.md`.
+
+**Decision records:** `decisions:gates-never-block`, `decisions:single-turn-agents`,
+`decisions:host-owned-completion`, `decisions:v1-import-retired`,
+`decisions:two-speed-verification`, `decisions:corpus-before-mechanism`,
+`decisions:rust-core-required`.
+
+**Core memory:** `rust_core_backend_boundary` (any wire model, retry classification, or
+identity resolution added here belongs in `sase-core`, not in Python).
+
+---
+
+## Appendix A — Parallel independent analysis (`research.7.cdx`)
+
+Two agents researched this question concurrently and each produced a complete report.
+The body above is `research.7.cld`'s. This appendix is `research.7.cdx`'s report —
+originally titled *SASE collaboration architecture* — reproduced verbatim with its
+headings demoted one level. The two agree on the load-bearing conclusions (make the
+forge-backed Patch/PR plane the collaboration boundary, retire the `agents_sync` import
+leg while keeping durable published provenance, and keep the tailnet host daemon
+single-user); they differ in evidence, emphasis, and phasing detail. Neither has been
+edited to agree with the other, and this document has not yet been consolidated into a
+single narrative.
 
 **Date:** 2026-09-04  
 **Status:** Research recommendation; not an approved implementation direction  
@@ -7,7 +870,7 @@ machine, developing the same project concurrently through a pull-request workflo
 should happen to the current cross-machine agent-sync system, and how should the proposed
 single-TUI tailnet fleet fit into the result?
 
-## Executive conclusion
+### Executive conclusion
 
 SASE should make the **Patch and its pull request**, not the agent, the unit of
 collaboration.
@@ -39,7 +902,7 @@ eager synchronization and the fiction that another user's historical agent is a 
 agent. The tailnet fleet does not replace the shared PR plane, and the PR plane does not
 replace the user's live fleet.
 
-## Method and evidence
+### Method and evidence
 
 This report examined:
 
@@ -64,7 +927,7 @@ must not be mistaken for a cross-project benchmark. They are nevertheless valuab
 because the sample contains only one user across two machines: it is a lower-complexity
 case than the multi-user design must support.
 
-## What collaboration should mean in SASE
+### What collaboration should mean in SASE
 
 Collaboration is not “I can see every agent everybody has ever run.” It is the ability
 for people and their tools to develop one codebase concurrently while maintaining
@@ -127,9 +990,9 @@ describes Git-style pull requests as a legitimate batched collaboration model, d
 from real-time shared-document replication ([Kleppmann et al., “Local-first
 software”](https://www.inkandswitch.com/essay/local-first/)).
 
-## The current agent-sync solution
+### The current agent-sync solution
 
-### What it does well
+#### What it does well
 
 The present v2 system is carefully engineered. It provides:
 
@@ -148,7 +1011,7 @@ Those are real capabilities. In particular, the offline-machine property emphasi
 the tailnet fleet report is worth preserving: a host disappearing should not destroy the
 only record of work that affected the project.
 
-### Its actual shape
+#### Its actual shape
 
 `sase agent sync` is a full-duplex Git transaction per selected project:
 
@@ -182,7 +1045,7 @@ of code quality:
 | Commits touching `src/sase/agents_sync/` since its 2026-07-22 introduction | 111 |
 | Additional cross-cutting callers/tests | Not included above |
 
-### Observed scale
+#### Observed scale
 
 On 2026-09-04, the live agents sidecar for `sase`—one user, two machines, initialized
 2026-07-23—had:
@@ -212,7 +1075,7 @@ since been retired behind a sunset path and batching work has landed, but the ep
 shows how replication, migration, display naming, provenance, revival, and permanent
 name allocation amplify one another.
 
-### Why it is not a collaboration architecture
+#### Why it is not a collaboration architecture
 
 The current solution answers “how do I reproduce remote agent history locally?” It does
 not answer the questions collaborators actually need:
@@ -229,7 +1092,7 @@ The sync does contain commit associations, but the agent hood remains the primar
 replication object and the PR remains secondary. For team development, that priority is
 backward.
 
-### Principal problems
+#### Principal problems
 
 1. **It conflates six products.** Provenance archive, prompt archive, artifact hosting,
    live-status discovery, cross-machine revival, and collaboration are one Git protocol.
@@ -278,11 +1141,11 @@ writer's global regeneration, the commit frequency, eager import semantics, priv
 the lack of a PR-centered model. They are a useful transition optimization, not the
 architecture.
 
-## Requirements and invariants
+### Requirements and invariants
 
 The collaboration design should satisfy these invariants.
 
-### Authority
+#### Authority
 
 - A host is the sole authority for its live processes, local workspaces, local logs, and
   runner-slot admission.
@@ -292,7 +1155,7 @@ The collaboration design should satisfy these invariants.
 - Caches may be stale and must display their observation time; they never become a new
   authority merely because a TUI loaded them.
 
-### Identity
+#### Identity
 
 Display names and durable identities must be separate:
 
@@ -315,7 +1178,7 @@ project. Tailscale's model is a useful precedent: it distinguishes identity-prov
 user identity from a cryptographic node identity and considers both when authorizing a
 connection ([Tailscale identity](https://tailscale.com/docs/concepts/tailscale-identity)).
 
-### Safety and consistency
+#### Safety and consistency
 
 - Local work must continue offline. Shared state is eventually published when the forge
   is reachable.
@@ -330,7 +1193,7 @@ connection ([Tailscale identity](https://tailscale.com/docs/concepts/tailscale-i
 - Cross-user process operations are denied by default even when both users can read the
   repository.
 
-## Options considered
+### Options considered
 
 | Architecture | Same-user fleet | Multi-user PR coordination | Offline/local work | Privacy | Scaling | Verdict |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -344,7 +1207,7 @@ The central-service option may eventually improve webhook fan-out and organizati
 analytics, but it should be a cache/relay over forge truth, not a prerequisite for local
 SASE or a new owner of source and agent data.
 
-## Recommended architecture in detail
+### Recommended architecture in detail
 
 ```text
                                   SHARED PROJECT PLANE
@@ -376,7 +1239,7 @@ SASE or a new owner of source and agent data.
              fetched by run/Patch reference, never auto-imported
 ```
 
-### 1. Personal execution and fleet plane
+#### 1. Personal execution and fleet plane
 
 Adopt the tailnet research's central recommendation:
 
@@ -405,7 +1268,7 @@ larger remote-execution surface than PR collaboration requires. Tailscale grants
 valuable for explicit team-operated hosts, but new grants are deny-by-default and should
 be least privilege ([Tailscale grants](https://tailscale.com/docs/reference/syntax/grants)).
 
-### 2. Forge-backed collaboration plane
+#### 2. Forge-backed collaboration plane
 
 The shared read model is **workstreams**, not remote agent rows. A workstream combines:
 
@@ -462,9 +1325,9 @@ write access is GitHub-App-only and check data has finite retention
 ([GitHub Checks API](https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-checks)).
 PR state and terminal run manifests must remain understandable without a check run.
 
-### 3. Collaboration workflow
+#### 3. Collaboration workflow
 
-#### Launch
+##### Launch
 
 1. Resolve the project by immutable provider repository ID.
 2. If launched from an issue, query open claims and PRs linked to that issue. Warn on an
@@ -478,7 +1341,7 @@ PR state and terminal run manifests must remain understandable without a check r
    remote branch keys.
 5. Launch the run with stable principal, host, Patch, and run identities captured.
 
-#### Publish intent
+##### Publish intent
 
 - Before the first push, the Patch is local and may continue offline.
 - At the first durable stitch/push, open or update a **draft PR** promptly. The draft PR
@@ -494,7 +1357,7 @@ follow-up through PR comments ([GitHub third-party coding
 agents](https://docs.github.com/en/copilot/concepts/agents/about-third-party-coding-agents),
 [Copilot agent workflow](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/overview)).
 
-#### Iterate and hand off
+##### Iterate and hand off
 
 - Reviews and PR comments become durable collaboration events. SASE may offer a local
   action to launch a successor run from a selected change request.
@@ -507,7 +1370,7 @@ agents](https://docs.github.com/en/copilot/concepts/agents/about-third-party-cod
 - Potential overlap is computed from shared issue links and PR diffs. It is a warning,
   never an attempt to lock paths globally.
 
-#### Land
+##### Land
 
 - Ready state means the Patch has a current remote head, required reviews, required
   checks, and no unresolved blocking relationships.
@@ -517,7 +1380,7 @@ agents](https://docs.github.com/en/copilot/concepts/agents/about-third-party-cod
   failed archive upload leaves an explicit retry obligation but never invalidates the
   source commit or hides the PR.
 
-### 4. Lazy run archive
+#### 4. Lazy run archive
 
 Introduce a `RunArchiveProvider` boundary with local, Git-sidecar, and future object-store
 implementations. The archive is useful for reproducibility and handoff, but collaboration
@@ -568,7 +1431,7 @@ selected manifest/content locally. “Revive” downloads one selected restartab
 and launches a **new** local run with `derived_from_run_id`; it never rewrites the old
 identity into the viewer's agent namespace.
 
-### 5. Failure and offline semantics
+#### 5. Failure and offline semantics
 
 | Condition | Required behavior |
 | --- | --- |
@@ -583,7 +1446,7 @@ identity into the viewer's agent namespace.
 | User loses repository access | Forge and archive reads stop; cached sensitive bodies obey local retention policy |
 | Host token is revoked | Fleet connection becomes unauthorized; forge work remains visible according to repo ACLs |
 
-### 6. Security model
+#### 6. Security model
 
 There are three different permissions and they must not collapse into “can read the
 repo”:
@@ -603,9 +1466,9 @@ Patch/run, expected revision, result, and idempotency key. The system should exp
 coarse teammate activity only when deliberately published; raw reasoning and transcripts
 are neither required nor desirable for basic collaboration.
 
-## What to keep, change, and remove
+### What to keep, change, and remove
 
-### Keep
+#### Keep
 
 - Patch ↔ PR as the durable code-change mapping, and Stitch ↔ commit attribution.
 - SASE's isolated workspace-per-agent model.
@@ -616,7 +1479,7 @@ are neither required nor desirable for basic collaboration.
 - The fleet report's host daemon, HTTP+SSE, per-host authority, cache/staleness model,
   and read-only-first rollout.
 
-### Change
+#### Change
 
 - Make stable principal/host/run IDs canonical; render username, machine, and agent names
   as labels.
@@ -629,7 +1492,7 @@ are neither required nor desirable for basic collaboration.
 - Move publication off the code-commit critical path.
 - Make broad transcript/prompt sharing opt-in or project-policy-driven.
 
-### Remove
+#### Remove
 
 - Default cloning/materialization of every enabled project's full agents archive.
 - Periodic all-project agent-repository inspection as the source of collaboration
@@ -641,12 +1504,12 @@ are neither required nor desirable for basic collaboration.
   family groups, visibility state, and permanent name registry.
 - Any plan to use a personal tailnet as the required multi-user project bus.
 
-## Migration strategy
+### Migration strategy
 
 The migration should preserve existing archives while proving the replacement in small
 steps.
 
-### Phase 1 — Establish the collaboration read model
+#### Phase 1 — Establish the collaboration read model
 
 - Add stable repository, Patch, principal, host, and run IDs without changing current
   display names.
@@ -656,14 +1519,14 @@ steps.
 - Measure query count, time to first useful row, active-PR cardinality, and stale-cache
   behavior.
 
-### Phase 2 — Publish Patch intent and handoff
+#### Phase 2 — Publish Patch intent and handoff
 
 - Add idempotent advisory issue claims and early draft-PR linkage.
 - Add PR-comment-driven iteration and explicit Patch handoff.
 - Use expected head SHA on remote mutations.
 - Let the forge's review rules and merge queue own landing safety.
 
-### Phase 3 — Ship the personal fleet separately
+#### Phase 3 — Ship the personal fleet separately
 
 - Follow the fleet report through read-only federated visibility before mutations.
 - Use stable per-user host-installation identity rather than machine label alone.
@@ -671,7 +1534,7 @@ steps.
 - Keep all cross-user controls disabled unless a separately audited operator policy is
   configured.
 
-### Phase 4 — Introduce archive v3 and stop eager imports
+#### Phase 4 — Introduce archive v3 and stop eager imports
 
 - Add the `RunArchiveProvider` and compact terminal manifest.
 - Publish only Patch-associated terminal runs by default; allow explicit archives for
@@ -682,7 +1545,7 @@ steps.
 - Make current agents clones partial/sparse during the transition to reduce immediate
   disk and blob-transfer cost.
 
-### Phase 5 — Freeze and retire legacy transport
+#### Phase 5 — Freeze and retire legacy transport
 
 - Stop writing v2 hood snapshots and per-commit prompt pages.
 - Retain existing v1/v2 repositories as read-only history for a documented period.
@@ -692,7 +1555,7 @@ steps.
   shared-index regeneration, and full-sync UI only after telemetry shows no required
   consumers remain.
 
-### Acceptance criteria
+#### Acceptance criteria
 
 The replacement is successful when:
 
@@ -716,7 +1579,7 @@ The replacement is successful when:
 10. The old agents-sync path can be removed without breaking Patch/PR collaboration or
     personal fleet visibility.
 
-## Risks and open decisions
+### Risks and open decisions
 
 - **Archive backend:** a compact Git v3 backend is the lowest-risk transition, but an
   object store will eventually handle large encrypted blobs and retention better. The
@@ -736,7 +1599,7 @@ The replacement is successful when:
   relay later. It must remain a reconstructible cache over forge/archive truth so local
   development never depends on it.
 
-## Recommended solution
+### Recommended solution
 
 Build SASE collaboration around a provider-neutral **Workstream = Work item + Patch +
 PR** model, with the Git forge as the shared source of truth for intent, review, checks,
