@@ -4,7 +4,7 @@
     {
       "created_at": "2026-09-04T15:58:28Z",
       "created_by": "research.7.cdx",
-      "description": "Uses the proposed same-user tailnet fleet control plane as one layer of the collaboration architecture",
+      "description": "scopes the fleet daemon as single-user and amends its offline-host caching story",
       "origin": "manual",
       "relation": "derives-from",
       "schema_version": 2,
