@@ -15,7 +15,7 @@
     {
       "created_at": "2026-09-04T15:59:48Z",
       "created_by": "research.7.cdx",
-      "description": "Uses the documented sync scaling and identity failures to evaluate the current agent replication design",
+      "description": "supplies the measured evidence that the agents_sync import leg has never landed",
       "origin": "manual",
       "relation": "derives-from",
       "schema_version": 2,
