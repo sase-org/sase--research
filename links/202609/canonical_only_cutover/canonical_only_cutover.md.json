@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/canonical_only_cutover/canonical_only_cutover.md",
+  "rows": [
+    {
+      "created_at": "2026-09-05T23:02:00Z",
+      "created_by": "sase-x7.1",
+      "description": "Ground fleet-census phase sase-x7.1 execution in the research this epic is based on",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:sase-x7.1",
+      "target_ref": "research:202609/canonical_only_cutover/canonical_only_cutover.md",
+      "uses": 2
+    }
+  ],
+  "schema_version": 2
+}
