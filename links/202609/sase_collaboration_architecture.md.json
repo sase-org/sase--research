@@ -55,6 +55,17 @@
       "source_ref": "research:202609/sase_collaboration_architecture.md",
       "target_ref": "research:202607/shared_sdd_clone_consolidated.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-05T15:02:25Z",
+      "created_by": "01",
+      "description": "Context on why the sase-ws import-leg removal epic was chosen; assessing conflicts with the tailnet fleet design",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:01",
+      "target_ref": "research:202609/sase_collaboration_architecture.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
