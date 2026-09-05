@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/tailnet_agent_fleet_v2.md",
+  "rows": [
+    {
+      "created_at": "2026-09-05T23:17:19Z",
+      "created_by": "research.1g.final_2",
+      "description": "Consolidating researcher A's fleet-dispatch report into the merged report",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1g.final_2",
+      "target_ref": "research:202609/tailnet_agent_fleet_v2.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
