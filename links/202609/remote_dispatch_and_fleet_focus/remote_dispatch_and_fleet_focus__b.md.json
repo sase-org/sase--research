@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/remote_dispatch_and_fleet_focus/remote_dispatch_and_fleet_focus__b.md",
+  "rows": [
+    {
+      "created_at": "2026-09-06T16:03:29Z",
+      "created_by": "research.1i.final",
+      "description": "Confirm relocated researcher B canonical reference and retained provenance",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1i.final",
+      "target_ref": "research:202609/remote_dispatch_and_fleet_focus/remote_dispatch_and_fleet_focus__b.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}

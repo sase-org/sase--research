@@ -44,6 +44,17 @@
       "source_ref": "agent:research.1i.cld",
       "target_ref": "research:202609/tailnet_fleet_federation/tailnet_fleet_federation.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-06T15:53:20Z",
+      "created_by": "research.1i.final",
+      "description": "Review latest fleet study and evidence superseding the first two studies",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1i.final",
+      "target_ref": "research:202609/tailnet_fleet_federation/tailnet_fleet_federation.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
