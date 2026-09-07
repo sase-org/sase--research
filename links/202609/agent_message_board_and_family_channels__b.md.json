@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/agent_message_board_and_family_channels__b.md",
+  "rows": [
+    {
+      "created_at": "2026-09-07T02:34:34Z",
+      "created_by": "research.1j.final",
+      "description": "Read the dispatch-time expansion and hook evidence from report B",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1j.final",
+      "target_ref": "research:202609/agent_message_board_and_family_channels__b.md",
+      "uses": 4
+    }
+  ],
+  "schema_version": 2
+}
