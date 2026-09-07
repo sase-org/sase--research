@@ -22,6 +22,17 @@
       "source_ref": "agent:research.1l.image",
       "target_ref": "research:202609/provider_subscription_usage/provider_subscription_usage.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-07T18:22:55Z",
+      "created_by": "research.1m.cdx",
+      "description": "Need the remaining prior provider-usage findings, including tests and unresolved caveats",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1m.cdx",
+      "target_ref": "research:202609/provider_subscription_usage/provider_subscription_usage.md",
+      "uses": 4
     }
   ],
   "schema_version": 2
