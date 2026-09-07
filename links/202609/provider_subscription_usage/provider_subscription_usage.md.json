@@ -2,6 +2,17 @@
   "artifact_ref": "research:202609/provider_subscription_usage/provider_subscription_usage.md",
   "rows": [
     {
+      "created_at": "2026-09-07T18:22:10Z",
+      "created_by": "research.1m.cld",
+      "description": "Reviewing prior research on LLM provider subscription usage limits as required context for designing the CLI/TUI UX for surfacing those limits in sase",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1m.cld",
+      "target_ref": "research:202609/provider_subscription_usage/provider_subscription_usage.md",
+      "uses": 1
+    },
+    {
       "created_at": "2026-09-07T18:23:14Z",
       "created_by": "research.1l.image",
       "description": "Need the report's findings and recommendation to design the requested infographic",
