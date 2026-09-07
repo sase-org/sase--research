@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/subscription_capacity_experience/subscription_capacity_experience.md",
+  "rows": [
+    {
+      "created_at": "2026-09-07T19:53:52Z",
+      "created_by": "research.1m.image",
+      "description": "Need the consolidated UX recommendations to design an infographic of the main points",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1m.image",
+      "target_ref": "research:202609/subscription_capacity_experience/subscription_capacity_experience.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
