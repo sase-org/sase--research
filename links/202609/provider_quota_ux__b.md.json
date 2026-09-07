@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/provider_quota_ux__b.md",
+  "rows": [
+    {
+      "created_at": "2026-09-07T19:29:31Z",
+      "created_by": "research.1m.final",
+      "description": "Examine report B pacing equations, thresholds, and CLI proposal precisely",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1m.final",
+      "target_ref": "research:202609/provider_quota_ux__b.md",
+      "uses": 4
+    }
+  ],
+  "schema_version": 2
+}

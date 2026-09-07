@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/provider_usage_capacity_ux__a.md",
+  "rows": [
+    {
+      "created_at": "2026-09-07T19:29:31Z",
+      "created_by": "research.1m.final",
+      "description": "Examine report A CLI specification, schema corrections, validation, and sources",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1m.final",
+      "target_ref": "research:202609/provider_usage_capacity_ux__a.md",
+      "uses": 2
+    }
+  ],
+  "schema_version": 2
+}
