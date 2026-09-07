@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/pager_filetype_syntax_layer/pager_filetype_syntax_layer.md",
+  "rows": [
+    {
+      "created_at": "2026-09-07T14:55:51Z",
+      "created_by": "sase-xz.1",
+      "description": "Need §4.3 language resolution table from research for mapping implementation",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:sase-xz.1",
+      "target_ref": "research:202609/pager_filetype_syntax_layer/pager_filetype_syntax_layer.md",
+      "uses": 2
+    }
+  ],
+  "schema_version": 2
+}
