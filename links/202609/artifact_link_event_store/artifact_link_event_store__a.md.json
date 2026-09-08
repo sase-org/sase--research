@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/artifact_link_event_store/artifact_link_event_store__a.md",
+  "rows": [
+    {
+      "created_at": "2026-09-08T14:34:17Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: artifact_link_event_store__a.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202609/artifact_link_event_store/artifact_link_event_store.md",
+      "target_ref": "research:202609/artifact_link_event_store/artifact_link_event_store__a.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
