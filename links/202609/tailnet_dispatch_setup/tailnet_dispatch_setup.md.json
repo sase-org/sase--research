@@ -33,6 +33,17 @@
       "source_ref": "research:202609/tailnet_dispatch_setup/tailnet_dispatch_setup.md",
       "target_ref": "research:202609/tailnet_dispatch_setup/tailnet_dispatch_setup__b.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-08T15:28:57Z",
+      "created_by": "sase-xe.16.8",
+      "description": "Need consolidated remote dispatch research before implementing fleet visual snapshot phase sase-xe.16.8",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:sase-xe.16.8",
+      "target_ref": "research:202609/tailnet_dispatch_setup/tailnet_dispatch_setup.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
