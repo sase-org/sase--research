@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/tailnet_dispatch_setup/tailnet_dispatch_setup.md",
+  "rows": [
+    {
+      "created_at": "2026-09-08T13:51:44Z",
+      "created_by": "research.1n.final",
+      "description": "Verify the completed report structure and its local source links",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1n.final",
+      "target_ref": "research:202609/tailnet_dispatch_setup/tailnet_dispatch_setup.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
