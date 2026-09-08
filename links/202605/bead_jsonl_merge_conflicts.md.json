@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202605/bead_jsonl_merge_conflicts.md",
+  "rows": [
+    {
+      "created_at": "2026-09-08T13:58:57Z",
+      "created_by": "research.1o.cld",
+      "description": "Continue reading options 5-7 and the recommendation for prior art",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1o.cld",
+      "target_ref": "research:202605/bead_jsonl_merge_conflicts.md",
+      "uses": 2
+    }
+  ],
+  "schema_version": 2
+}
