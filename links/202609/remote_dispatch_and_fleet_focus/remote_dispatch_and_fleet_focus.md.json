@@ -99,6 +99,28 @@
       "source_ref": "agent:sase-xe.16.8",
       "target_ref": "research:202609/remote_dispatch_and_fleet_focus/remote_dispatch_and_fleet_focus.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-08T17:30:09Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: remote_dispatch_and_fleet_focus__a.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202609/remote_dispatch_and_fleet_focus/remote_dispatch_and_fleet_focus.md",
+      "target_ref": "research:202609/remote_dispatch_and_fleet_focus/remote_dispatch_and_fleet_focus__a.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-09-08T17:30:09Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: remote_dispatch_and_fleet_focus__b.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202609/remote_dispatch_and_fleet_focus/remote_dispatch_and_fleet_focus.md",
+      "target_ref": "research:202609/remote_dispatch_and_fleet_focus/remote_dispatch_and_fleet_focus__b.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
