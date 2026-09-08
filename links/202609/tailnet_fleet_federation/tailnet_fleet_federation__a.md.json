@@ -1,5 +1,5 @@
 {
-  "artifact_ref": "research:202609/tailnet_agent_fleet_v2.md",
+  "artifact_ref": "research:202609/tailnet_fleet_federation/tailnet_fleet_federation__a.md",
   "rows": [
     {
       "created_at": "2026-09-05T23:17:19Z",
@@ -9,7 +9,7 @@
       "relation": "read",
       "schema_version": 2,
       "source_ref": "agent:research.1g.final_2",
-      "target_ref": "research:202609/tailnet_agent_fleet_v2.md",
+      "target_ref": "research:202609/tailnet_fleet_federation/tailnet_fleet_federation__a.md",
       "uses": 1
     }
   ],

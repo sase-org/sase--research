@@ -96,7 +96,7 @@
       "origin": "manual",
       "relation": "supersedes",
       "schema_version": 2,
-      "source_ref": "research:202609/cross_machine_agent_control_plane.md",
+      "source_ref": "research:202609/tailnet_fleet_federation/tailnet_fleet_federation__b.md",
       "target_ref": "research:202609/tailnet_agent_fleet/tailnet_agent_fleet.md",
       "uses": 1
     },

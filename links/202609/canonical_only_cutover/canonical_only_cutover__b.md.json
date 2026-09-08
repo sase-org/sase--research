@@ -1,5 +1,5 @@
 {
-  "artifact_ref": "research:202609/legacy_backcompat_removal.md",
+  "artifact_ref": "research:202609/canonical_only_cutover/canonical_only_cutover__b.md",
   "rows": [
     {
       "created_at": "2026-09-05T21:59:13Z",
@@ -9,7 +9,7 @@
       "relation": "read",
       "schema_version": 2,
       "source_ref": "agent:research.1f.final",
-      "target_ref": "research:202609/legacy_backcompat_removal.md",
+      "target_ref": "research:202609/canonical_only_cutover/canonical_only_cutover__b.md",
       "uses": 2
     }
   ],
