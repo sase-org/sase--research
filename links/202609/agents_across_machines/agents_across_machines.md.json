@@ -66,6 +66,17 @@
       "source_ref": "agent:research.1q.image_2",
       "target_ref": "research:202609/agents_across_machines/agents_across_machines.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-09T19:46:01Z",
+      "created_by": "0hv",
+      "description": "The consolidated UX research this epic implements.",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "plan:202609/unified_agents_across_machines.md",
+      "target_ref": "research:202609/agents_across_machines/agents_across_machines.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
