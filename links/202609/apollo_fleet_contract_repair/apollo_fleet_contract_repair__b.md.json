@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/apollo_fleet_contract_repair/apollo_fleet_contract_repair__b.md",
+  "rows": [
+    {
+      "created_at": "2026-09-09T12:43:16Z",
+      "created_by": "sase",
+      "description": "research-swarm lineage: apollo_fleet_contract_repair__b.md is a consolidation source on disk",
+      "origin": "derived",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202609/apollo_fleet_contract_repair/apollo_fleet_contract_repair.md",
+      "target_ref": "research:202609/apollo_fleet_contract_repair/apollo_fleet_contract_repair__b.md",
+      "uses": 1
+    }
+  ],
+  "schema_version": 2
+}
