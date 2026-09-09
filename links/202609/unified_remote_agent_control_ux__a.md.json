@@ -1,0 +1,17 @@
+{
+  "artifact_ref": "research:202609/unified_remote_agent_control_ux__a.md",
+  "rows": [
+    {
+      "created_at": "2026-09-09T18:53:40Z",
+      "created_by": "research.1q.final_2",
+      "description": "Verify the full A report including recommendations and sources after output truncation",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1q.final_2",
+      "target_ref": "research:202609/unified_remote_agent_control_ux__a.md",
+      "uses": 2
+    }
+  ],
+  "schema_version": 2
+}
