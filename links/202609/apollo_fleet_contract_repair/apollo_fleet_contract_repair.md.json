@@ -66,6 +66,17 @@
       "source_ref": "agent:sase-xe.16.11.7.2",
       "target_ref": "research:202609/apollo_fleet_contract_repair/apollo_fleet_contract_repair.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-09T20:02:53Z",
+      "created_by": "sase-xe.16.11.7.4",
+      "description": "Need live reproduction evidence before implementing phase sase-xe.16.11.7.4 launch-durability",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:sase-xe.16.11.7.4",
+      "target_ref": "research:202609/apollo_fleet_contract_repair/apollo_fleet_contract_repair.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
