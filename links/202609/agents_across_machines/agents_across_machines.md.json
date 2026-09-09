@@ -77,6 +77,28 @@
       "source_ref": "plan:202609/unified_agents_across_machines.md",
       "target_ref": "research:202609/agents_across_machines/agents_across_machines.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-09T19:55:30Z",
+      "created_by": "sase-xe.16.11.7.1",
+      "description": "Need consolidated UX research context for fleet-wire implementation",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:sase-xe.16.11.7.1",
+      "target_ref": "research:202609/agents_across_machines/agents_across_machines.md",
+      "uses": 1
+    },
+    {
+      "created_at": "2026-09-09T19:57:32Z",
+      "created_by": "sase-xe.16.11.7.2",
+      "description": "Need source UX research before implementing attention-wire phase sase-xe.16.11.7.2",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:sase-xe.16.11.7.2",
+      "target_ref": "research:202609/agents_across_machines/agents_across_machines.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
