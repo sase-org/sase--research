@@ -33,6 +33,17 @@
       "source_ref": "file:explicit:804494daae502aa50b342fdb",
       "target_ref": "research:202609/agents_across_machines/agents_across_machines.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-09T19:15:32Z",
+      "created_by": "0hs",
+      "description": "reviews its recommendation and re-verifies its evidence",
+      "origin": "manual",
+      "relation": "derives-from",
+      "schema_version": 2,
+      "source_ref": "research:202609/agents_across_machines_review.md",
+      "target_ref": "research:202609/agents_across_machines/agents_across_machines.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
