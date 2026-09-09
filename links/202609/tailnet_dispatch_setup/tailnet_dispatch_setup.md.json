@@ -77,6 +77,17 @@
       "source_ref": "agent:sase-xe.16.11.1",
       "target_ref": "research:202609/tailnet_dispatch_setup/tailnet_dispatch_setup.md",
       "uses": 1
+    },
+    {
+      "created_at": "2026-09-09T14:21:52Z",
+      "created_by": "sase-xe.16.11.5",
+      "description": "Need tailnet setup research before live Apollo acceptance on sase-xe.16.11.5",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:sase-xe.16.11.5",
+      "target_ref": "research:202609/tailnet_dispatch_setup/tailnet_dispatch_setup.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
