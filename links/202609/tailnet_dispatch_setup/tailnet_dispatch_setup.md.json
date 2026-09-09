@@ -55,6 +55,17 @@
       "source_ref": "agent:sase-xe.16.6",
       "target_ref": "research:202609/tailnet_dispatch_setup/tailnet_dispatch_setup.md",
       "uses": 2
+    },
+    {
+      "created_at": "2026-09-08T21:58:24Z",
+      "created_by": "sase-xe.16.10",
+      "description": "Need consolidated setup research before live Apollo proof phase",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:sase-xe.16.10",
+      "target_ref": "research:202609/tailnet_dispatch_setup/tailnet_dispatch_setup.md",
+      "uses": 1
     }
   ],
   "schema_version": 2
