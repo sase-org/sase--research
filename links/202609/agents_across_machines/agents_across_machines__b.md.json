@@ -22,6 +22,17 @@
       "source_ref": "agent:0hs",
       "target_ref": "research:202609/agents_across_machines/agents_across_machines__b.md",
       "uses": 3
+    },
+    {
+      "created_at": "2026-09-09T18:53:40Z",
+      "created_by": "research.1q.final_2",
+      "description": "Verify the full B report including its independent findings after output truncation",
+      "origin": "read",
+      "relation": "read",
+      "schema_version": 2,
+      "source_ref": "agent:research.1q.final_2",
+      "target_ref": "research:202609/agents_across_machines/agents_across_machines__b.md",
+      "uses": 2
     }
   ],
   "schema_version": 2
