@@ -4,7 +4,9 @@ _Lead researcher · 2026-09-16 · consolidates
 [report A](service_host_and_services_tab__a.md) and
 [report B](service_host_and_services_tab__b.md) plus independent verification at sase
 `491daa988` and live inspection of athena (re-verified today: four leaked
-`sase-axe-*.scope` units, `sase-gateway.service` enabled+active, `Linger=yes`)._
+`sase-axe-*.scope` units, `sase-gateway.service` enabled+active, `Linger=yes`). Revised
+the same day after cross-checking an independent third report (GPT Astra, not committed)
+at sase `7636fe03b` and on athena and apollo; §12 lists what changed and why._
 
 This report uses the request's names — **Supervisor** for today's AXE, **Service tab**
 for today's AXE tab — except where §3 flags a naming recommendation.
@@ -13,7 +15,7 @@ for today's AXE tab — except where §3 flags a naming recommendation.
 
 **Worth pursuing — but only as a replacement architecture, not an addition.** Both
 researchers independently reached the same verdict for the same reasons. SASE today has
-three bespoke supervision arrangements that a single service runtime would subsume:
+four bespoke supervision arrangements that a single service runtime would subsume:
 
 - **AXE self-supervises badly.** A TUI start path wraps the orchestrator in
   `systemd-run --scope`; recovery is an optional 5-minute ensure timer (installed on
@@ -88,9 +90,12 @@ ship first regardless of the rest of the epic. Report A missed this entirely; it
    node that isn't rendered. Unavailable nodes (plugin missing, invalid definition)
    carry the reason inline.
 2. **Define stop vs. disable persistence explicitly** (A+B). `stop` is a runtime
-   override holding until `start` or the next host start/boot; `disable` is persistent
+   override that survives host restarts and crashes and clears only on `start` or the
+   next machine boot (keyed to the boot id, as B specified); `disable` is persistent
    machine policy. systemd users already expect stop ≠ disable; without this, "I
-   stopped the gateway" is ambiguous after `sase update` restarts the host.
+   stopped the gateway" is ambiguous after `sase update` restarts the host. (An
+   earlier draft said "next host start/boot". That is wrong: host restarts are routine,
+   so the stop would be undone by the very `sase update` this rule exists for.)
 3. **Long-lived detached work must escape the unit cgroup** (B; §2). Non-negotiable.
 4. **The host resolves config from machine-level layers only** — defaults, plugin
    layers, user config, machine overlay — **never project-local `sase.yml`** (A+B). A
@@ -137,6 +142,38 @@ ship first regardless of the rest of the epic. Report A missed this entirely; it
 14. **Limit *active* oneshots, not history** (A). Today a completed `!` command
     consumes its slot until dismissed; completed history must never block a new
     command.
+15. **The host needs an explicit environment contract** (B's unit had a static `PATH`;
+    lead, verified live). Today AXE inherits the launching TUI's interactive shell
+    environment, and every agent a job launches inherits it in turn. A platform unit
+    gets only the service manager's environment. On athena, the running orchestrator's
+    environment includes `GEMINI_API_KEY`, `SASE_FEATURE_FLAGS`, and the nvm bin
+    directory. `systemctl --user show-environment` has none of them, so `codex`,
+    `gemini`, and `opencode` do not resolve there. On apollo the user manager's `PATH`
+    lacks `~/.local/bin`, so even `sase` does not resolve. B's static
+    `<install>/bin:%h/.local/bin:/usr/local/bin:/usr/bin:/bin` would still miss the nvm
+    CLIs on athena, and launchd's default `PATH` omits Homebrew. So:
+    `sase service init` captures the invoking shell's `PATH` into a 0600
+    `~/.sase/service/env` file. The host loads that file itself, so Linux and macOS
+    share one mechanism and no unit or plist carries secrets. Secrets that providers
+    read from the environment (`GEMINI_API_KEY`, `mobile_gateway.fcm_credential_env`)
+    are added to it explicitly; the file never holds a snapshot of the whole shell
+    environment. `init --check`, `sase doctor`, and `status` resolve every configured
+    agent-provider CLI and the gateway binary against the host's effective `PATH`, and
+    they report flags that are set only in the interactive shell. Without this, the
+    migration silently breaks agent launches for every provider that lives outside the
+    service manager's `PATH`.
+16. **Oneshots run only on request, never on replay** (Astra; lead-verified gap). The
+    host auto-starts enabled *daemons* only. A oneshot runs because a request (`!`,
+    `sase service proc run`) asked for it. It never runs because a config entry or an
+    old row exists. After a crash, an unsettled oneshot is settled as unknown and never
+    retried. B's glossary text said "configured oneshots run when the sase service
+    starts", and its examples conflated host start with boot ("at host start, prune
+    tmp" / "warm caches after boot"). Host starts happen on every update, flag flip,
+    and config save, so that rule would re-run side effects routinely. v1 therefore
+    accepts only `mode: daemon` in `service.procs`; `oneshot` is transient-only. This is
+    the same corpus-before-mechanism call as `when:` in §5, since no configured oneshot
+    has a consumer. If one is added later, it runs at most once per machine boot (keyed
+    to the boot id) and never on a host restart or config reload.
 
 ## 5. Where the reports disagreed, and the resolutions
 
@@ -218,8 +255,11 @@ immediately resurrect.
 **Every run is a durable Proc.** The stable service-proc node is what users control;
 each launch/restart is a distinct proc-store row carrying the additive `service` block
 (`{name, mode, source}`) — restart history without mutating one record into several
-lifetimes. Exempt service rows from the generic 100-row retention and keep per-service
-last-N instead, so restarts don't churn unrelated history.
+lifetimes. Exempt *named* service-proc rows from the generic 100-row retention and keep
+per-service last-N instead, so restarts don't churn unrelated history. Transient
+oneshots have no stable name (B's block is `{mode: oneshot, source: transient}`), so
+they stay under the generic retention. Otherwise every `!` command would become its own
+bucket that is never pruned.
 
 **Config** (composed and validated in sase-core; Python fails closed, like
 `axe_config_compose`):
@@ -230,7 +270,7 @@ service:
     <name>:
       description: "…"
       enabled: true               # default true; plugins ship false
-      mode: daemon                # daemon | oneshot
+      mode: daemon                # only daemon in v1; oneshot is transient-only (§4.16)
       command: "autossh -N box"   # string → sh -c; list → argv; XOR with builtin:
       builtin: gateway            # core launcher reading existing config sections
       cwd: "~"                    # env:, restart:, success_exit_codes:,
@@ -247,6 +287,15 @@ needs dynamic expansion; the known case (Telegram) is covered by the plugin ship
 one-line overlay entry. Complex services live behind an executable boundary — testable,
 portable, and isolating plugin failures from the host (A's argument, adopted).
 
+**Compose list-valued fields atomically.** The generic layer merge concatenates lists in
+the default, plugin, overlay, and local layers. Only the base user layer replaces them
+(`merge_config_sources` in `src/sase/config/loading.py`; verified). As a result, a
+machine overlay that overrides a plugin's `command: [argv…]` would *append* to the
+plugin's argv, and `success_exit_codes` and `after` would accumulate the same way. The
+sase-core `service.procs` composer must merge each entry field by field and replace
+list values whole in every layer. It must also treat an explicit `enabled: false` as a
+value, never as a missing key.
+
 **Rust core boundary** (per rust-core-required): config compose/validation, the wire
 `service` block + query field + retention exemption, the locked
 `~/.sase/service/state.json` store (overrides, boot-scoped stops, heartbeat), a
@@ -257,11 +306,15 @@ identically. Process spawning, platform-unit writers, and Textual stay in Python
 **Platform units.** Linux: `~/.config/systemd/user/sase.service` — `Type=exec`, stable
 `ExecStart`, `Restart=on-failure`, `RestartSec=5`, **`KillMode=mixed`**,
 `WantedBy=default.target`, no `network-online.target` (it doesn't exist in the user
-manager), no features beyond systemd 255 (apollo). `init` checks linger and offers the
-exact `loginctl enable-linger` remediation without silently elevating. macOS:
+manager), no features beyond systemd 255 (apollo). The environment comes from the
+host-loaded env file (§4.15), not from `Environment=` lines. `init` checks linger and
+offers the exact `loginctl enable-linger` remediation without silently elevating. macOS:
 `~/Library/LaunchAgents/sh.sase.service.plist` — `RunAtLoad`,
 `KeepAlive={SuccessfulExit: false}`, `AbandonProcessGroup=true`, explicit log paths,
-`ThrottleInterval=10`; `launchctl bootstrap gui/$UID`. **Startup means per-user
+`ThrottleInterval=10`; `launchctl bootstrap gui/$UID`. macOS 13+ lists LaunchAgents
+under Login Items, and the user can switch them off there. `init --check` and `status`
+must report a user-disabled background item as such and must not re-bootstrap it in a
+loop. **Startup means per-user
 service-manager startup**: boot on Linux only with linger (both machines already have
 it), login on macOS; a pre-login root LaunchDaemon is an explicit later mode, not the
 default. The `mac` host is often offline, so launchd paths need unit tests against a
@@ -277,8 +330,11 @@ sase service proc run [--cwd/--label/--project/--workspace] -- CMD...   # transi
 ```
 
 Root start/stop drive the platform unit when installed, else the lock-guarded detached
-fallback. `sase service proc run` vs. `sase service run` needs contrasting help text;
-rename the host entrypoint to `sase service host` if it confuses. TUI flags:
+fallback. `sase service` has no `list` child, so the central bare-group → `list` rule
+does not cover it. Bare `sase service` must print help or act as `status`. It must never
+act as `run`, because someone exploring the CLI must not start a foreground host.
+`sase service proc run` vs. `sase service run` needs contrasting help text; rename the
+host entrypoint to `sase service host` if it confuses. TUI flags:
 `--no-axe`/`--restart-axe` → `--no-service`/`--restart-service` with sunset aliases.
 
 ## 7. Services tab
@@ -315,7 +371,10 @@ rename the host entrypoint to `sase service host` if it confuses. TUI flags:
   cannot mean invisible failure.
 - Procs pane: add the `service` boolean (+ `svc:<name>`), seed the query from
   `tui.procs.default_query` (default `-service`), include service metadata in the
-  filter cache key; gear excludes `service` rows and monitor rows.
+  filter cache key; gear excludes `service` rows and monitor rows. The pane already
+  restores its committed query from session state, so the seed applies only when no
+  query has been persisted. A query the user cleared persists as empty and is never
+  re-seeded.
 - Preserve the TUI perf constraints: no I/O on the event loop, consume the atomic
   snapshot off-thread, generation-aware refresh, navigation p95 < 16 ms — measure under
   restart storms before rollout.
@@ -376,14 +435,34 @@ not terms agents must distinguish (A's judgment, adopted).
    `supervisor` builtin (argv `sase axe start` initially), handover that stops a
    running orchestrator lock-holder and restarts it under the host. Behind a
    `service_host` beta flag; exercise concurrent-start, stale-lock, crash-loop,
-   signal, and reload cases before it owns production children.
+   signal, reload, stop-vs-restart race, and no-oneshot-replay cases before it owns
+   production children. **Release gate:** under a real unit, restart the host while
+   three things are live: a job-launched agent, a running `!` oneshot, and a
+   gateway-launched agent. All three must survive. An agent launched for each
+   configured provider must also resolve its CLI and credentials (§4.15). Mock-only
+   tests cannot establish either property.
 4. **Platform units:** init/uninstall with `--check`/`--diff`, systemd + launchd
-   writers, linger check, legacy-unit detection, decline marker, the machine-scoped
+   writers, the env-file capture and provider-CLI resolution check (§4.15), linger
+   check, legacy-unit detection, decline marker, the machine-scoped
    `sase init` step (once per `--all`), `sase doctor` checks.
 5. **Gateway + Telegram:** `gateway` builtin (reads `mobile_gateway.*`, adds the
-   agent-bridge args the hand unit is missing); sase-telegram ships its `sase_config`
+   agent-/helper-bridge args the hand unit is missing). Its launcher must reuse
+   `_prepare_mobile_gateway_launch`'s argv and exec the gateway binary directly —
+   **not** `sase mobile gateway start`, which POSTs `/api/v1/session/pair/start` after every
+   successful health check. Under restart policy, that would create a fresh pairing
+   challenge on every restart and write the code into the persistent service log.
+   Today `start` is the only `sase mobile gateway` subcommand and the only CLI path
+   that mints a pairing code, so add a `pair` subcommand that asks the running gateway
+   for a challenge. When a host-owned gateway is enabled, `start` should point there
+   rather than fight the host for port 7629. sase-telegram ships its `sase_config`
    layer, `ensure_receiver_running` no-ops when configured (sunset flag for old sase),
-   delete core's origin check, migrate `telegram_is_enabled` to config enablement.
+   delete core's origin check, migrate `telegram_is_enabled` to config enablement. The
+   marker is machine-local and exists only on athena (verified; apollo has none).
+   Telegram allows one `getUpdates` consumer per bot, and SASE has no cross-machine
+   lock. The migrated `enabled: true` must therefore land in the athena machine
+   overlay, never in the chezmoi-synced base config, which would start a second
+   receiver on apollo. The offset file (`~/.sase/telegram/update_offset.txt`) is
+   unchanged because the receiver code is unchanged.
 6. **TUI:** Services tab nodes/keys/pill, gear exclusion, Procs query field +
    configurable default. Display-label rename only; tab-id canonicalization waits.
 7. **Oneshots:** `!` onto the proc store; legacy slot dirs readable behind a sunset
@@ -416,8 +495,9 @@ after. Old `sase-axe-*.scope` units clear as their agents exit.
 - **Secrets:** unit files must not embed tokens; `env:` should support `${VAR}`
   references; procs keep reading credentials as they do today.
 - **Test/dev homes:** one host per SASE home; `init` refuses under a nonstandard
-  `SASE_HOME` without `--force`; keep the pytest process guard so tests never touch
-  real units.
+  `SASE_HOME` without `--force`, and under `--force` the unit and plist names carry a
+  home-derived suffix so they cannot overwrite the default home's `sase.service`; keep
+  the pytest process guard so tests never touch real units.
 - **Open:** expose service control through the gateway's mobile API (cheap via the
   status wire, but a security surface — defer); `after:` ordering vs. readiness
   probes (defer; no current consumer).
@@ -429,8 +509,11 @@ after. Old `sase-axe-*.scope` units clear as their agents exit.
 Pursue it as an epic. One platform unit per machine runs `sase service run`; the host
 supervises daemon service procs as children (code extracted from the AXE orchestrator)
 and launches oneshots — including migrated `!` commands — through the detached proc
-path so they survive host restarts. Detached work escapes the unit cgroup via a scope
-helper, shipped first. Service procs are declared in a flat, layer-merged
+path so they survive host restarts, and they run only on request, never on replay.
+Detached work escapes the unit cgroup via a scope helper, shipped first. The host loads
+an explicit, init-captured environment, so agents it launches keep resolving their CLIs
+and credentials once they no longer inherit a TUI shell. Service procs are declared in a
+flat, layer-merged
 `service.procs` map (one line for simple cases; `builtin:` launchers for core;
 plugin `sase_config` layers for Telegram; arbitrary executables plus a tiny
 env/`status.json` contract for complex cases; no Python plugin API yet). Enablement is
@@ -449,3 +532,45 @@ and the prior naming research agrees), and land the five new glossary strands an
 edits in the final phase against shipped behavior. Every migration phase deletes the
 supervision path it replaces — the project's one disqualifying outcome is two
 supervisors owning the same child.
+
+## 12. Cross-check against a third report (GPT Astra)
+
+A third, independently generated report reached the same verdict and the same
+architecture: one foreground runtime under the OS service manager, the Proc store for
+executions, the Supervisor kept for routines, and a cgroup escape for agents as the
+release gate. Its value was in pointing at places where this consolidation was wrong or
+silent. Each point below was checked against the code or the live machines before it
+was adopted.
+
+**Adopted:**
+
+- The stop override is boot-scoped, not host-start-scoped (§4.2). This fixes an
+  internal contradiction with the "boot-scoped stops" store in §6.
+- The host needs an explicit environment contract (§4.15). Verified on both machines,
+  this is the largest finding the cross-check produced.
+- Oneshots run only on request, and configured oneshots are out of v1 (§4.16).
+- Transient oneshots stay under the generic retention (§6).
+- List-valued `service.procs` fields replace whole in every layer (§6).
+- A user-disabled macOS background item is reported, not retried (§6).
+- The behavior of bare `sase service` is defined (§6).
+- The Procs default query is a seed only, not re-applied (§7).
+- The gateway builtin never mints pairing codes, and a `pair` subcommand is added
+  (§9.5).
+- Telegram is enabled in exactly one machine overlay (§9.5).
+- The restart-with-live-work release gate is explicit (§9.3).
+- Suffixed unit names under `--force` (§10).
+- The verdict now counts four bespoke arrangements, matching its own list (§1).
+
+**Not adopted.** On each of these, Astra took the side this report had already
+rejected, and it added no new evidence:
+
+- A Unix-socket control API (§5 keeps file-based state).
+- Namespaced service IDs (§5 keeps flat names).
+- Enablement written only into YAML, with no machine-local override (§5 keeps B's
+  override with visible provenance).
+- Argv-only `command:` (a string is still `sh -c`, which is fine for user-authored
+  config).
+- Requiring a service-specific opt-in beyond `sase init --yes`. That is a policy
+  choice, and today every init step applies under `--yes`.
+- Astra's glossary drafts, including a separate *Service Definition* strand. §8 already
+  rejects implementation-vocabulary strands.
