@@ -3,7 +3,7 @@
 - **Type:** researcher report (cld), one of a 2-researcher swarm
 - **Date:** 2026-09-21
 - **Question:** The consolidated report
-  [multi_cli_orchestration_vs_sase](multi_cli_orchestration_vs_sase/multi_cli_orchestration_vs_sase.md)
+  [multi_cli_orchestration_vs_sase](../multi_cli_orchestration_vs_sase/multi_cli_orchestration_vs_sase.md)
   ranked "Add a generic ACP provider plugin" as SASE's highest-leverage multi-CLI
   improvement. This report asks four things:
   - What is the best way to implement it?
@@ -773,5 +773,5 @@ the Claude wait continuation work, so the `single-turn-agents` decision is respe
 - https://developers.openai.com/community/codex-for-oss
 
 **Source report:**
-[multi_cli_orchestration_vs_sase.md](multi_cli_orchestration_vs_sase/multi_cli_orchestration_vs_sase.md)
+[multi_cli_orchestration_vs_sase.md](../multi_cli_orchestration_vs_sase/multi_cli_orchestration_vs_sase.md)
 §4.2, §7.2, §7.4
