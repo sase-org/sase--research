@@ -5,11 +5,11 @@ _Independent research · researcher `grk` · 2026-09-27 · project: sase_
 **Question.** Once every SASE Goals epic is complete (none have been planned yet), which
 memory files should be added or updated?
 
-**Primary context.** [sase_goals_epic_roadmap.md](sase_goals_epic_roadmap/sase_goals_epic_roadmap.md)
+**Primary context.** [sase_goals_epic_roadmap.md](../sase_goals_epic_roadmap/sase_goals_epic_roadmap.md)
 (lead synthesis: six sibling epics G1–G6 plus one bug task). Destination contract:
-[sase_goals_design.md](sase_goals_design/sase_goals_design.md). Domain split:
-[sase_goals_why_not_beads.md](sase_goals_why_not_beads.md). Persistence:
-[sase_goals_persistence.md](sase_goals_persistence.md).
+[sase_goals_design.md](../sase_goals_design/sase_goals_design.md). Domain split:
+[sase_goals_why_not_beads.md](../sase_goals_why_not_beads.md). Persistence:
+[sase_goals_persistence.md](../sase_goals_persistence.md).
 
 **Method.** Audited reads of the roadmap and design; `sase memory read` of the live
 beads, artifacts, flags, sizes, CLI, TUI, xprompts, and generated-skills notes;
@@ -145,7 +145,7 @@ Skills are the same story: edit `src/sase/xprompts/skills/*.md`, land, then
 
 ## 3. Why a new note, not a beads addendum
 
-[sase_goals_why_not_beads.md](sase_goals_why_not_beads.md) is the memory-design
+[sase_goals_why_not_beads.md](../sase_goals_why_not_beads.md) is the memory-design
 constraint: reuse the beads *repository*, not the beads *model*. Folding Goals into
 `sase_beads.md` would teach the wrong noun in the file agents already open for
 scheduled work.
