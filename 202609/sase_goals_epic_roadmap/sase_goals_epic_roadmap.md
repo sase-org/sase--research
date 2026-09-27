@@ -18,6 +18,80 @@ I also checked the contested points myself:
 
 §3 lists where individual reports were wrong or out of date.
 
+## Related research
+
+Read these with `sase artifact read <ref> "<reason>"` before planning a Goals epic. Each
+link's text is its canonical ref. The design is the destination; this roadmap only
+decides how to deliver it.
+
+- [`research:202609/sase_goals_design/sase_goals_design.md`](../sase_goals_design/sase_goals_design.md)
+  — **the design.** Lifecycle (§4.1), binding (§4.2–§4.4), the finalizer and evidence
+  (§4.5), attention (§4.6), storage and sync (§4.7), provenance (§4.8), the `goal:` kind
+  and relations (§4.9), the TUI (§4.10), the CLI (§4.11), the Rust/Python split (§4.12,
+  every epic), and acceptance tests 1–12 (§5).
+- [`research:202609/sase_goals_memory_end_state/sase_goals_memory_end_state.md`](../sase_goals_memory_end_state/sase_goals_memory_end_state.md)
+  — **the memory changes each epic owns.** §4 has one row per epic listing the decision
+  records, glossary strands, and memory edits that epic's plan should authorize, plus a
+  definition-of-done line. §3 details each item.
+- [`research:202609/sase_goals_persistence.md`](../sase_goals_persistence.md) —
+  **storage and cross-machine sync:** when a goal is pushed and fetched, plus five sync
+  gaps (§4) to close before the ledger contract freezes. It predates the G-numbering.
+  Its "E1" is G1, and its "E2" is G2 plus G4's drafts.
+- [`research:202609/sase_goals_why_not_beads.md`](../sase_goals_why_not_beads.md) —
+  **why goals aren't beads.** Goals reuse the beads repository, hidden clone, and sync,
+  but not the bead model (§3). §5 says what would reopen that choice.
+- [`research:202609/xprompt_swarm_goals.md`](../xprompt_swarm_goals.md) — **swarm
+  goals.** A swarm shares one draft goal, and only the lead claims. §5 maps swarm
+  behavior onto G1–G6, and §6 lists three gaps for the G2–G4 planners.
+- [`research:202609/goal_outcomes_and_verification/goal_outcomes_and_verification.md`](../goal_outcomes_and_verification/goal_outcomes_and_verification.md)
+  — **the first-round synthesis** that the design builds on. It is background only;
+  where the two disagree, the design wins.
+
+**What to read for each epic,** in addition to this roadmap and that epic's §4 row in
+the memory end-state report:
+
+| Epic | Design sections                                                  | Other reports                                              |
+| ---- | ---------------------------------------------------------------- | ---------------------------------------------------------- |
+| G1   | §4.1, §4.7, §4.9 (the `goal:` kind), §4.11                       | persistence (all); why-not-beads §3                        |
+| G2   | §4.2, §4.3 (the bound line), §4.4, §4.8 (unit-prompt digest)     | swarm §6.3                                                 |
+| G3   | §4.5, §4.6                                                       | swarm §6.1; the receipt landing criteria below             |
+| G4   | §4.2 (drafts), §4.3 (intake), §4.8 (naming publishes the prompt) | persistence §4 items 1, 4, and 5; swarm §2, §5, §6.1, §6.2 |
+| G5   | §4.9 (jumps), §4.10                                              | —                                                          |
+| G6   | §4.6, §5 (metrics)                                               | —                                                          |
+
+**Adjacent research.**
+[`research:202609/sase_tool_epic_roadmap/sase_tool_epic_roadmap.md`](../sase_tool_epic_roadmap/sase_tool_epic_roadmap.md)
+is the `sase tool` split that §1.1 cites as the precedent.
+[`research:202609/sase_tool_e3_e4_landing_criteria/sase_tool_e3_e4_landing_criteria.md`](../sase_tool_e3_e4_landing_criteria/sase_tool_e3_e4_landing_criteria.md)
+sets the landing criteria for the E4 verification receipts (`sase-1ah`) whose snapshots
+G3's claims embed.
+
+**Per-researcher drafts** sit beside each lead report. Read one only for detail its lead
+dropped or a position the lead overruled:
+
+- design: [cdx](../sase_goals_design/sase_goals_design__cdx.md),
+  [cld](../sase_goals_design/sase_goals_design__cld.md),
+  [grk](../sase_goals_design/sase_goals_design__grk.md),
+  [mus](../sase_goals_design/sase_goals_design__mus.md),
+  [gem](../sase_goals_design/sase_goals_design__gem.md), and the
+  [infographic](../sase_goals_design/sase_goals_design_infographic.png);
+- memory end state:
+  [cdx](../sase_goals_memory_end_state/sase_goals_memory_end_state__cdx.md),
+  [cld](../sase_goals_memory_end_state/sase_goals_memory_end_state__cld.md),
+  [grk](../sase_goals_memory_end_state/sase_goals_memory_end_state__grk.md),
+  [mus](../sase_goals_memory_end_state/sase_goals_memory_end_state__mus.md),
+  [gem](../sase_goals_memory_end_state/sase_goals_memory_end_state__gem.md);
+- first round:
+  [cdx](../goal_outcomes_and_verification/goal_outcomes_and_verification__cdx.md),
+  [grk](../goal_outcomes_and_verification/goal_outcomes_and_verification__grk.md),
+  [mus](../goal_outcomes_and_verification/goal_outcomes_and_verification__mus.md),
+  [gem](../goal_outcomes_and_verification/goal_outcomes_and_verification__gem.md), and
+  the
+  [infographic](../goal_outcomes_and_verification/goal_outcomes_and_verification_infographic.png).
+
+This roadmap's own drafts are linked under **Sources** above. Its infographic is
+[`sase_goals_epic_roadmap_infographic.png`](sase_goals_epic_roadmap_infographic.png).
+
 ---
 
 ## 0. Bottom line
