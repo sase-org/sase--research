@@ -13,9 +13,9 @@
     swarms from 2026-07-09 to 2026-10-01 (`~/.sase/projects/*/artifacts/ace-run/`).
     The current swarm, `research.37`, is excluded.
   - Prior SASE research, read with `sase artifact read`:
-    [`research_swarm_linker_agent`](../202609/research_swarm_linker_agent/research_swarm_linker_agent.md),
-    [`multi_agent_collaboration_strategy`](../202609/multi_agent_collaboration_strategy/multi_agent_collaboration_strategy.md),
-    and [`xprompt_swarm_goals`](../202609/xprompt_swarm_goals.md).
+    [`research_swarm_linker_agent`](../../202609/research_swarm_linker_agent/research_swarm_linker_agent.md),
+    [`multi_agent_collaboration_strategy`](../../202609/multi_agent_collaboration_strategy/multi_agent_collaboration_strategy.md),
+    and [`xprompt_swarm_goals`](../../202609/xprompt_swarm_goals.md).
   - External work on multi-agent research systems, listed under [Sources](#sources).
 
 ## Bottom line
@@ -326,9 +326,9 @@ this protocol:
   hand-numbered headings. This gives up a byte-identical default render, deliberately.
 
 The strongest past syntheses I read already work this way. Both
-[`research_swarm_linker_agent`](../202609/research_swarm_linker_agent/research_swarm_linker_agent.md)
+[`research_swarm_linker_agent`](../../202609/research_swarm_linker_agent/research_swarm_linker_agent.md)
 and
-[`multi_agent_collaboration_strategy`](../202609/multi_agent_collaboration_strategy/multi_agent_collaboration_strategy.md)
+[`multi_agent_collaboration_strategy`](../../202609/multi_agent_collaboration_strategy/multi_agent_collaboration_strategy.md)
 rule on each disagreement in a table and check the contested claims against code. This
 change makes that the norm instead of luck.
 
@@ -414,7 +414,7 @@ strict, because that strictness is the publication barrier.
 - **Name the goal's claimer when goals reach swarms (G4).** The lead, or the linker when
   it runs, should claim. The image agent never should. With `image=true` today, the
   host's role rule would hand the claim to image or linker
-  ([`xprompt_swarm_goals`](../202609/xprompt_swarm_goals.md), gap 1).
+  ([`xprompt_swarm_goals`](../../202609/xprompt_swarm_goals.md), gap 1).
 - **Hand off to action, optionally.** 13 swarms produced 26 forked follow-ups
   (`.f0`, `--plan`, `--code`). The lead could `sase var set next_step="<one-line plan
   prompt>"`, so the TUI shows a ready follow-up. A gate on every swarm would be noise.
