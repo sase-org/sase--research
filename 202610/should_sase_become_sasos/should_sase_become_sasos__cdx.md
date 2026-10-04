@@ -7,7 +7,7 @@
 
 ## What I read and how I kept the research independent
 
-I first read the supplied [naming shortlist](sase_rename_new_name_shortlist/sase_rename_new_name_shortlist.md) through the audited `sase artifact read` workflow. It argues for a time-bounded rename decision, prioritizes product fit over extreme brevity, warns against namesakes among agent tools, and distinguishes the public identity from compatibility-sensitive internals. I treated its recommendation and measurements as context to test, not conclusions to inherit.
+I first read the supplied [naming shortlist](../sase_rename_new_name_shortlist/sase_rename_new_name_shortlist.md) through the audited `sase artifact read` workflow. It argues for a time-bounded rename decision, prioritizes product fit over extreme brevity, warns against namesakes among agent tools, and distinguishes the public identity from compatibility-sensitive internals. I treated its recommendation and measurements as context to test, not conclusions to inherit.
 
 I independently examined this project's `README.md`, `pyproject.toml`, `docs/architecture.md`, and the configuration, plugin, workspace, Rust-backend, and editor documentation. I searched external sources for the exact proposed name, the existing SASE category, and agent operating systems. I directly queried package registries, GitHub profile metadata, domain registration endpoints, and DNS. I did not open any other report from this swarm, inspect peer transcripts, or solicit peer findings. The supplied shortlist is shared input; I did not follow its links to the underlying researchers' reports.
 

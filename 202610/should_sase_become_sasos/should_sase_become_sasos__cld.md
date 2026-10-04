@@ -5,8 +5,8 @@
 > end with a recommendation (rename or no rename) and its justification.
 
 **Date:** 2026-10-04 · **Researcher:** cld · **Prior research consulted:**
-[October shortlist](sase_rename_new_name_shortlist/sase_rename_new_name_shortlist.md) and
-[July `sawi` decision](../202607/sawi_rename_decision/sawi_rename_decision.md)
+[October shortlist](../sase_rename_new_name_shortlist/sase_rename_new_name_shortlist.md) and
+[July `sawi` decision](../../202607/sawi_rename_decision/sawi_rename_decision.md)
 
 ## Bottom line
 
@@ -331,8 +331,8 @@ collision and better handles. Its costs would be a weaker expansion and about 15
 
 **Prior project research:**
 
-- [October 2026 shortlist](sase_rename_new_name_shortlist/sase_rename_new_name_shortlist.md)
-- [July 2026 `sawi` decision](../202607/sawi_rename_decision/sawi_rename_decision.md)
+- [October 2026 shortlist](../sase_rename_new_name_shortlist/sase_rename_new_name_shortlist.md)
+- [July 2026 `sawi` decision](../../202607/sawi_rename_decision/sawi_rename_decision.md)
 
 **SASOS (single address space OS):**
 
