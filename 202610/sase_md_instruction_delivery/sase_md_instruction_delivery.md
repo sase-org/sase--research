@@ -1,3 +1,10 @@
+---
+audio:
+  edition: brief
+  duration_s: 302.88
+  chapter_count: 3
+  episode_id: sase-instructions-delivered-once-c0d935
+---
 # SASE.md and Per-Invocation Instruction Delivery: Consolidated Report
 
 > **Research query:** Is it a good idea to migrate all existing agent instruction files to
@@ -9,6 +16,13 @@
 > let parts of the file render only for certain agents, perhaps tagged with a new `%tag`
 > directive. It also asks for missed high-value use cases, a critique of the plan, clearly
 > called-out requirement adjustments, and a recommended solution.
+
+<div class="listen">
+
+♫ **Brief audio edition** · 5 min · 3 chapters ·
+[Narration script](sase_md_instruction_delivery_narration.md)
+
+</div>
 
 ![Infographic summarizing the SASE.md instruction-delivery research: Grok loads zero project instruction files, Codex and Claude get the shared contract twice, and Muse and Grok miss the home layer; package, plugin, home, project, and launch-fact layers compose through an optional SASE.md composition spec into one frozen bundle per provider invocation that each provider adapter delivers exactly once and verifies against provider session records; audiences are targeted with facts first, not %tag; and a five-phase rollout runs from restoring Grok to adding labels only when needed.](sase_md_instruction_delivery_infographic.png)
 
