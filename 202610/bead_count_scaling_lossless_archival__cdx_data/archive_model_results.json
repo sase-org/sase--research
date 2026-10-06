@@ -1,0 +1,65 @@
+{
+  "stats": {
+    "closed": 6444,
+    "flag": 66,
+    "in_progress": 169,
+    "open": 27,
+    "phase": 4976,
+    "plan": 949,
+    "plus_one": 1241,
+    "ready": 393,
+    "snoozed": 1,
+    "task": 1109,
+    "total": 7034
+  },
+  "event_count_by_current_status": {
+    "removed_or_unknown": 365,
+    "closed": 44145,
+    "active": 3847
+  },
+  "event_bytes_by_current_status": {
+    "removed_or_unknown": 220391,
+    "closed": 31179993,
+    "active": 3649600
+  },
+  "streams_by_current_status": {
+    "no_current_rows": 50,
+    "all_closed_current_rows": 1540,
+    "mixed_or_active": 518
+  },
+  "full_snapshot_archive_bytes": 12626580,
+  "restore_verified_files": 2111,
+  "restore_byte_equality": true,
+  "counterfactual_active_projection": {
+    "beads": 590,
+    "bytes": 2438888,
+    "show": {
+      "median_ms": 9.267728,
+      "min_ms": 9.191642,
+      "max_ms": 9.795728,
+      "samples_ms": [
+        9.309988,
+        9.795728,
+        9.259872,
+        9.308044,
+        9.191642,
+        9.267728,
+        9.251016
+      ]
+    },
+    "active_list": {
+      "median_ms": 19.756517,
+      "min_ms": 19.148066,
+      "max_ms": 21.384465,
+      "samples_ms": [
+        20.231493,
+        20.003098,
+        19.756517,
+        21.384465,
+        19.148066,
+        19.257613,
+        19.546235
+      ]
+    }
+  }
+}
