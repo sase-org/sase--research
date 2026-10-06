@@ -1,0 +1,6 @@
+# host:  17:32:42 up 5 days,  7:42,  2 users,  load average: 8.91, 9.13, 10.72
+bead_stats                                   median    568.0 ms  min    554.7
+bead_show sase-j0                            median    553.9 ms  min    550.2
+bead_show_issue_detail sase-j0               median    633.1 ms  min    613.3
+bead_ready                                   median    613.8 ms  min    596.6
+bead_read_store (all issues -> Python)       median    749.0 ms  min    711.8

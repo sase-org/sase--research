@@ -1,0 +1,20 @@
+# host:  17:32:24 up 5 days,  7:42,  2 users,  load average: 9.42, 9.22, 10.79
+# sase-core fa390362 (release, thin LTO); store copy of beads sidecar a58a7de1
+streams: 2108
+1. list dir + stat every stream                            median      4.06 ms   min      4.02  max      5.87
+2. open + read all stream bytes                            median     15.32 ms   min     15.11  max     17.13
+3. untyped serde_json::Value parse of every line           median    118.79 ms   min    117.16  max    119.12
+4. prune_removed_flag_event_streams (detector, no-op)      median    132.44 ms   min    130.84  max    146.77
+5. read_event_store (4 + typed parse + stream validate)    median    277.37 ms   min    271.19  max    284.74
+events: 48393
+6. reduce_event_streams (clone+validate+merge+apply+sort)  median    191.81 ms   min    186.28  max    206.22
+6a. deep clone of all parsed streams (validated_event_streams copy) median     31.59 ms   min     30.81  max     31.85
+6b. stream.validate() for every stream                     median     27.54 ms   min     27.41  max     28.77
+5a. typed BeadEventRecordWire parse only (no prune)        median     87.47 ms   min     85.49  max     94.24
+issues: 7034
+7. clone of reduced Vec<IssueWire>                         median     20.95 ms   min     20.32  max     22.17
+8. read_store_issues (production read path)                median    515.94 ms   min    487.94  max    541.29
+9. export_issues_to_jsonl (projection serialization)       median     46.16 ms   min     42.32  max     49.45
+10. read_legacy_jsonl_issues (parse issues.jsonl)          median    101.78 ms   min     99.97  max    102.48
+11. show_issue_detail (sase bead read core)                median    587.40 ms   min    551.87  max    619.52
+sum(5,6) = 469.2 ms (production read ≈ this)
