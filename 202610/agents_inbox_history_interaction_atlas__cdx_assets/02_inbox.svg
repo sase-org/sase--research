@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="940" viewBox="0 0 1560 940" role="img"><title>02 / Inbox keeps its operational shape</title><desc>Illustrative 150-column concept, invented names and counts. Existing decks and placement concepts retained.</desc><rect width="100%" height="100%" fill="#0B101A"/>
+<text x="36" y="24" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="30" font-weight="bold" fill="#EBC575">02 / Inbox keeps its operational shape</text>
+<text x="36" y="72" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="normal" fill="#B3BED0">Illustrative 150-column concept, invented names and counts. Existing decks and placement concepts retained.</text>
+<rect x="38" y="116" width="1475.0" height="716" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="48.0" y="126" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">SASE   [ Agents ]    Artifacts    Services</text>
+<text x="1085.8999999999999" y="126" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">sase   |   2 running  1 input</text>
+<text x="48.0" y="174" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">[ Inbox ]  |  History</text>
+<text x="339.0" y="174" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">,a switch   |   Project: sase</text>
+<text x="48.0" y="198" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">[ main ]    research    ops    |    ] / [ agent placement tabs</text>
+<line x1="639.6999999999999" y1="246" x2="639.6999999999999" y2="774" stroke="#34445C" stroke-width="1"/>
+<text x="48.0" y="246" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">@default                         5 agents</text>
+<text x="48.0" y="294" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#9BE0AF">v cache-fix             RUNNING       02m</text>
+<text x="67.4" y="318" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">cache-fix--impl       RUNNING       local</text>
+<rect x="45.0" y="364" width="582.0" height="24" fill="#2B3549" stroke="#2B3549" stroke-width="1"/>
+<text x="48.0" y="366" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">&gt; schema-audit          ASKING        09m</text>
+<text x="67.4" y="390" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#EBC575">Needs input: approve migration strategy</text>
+<text x="48.0" y="438" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">  tests-review          DONE unread   12m</text>
+<text x="48.0" y="486" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">  parser-cleanup        DONE read     34m</text>
+<text x="48.0" y="534" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">v build-check           MONITOR       06m</text>
+<text x="67.4" y="558" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">build-check--mon      command running</text>
+<text x="668.8" y="246" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">schema-audit   |   ASKING   |   local</text>
+<text x="668.8" y="294" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">Main   /   Context + Reply</text>
+<text x="668.8" y="342" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">CONTEXT</text>
+<text x="668.8" y="366" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Review the schema change and propose a migration.</text>
+<text x="668.8" y="438" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">REPLY</text>
+<text x="668.8" y="462" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">I recommend preserving both columns until backfill completes.</text>
+<text x="668.8" y="486" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Choose a migration strategy in the review gate.</text>
+<text x="668.8" y="582" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Links: plan:schema-rollout  ·  bead:sase-example</text>
+<text x="668.8" y="678" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Enter: available actions     p: Main / Files / Tools / FINAL</text>
+<text x="48.0" y="774" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">j/k move   ,/ filter   ,a History   p deck   Ctrl+F/B focus   r refresh</text>
+<text x="36" y="859" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#B3BED0">Inbox includes completed work kept for review. “Live” would describe this view poorly.</text>
+<text x="36" y="888" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#B3BED0">Switching to History parks the selected identity, filters, placement tab, folds, and deck position.</text>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="650" viewBox="0 0 1560 650" role="img"><title>01 / One agent destination, two jobs</title><desc>Concept map. Gold = agent destination; text labels carry the distinctions.</desc><rect width="100%" height="100%" fill="#0B101A"/>
+<text x="36" y="24" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="30" font-weight="bold" fill="#EBC575">01 / One agent destination, two jobs</text>
+<text x="36" y="72" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="normal" fill="#B3BED0">Concept map. Gold = agent destination; text labels carry the distinctions.</text>
+<rect x="36" y="120" width="660" height="390" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="60" y="140" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="18" font-weight="bold" fill="#B3BED0">CURRENT</text>
+<text x="60" y="185" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="bold" fill="#EBC575">Agents</text>
+<text x="60" y="233" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#E7EDF7">Watch · answer · inspect decks</text>
+<text x="60" y="260" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#E7EDF7">Non-dismissed inbox + placement tabs</text>
+<line x1="60" y1="307" x2="667" y2="307" stroke="#34445C" stroke-width="1"/>
+<text x="60" y="330" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="bold" fill="#EBC575">Artifacts &gt; Agent</text>
+<text x="60" y="381" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#E7EDF7">Find old identity · inspect metadata · revive</text>
+<text x="60" y="408" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#E7EDF7">Good historical viewer requires restoration</text>
+<line x1="709" y1="310" x2="805" y2="310" stroke="#79D5DF" stroke-width="2"/>
+<line x1="795" y1="304" x2="805" y2="310" stroke="#79D5DF" stroke-width="2"/>
+<line x1="795" y1="316" x2="805" y2="310" stroke="#79D5DF" stroke-width="2"/>
+<rect x="822" y="120" width="699" height="390" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="846" y="140" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="18" font-weight="bold" fill="#B3BED0">PROPOSED</text>
+<text x="846" y="184" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="bold" fill="#EBC575">Agents</text>
+<rect x="846" y="235" width="285" height="165" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="866" y="253" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="22" font-weight="bold" fill="#79D5DF">[ Inbox ]</text>
+<text x="866" y="300" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Operational tree</text>
+<text x="866" y="327" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Placement + tribes</text>
+<text x="866" y="354" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Unread and attention</text>
+<rect x="1155" y="235" width="342" height="165" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="1175" y="253" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="22" font-weight="bold" fill="#79D5DF">[ History ]</text>
+<text x="1175" y="300" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Searchable catalog</text>
+<text x="1175" y="327" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">No placement strip</text>
+<text x="1175" y="354" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Read without restoring</text>
+<text x="846" y="439" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="bold" fill="#EBC575">Shared identity · detail decks · links</text>
+<text x="36" y="553" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="normal" fill="#B3BED0">The switch changes the browsing task. It never moves an agent to a new placement tab.</text>
+<text x="36" y="584" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="normal" fill="#B3BED0">Artifacts retains Stitch, Patch, Bead, document providers, and File.</text>
+</svg>

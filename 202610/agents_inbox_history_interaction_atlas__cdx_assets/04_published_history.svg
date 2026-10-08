@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="970" viewBox="0 0 1560 970" role="img"><title>04 / Published history declares its evidence</title><desc>Phase-two concept. Snapshot state is historical evidence, never a remote-control signal.</desc><rect width="100%" height="100%" fill="#0B101A"/>
+<text x="36" y="24" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="30" font-weight="bold" fill="#EBC575">04 / Published history declares its evidence</text>
+<text x="36" y="72" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="normal" fill="#B3BED0">Phase-two concept. Snapshot state is historical evidence, never a remote-control signal.</text>
+<rect x="38" y="116" width="1475.0" height="740" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="48.0" y="126" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">SASE   [ Agents ]    Artifacts    Services</text>
+<text x="1085.8999999999999" y="126" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">sase   |   2 running  1 input</text>
+<text x="48.0" y="174" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">Inbox  |  [ History ]</text>
+<text x="339.0" y="174" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">,a switch   |   Project: sase</text>
+<text x="48.0" y="198" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Source: Published project v</text>
+<text x="348.7" y="198" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Group: Date v    Time: Any time v    Hidden: excluded</text>
+<text x="48.0" y="222" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#EBC575">Query: in:published project:sase name:cache*</text>
+<text x="48.0" y="246" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Snapshot: 8c3e1a2  |  last synchronized Oct 06 09:20  |  Sync published history</text>
+<line x1="639.6999999999999" y1="294" x2="639.6999999999999" y2="798" stroke="#34445C" stroke-width="1"/>
+<text x="48.0" y="294" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">PUBLISHED HISTORY  |  4 matches</text>
+<text x="48.0" y="342" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#B3BED0">OCT 06</text>
+<rect x="45.0" y="364" width="582.0" height="24" fill="#2B3549" stroke="#2B3549" stroke-width="1"/>
+<text x="48.0" y="366" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">&gt; cache-audit           WAS ACTIVE</text>
+<text x="67.4" y="390" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">published · athena · observed Oct 06 08:45</text>
+<text x="48.0" y="438" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">  cache-fix             DONE</text>
+<text x="67.4" y="462" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">local + published · apollo</text>
+<text x="48.0" y="534" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">One logical row per run; all source locations retained.</text>
+<text x="668.8" y="294" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">cache-audit   |   Published snapshot</text>
+<text x="668.8" y="342" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Recorded state: ACTIVE as of Oct 06 08:45</text>
+<text x="668.8" y="366" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Current liveness: unknown   |   Owner: athena</text>
+<text x="668.8" y="414" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">Main / Snapshot + Reply</text>
+<text x="668.8" y="462" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Published reply content appears here when retained.</text>
+<text x="668.8" y="486" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">A snapshot does not imply a controllable agent on this host.</text>
+<text x="668.8" y="558" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Files: 1 published commit    Tools: not published</text>
+<text x="668.8" y="582" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">FINAL: not published</text>
+<text x="668.8" y="654" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Enter: Copy ref / Open published page / Open transcript</text>
+<text x="668.8" y="678" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Restore unavailable: no local archive bundle.</text>
+<text x="48.0" y="798" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">j/k move   ,/ filter   ,a Inbox   p deck   ^ prior query   Ctrl+O back</text>
+<text x="36" y="886" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#B3BED0">Source: This machine / Published project / Combined. Combined is not called “all agents everywhere”.</text>
+<text x="36" y="915" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#B3BED0">Snapshot freshness, synchronization time, and a run’s observation time are different facts.</text>
+</svg>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="930" viewBox="0 0 1560 930" role="img"><title>07 / Honest states, useful next actions</title><desc>Microcopy plate. These states are different and should not all render as “No agents found”.</desc><rect width="100%" height="100%" fill="#0B101A"/>
+<text x="36" y="24" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="30" font-weight="bold" fill="#EBC575">07 / Honest states, useful next actions</text>
+<text x="36" y="72" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="normal" fill="#B3BED0">Microcopy plate. These states are different and should not all render as “No agents found”.</text>
+<rect x="36" y="126" width="718" height="213" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="57" y="145" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="bold" fill="#79D5DF">A / Inbox clear</text>
+<text x="57" y="191" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">No agents need attention.</text>
+<text x="57" y="220" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Completed runs stay available in History.</text>
+<text x="57" y="249" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7"></text>
+<text x="57" y="278" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">[ Browse history ]</text>
+<rect x="806" y="126" width="718" height="213" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="827" y="145" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="bold" fill="#79D5DF">B / Search has no matches</text>
+<text x="827" y="191" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">No matches in this machine’s history.</text>
+<text x="827" y="220" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Project: sase  ·  Query: name:parser*</text>
+<text x="827" y="249" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7"></text>
+<text x="827" y="278" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">[ Clear name filter ]  [ Change source ]</text>
+<rect x="36" y="365" width="718" height="213" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="57" y="384" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="bold" fill="#EBC575">C / Search is still incomplete</text>
+<text x="57" y="430" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Showing 50 loaded results.</text>
+<text x="57" y="459" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Older history is still being searched.</text>
+<text x="57" y="488" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7"></text>
+<text x="57" y="517" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Searching…  Cancel preserves the current view.</text>
+<rect x="806" y="365" width="718" height="213" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="827" y="384" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="bold" fill="#B3BED0">D / Content was not retained</text>
+<text x="827" y="430" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Reply unavailable for this run.</text>
+<text x="827" y="459" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Identity, timestamps, and links are still available.</text>
+<text x="827" y="488" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7"></text>
+<text x="827" y="517" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">[ Copy reference ]  [ View retained files ]</text>
+<rect x="36" y="604" width="718" height="213" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="57" y="623" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="bold" fill="#FFA3A3">E / Published source unavailable</text>
+<text x="57" y="669" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Published history could not be loaded.</text>
+<text x="57" y="698" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">This machine’s retained history is available.</text>
+<text x="57" y="727" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7"></text>
+<text x="57" y="756" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">[ Use local history ]  [ Retry source ]</text>
+<rect x="806" y="604" width="718" height="213" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="827" y="623" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="bold" fill="#EBC575">F / Returned row differs from selected row</text>
+<text x="827" y="669" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Loading the selected run’s reply…</text>
+<text x="827" y="698" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Keep the identity header and content placeholder.</text>
+<text x="827" y="727" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7"></text>
+<text x="827" y="756" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Never show the previous agent’s text under this name.</text>
+<text x="36" y="861" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#B3BED0">Color is supplementary. Every condition has a text label, and each recovery action names its effect.</text>
+</svg>

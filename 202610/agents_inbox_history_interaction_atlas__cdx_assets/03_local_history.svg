@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="970" viewBox="0 0 1560 970" role="img"><title>03 / History is a catalog with real agent decks</title><desc>Illustrative 150-column concept. Reading a dismissed run does not revive it or alter inbox counts.</desc><rect width="100%" height="100%" fill="#0B101A"/>
+<text x="36" y="24" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="30" font-weight="bold" fill="#EBC575">03 / History is a catalog with real agent decks</text>
+<text x="36" y="72" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="normal" fill="#B3BED0">Illustrative 150-column concept. Reading a dismissed run does not revive it or alter inbox counts.</text>
+<rect x="38" y="116" width="1475.0" height="740" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="48.0" y="126" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">SASE   [ Agents ]    Artifacts    Services</text>
+<text x="1085.8999999999999" y="126" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">sase   |   2 running  1 input</text>
+<text x="48.0" y="174" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">Inbox  |  [ History ]</text>
+<text x="339.0" y="174" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">,a switch   |   Project: sase</text>
+<text x="48.0" y="198" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Source: This machine v</text>
+<text x="348.7" y="198" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Group: Date v    Time: Any time v    Hidden: excluded</text>
+<text x="48.0" y="222" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#EBC575">Query: in:local project:sase name:parser*</text>
+<line x1="639.6999999999999" y1="270" x2="639.6999999999999" y2="798" stroke="#34445C" stroke-width="1"/>
+<text x="48.0" y="270" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">HISTORY  |  12 matches  |  newest activity first</text>
+<text x="48.0" y="318" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#B3BED0">TODAY · Oct 08</text>
+<text x="48.0" y="342" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">  parser-tests          DONE       inbox</text>
+<text x="48.0" y="390" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#B3BED0">YESTERDAY · Oct 07</text>
+<rect x="45.0" y="412" width="582.0" height="24" fill="#2B3549" stroke="#2B3549" stroke-width="1"/>
+<text x="48.0" y="414" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">&gt; parser-cleanup        DONE       dismissed</text>
+<text x="67.4" y="438" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">local · 3 turns · 11:42 · restorable</text>
+<text x="48.0" y="486" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#FFA3A3">  parser-retry          FAILED     dismissed</text>
+<text x="67.4" y="510" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">local · 2 turns · 10:15 · restorable</text>
+<text x="48.0" y="558" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#B3BED0">OLDER · Oct 04</text>
+<text x="48.0" y="582" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">  parser-exploration    DONE       dismissed</text>
+<text x="67.4" y="606" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">local · reply unavailable</text>
+<text x="48.0" y="702" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Selection stays fixed when new rows arrive.</text>
+<text x="668.8" y="270" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">parser-cleanup   |   DONE   |   Dismissed</text>
+<text x="668.8" y="294" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Local archive · ended Oct 07 11:42 · no runner</text>
+<text x="668.8" y="342" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">Main / Reply   ( plan | mon | [ impl ] )</text>
+<text x="668.8" y="390" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">REPLY · parser-cleanup--impl</text>
+<text x="668.8" y="438" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Simplified the parser and preserved the error positions.</text>
+<text x="668.8" y="462" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">The targeted tests pass. The changes are ready to review.</text>
+<text x="668.8" y="534" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Files: 2 retained diffs    Tools: retained    FINAL: retained</text>
+<text x="668.8" y="606" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Links: stitch:example-2  ·  plan:parser-cleanup</text>
+<text x="668.8" y="678" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Enter: Restore to inbox / Copy ref / Open transcript</text>
+<text x="668.8" y="702" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Restore changes visibility; it does not start another run.</text>
+<text x="48.0" y="798" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">j/k move   ,/ filter   ,a Inbox   p deck   ( / ) turn   ^ prior query</text>
+<text x="36" y="886" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#B3BED0">No agent placement strip or tribe tree here. Dates and session groups are browsing aids.</text>
+<text x="36" y="915" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="normal" fill="#B3BED0">Status (DONE/FAILED), inbox presence (dismissed), and content availability remain separate facts.</text>
+</svg>

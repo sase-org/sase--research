@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1250" viewBox="0 0 1000 1250" role="img"><title>06 / A 90-column terminal</title><desc>Proposed compact layout. One surface at a time; no unreadable narrow split.</desc><rect width="100%" height="100%" fill="#0B101A"/>
+<text x="36" y="24" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="30" font-weight="bold" fill="#EBC575">06 / A 90-column terminal</text>
+<text x="36" y="72" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="normal" fill="#B3BED0">Proposed compact layout. One surface at a time; no unreadable narrow split.</text>
+<rect x="40" y="116" width="892.9999999999999" height="500" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="50.0" y="126" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">SASE [Agents] Artifacts Services</text>
+<text x="50.0" y="174" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Inbox | [History]   ,a switch   Source: Local</text>
+<text x="50.0" y="198" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#EBC575">in:local project:sase name:parser*</text>
+<text x="50.0" y="246" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">HISTORY / 12 matches   Date v</text>
+<text x="50.0" y="294" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">YESTERDAY · Oct 07</text>
+<rect x="47.0" y="316" width="853.5999999999999" height="24" fill="#2B3549" stroke="#2B3549" stroke-width="1"/>
+<text x="50.0" y="318" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">&gt; parser-cleanup   DONE   dismissed   local</text>
+<text x="69.4" y="342" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">3 turns · restorable · reply and 2 diffs retained</text>
+<text x="50.0" y="390" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#FFA3A3">  parser-retry     FAILED dismissed   local</text>
+<text x="69.4" y="414" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">2 turns · restorable</text>
+<text x="50.0" y="486" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Detail preview: Simplified the parser and preserved error positions.</text>
+<text x="50.0" y="558" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">j/k move  Ctrl+F detail  Enter actions  ,/ filter  ,a Inbox</text>
+<line x1="490" y1="626" x2="490" y2="676" stroke="#79D5DF" stroke-width="2"/>
+<line x1="484" y1="666" x2="490" y2="676" stroke="#79D5DF" stroke-width="2"/>
+<line x1="496" y1="666" x2="490" y2="676" stroke="#79D5DF" stroke-width="2"/>
+<text x="516" y="645" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="16" font-weight="normal" fill="#79D5DF">Ctrl+F focuses the detail surface</text>
+<rect x="40" y="700" width="892.9999999999999" height="476" fill="#111C2B" stroke="#34445C" stroke-width="1"/>
+<text x="50.0" y="710" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#EBC575">SASE [Agents] Artifacts Services</text>
+<text x="50.0" y="758" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="bold" fill="#79D5DF">History &gt; parser-cleanup &gt; Main / Reply</text>
+<text x="50.0" y="782" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">DONE · Dismissed · local archive · ended Oct 07 11:42</text>
+<text x="50.0" y="830" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Turns: plan | mon | [impl]       ( / ) previous / next</text>
+<text x="50.0" y="878" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">REPLY</text>
+<text x="50.0" y="926" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">Simplified the parser and preserved the error positions.</text>
+<text x="50.0" y="950" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#E7EDF7">The targeted tests pass. The changes are ready to review.</text>
+<text x="50.0" y="1022" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#79D5DF">Links: stitch:example-2 · plan:parser-cleanup</text>
+<text x="50.0" y="1118" dominant-baseline="text-before-edge" font-family="DejaVu Sans Mono, monospace" font-size="16" font-weight="normal" fill="#B3BED0">Ctrl+B list  p deck  Enter actions  ,a Inbox</text>
+<text x="36" y="1200" dominant-baseline="text-before-edge" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="normal" fill="#B3BED0">The query, selected row, scroll position, and focused turn survive this view change.</text>
+</svg>
