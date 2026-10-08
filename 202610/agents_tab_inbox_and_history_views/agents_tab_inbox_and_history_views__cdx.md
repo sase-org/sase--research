@@ -4,7 +4,7 @@
 
 Give the top-level **Agents** tab two visible views: **Inbox** for supervising work and **History** for finding and reading retained runs. Keep agent identity, detail decks, references, and navigation shared. The central improvement is being able to read a dismissed agent’s reply and files without restoring it first.
 
-This report builds on the requested [earlier consolidated study](../202609/agent_history_in_agents_tab/agent_history_in_agents_tab.md), then independently checks the current Python/TUI code and relevant external product documentation. I did not consult any reports or findings from the current research.45 swarm. Historical measurements from the earlier study are attributed to that study; I did not remeasure the archive, examine live personal history, or test these proposals with users.
+This report builds on the requested [earlier consolidated study](../../202609/agent_history_in_agents_tab/agent_history_in_agents_tab.md), then independently checks the current Python/TUI code and relevant external product documentation. I did not consult any reports or findings from the current research.45 swarm. Historical measurements from the earlier study are attributed to that study; I did not remeasure the archive, examine live personal history, or test these proposals with users.
 
 ## 1. Visual approach and reading guide
 
