@@ -9,6 +9,14 @@
 
 ![Infographic summarizing the recommended split of the %auto autonomy work into safety tales, three committed epics, one optional epic, and one deferred epic](auto_autonomy_epic_roadmap_infographic.png)
 
+> **Amendment (2026-10-09): epic workers launch by default.** The user reversed
+> D7's worker stopgap: epic phase and land agents run the `autonomy.roles`
+> profile, default `standard`, so they auto-approve and launch the tales and
+> epics they author. `autonomy.roles.epic_phase` / `epic_land` narrows them
+> (set a role to `tale` to make nested epics wait again). This landed as a
+> follow-up tale to E1 (`plan:202610/auto_e1_epic_worker_roles.md`). The
+> infographic predates it.
+
 ## Bottom line
 
 **Split it.** The verifiable shape is:
@@ -23,10 +31,10 @@ mechanically. No feature flag crosses an epic boundary.
 
 | # | Unit | Distinct result you can check | Size | Repos |
 | ---: | --- | --- | --- | --- |
-| **P0** | [Safety tales](#safety-tales-before-the-epics) (5; 3 already filed) | No `%auto` spelling silently grants more than it says. Toggling auto off really turns it off. Epic workers park nested epics instead of launching them | 5 tales | sase, sase-core |
-| **E1** | [**One autonomy record**](#e1-one-autonomy-record) | One Rust evaluator decides every automatic gate from one live session record. `sase autonomy explain` predicts each decision exactly, every decision is logged, and the state survives every continuation. **No behavior change** | 6 medium phases | sase-core, sase |
+| **P0** | [Safety tales](#safety-tales-before-the-epics) (5; 3 already filed) | No `%auto` spelling silently grants more than it says. Toggling auto off really turns it off. Epic workers park nested epics instead of launching them (superseded by the amendment above; the tier-mismatch → `ask` half stays) | 5 tales | sase, sase-core |
+| **E1** | [**One autonomy record**](#e1-one-autonomy-record) | One Rust evaluator decides every automatic gate from one live session record. `sase autonomy explain` predicts each decision exactly, every decision is logged, and the state survives every continuation. **No behavior change** (one exception: the epic-worker default, see the amendment above) | 6 medium phases | sase-core, sase |
 | **E2** | [**See it, stop it**](#e2-see-it-and-stop-it) | Each agent names its profile on every surface. Epic launches ring with **Manual** and **Pause** buttons. One host-wide brake makes every future gate wait, including for workers that have not launched yet | 5 phases | sase-core, sase, sase-telegram |
-| **E3** | [**Named profiles**](#e3-named-profiles) | You pick `attended`, `overnight`, or your own profile by name, found through `%auto` completion and the `,a` picker. Generated workers run under config roles. Prompts can narrow autonomy but never grant it | 6 phases | sase-core, sase |
+| **E3** | [**Named profiles**](#e3-named-profiles) | You pick `attended`, `overnight`, or your own profile by name, found through `%auto` completion and the `,a` picker. Generated workers' config roles already exist (`autonomy.roles`); E3 lets them name config profiles. Prompts can narrow autonomy but never grant it | 6 phases | sase-core, sase |
 | E4 | *Optional:* [**Steer from anywhere**](#e4-steer-from-anywhere) | Retarget any live agent's profile from the TUI, CLI, or Telegram, with read-back and revision checks | 3 phases | sase(-core), sase-telegram |
 | E5 | *Deferred:* [**Bounded delegation**](#deferred-work) | A config-armed profile auto-approves a finite child workload, and neither retries nor fan-out can exceed it | ~4 phases | sase-core, sase |
 
@@ -63,8 +71,7 @@ Plan Decisions, and the baselines leave about ten open.
 - one core-first phase per epic (the host writes `sase-core-revision.txt` automatically
   when a turn commits both repos);
 - a two-step grammar: P0 rejects `%auto(...)`, and E3 later gives it meaning;
-- a two-step worker rule: P0 emits `%auto:tale`, and E3 moves that into config roles,
-  with identical behavior;
+- a two-step worker rule: P0 emitted `%auto:tale`. The E1 amendment moved worker autonomy into `autonomy.roles` (default `standard`). E3 widens role values to config profiles;
 - one [table-driven contract suite](#the-yardstick) that every epic extends.
 
 There are no throwaway adapters, no second evaluator, and no long-lived `beta` flags.
@@ -140,7 +147,9 @@ Target behavior once the P0 tales and E1 have landed. **Bold** marks a deliberat
 | `%auto:foo`, `%auto(…)`, `%auto(a, b)`, `%auto:x(…)` | **launch error** (today: bare automation or an opaque argument) | ← | ← |
 | bare `%auto`, then `A` off | **ask** (today: the env snapshot still approves) | **ask** | **ask** |
 | `%auto:tale` agent, `A` off then on | **restores `:tale`** (E1) | ask | first option |
-| epic phase or land worker | approve + archive | **ask** | first option |
+| epic phase or land worker | approve + archive | approve + launch clan | first option |
+| epic worker with a role set to `tale` | approve + archive | ask | first option |
+| epic worker with a role set to `manual` | ask | ask | ask |
 | gate follow-up or pipe successor of a `%auto:tale` agent (E1) | **approve + archive** (today: state dropped) | ask | first option |
 | in-process coder of a `%auto:tale` planner (E1) | **`:tale` kept** | — | — |
 
@@ -153,7 +162,7 @@ Ship these now, as tales, before E1's planner starts. Three are already filed an
 | Tale | Bead | Verify |
 | --- | --- | --- |
 | Fail-closed `%auto` grammar in Python, the Rust typed extractor, editor metadata, and the LSP. Reject named arguments, extra positionals, mixed `%auto:x(...)`, and unknown colon values. Accept `:manual` and `:off` as explicit Manual. The prompt bar shows the same error | `sase-1hg` (medium) | The parser probe matrix raises `DirectiveError` for every rejected form in both extractors. Bare, `+`, `true`, `:tale`, and `:epic` still launch |
-| Epic phase and land workers emit `%auto:tale`. A tier mismatch (`:tale` or `:plan` on an epic, `:epic` on a tale) becomes `ask` at all three call sites | **New** (medium) | `sase bead work <epic> --dry-run` shows `%auto:tale` on every phase and land segment. A fixture epic gate with argument `tale` parks. `tests/test_bead/test_work_epic_plan.py` flips its assertion. The changelog names the change |
+| Epic phase and land workers emit `%auto:tale`. A tier mismatch (`:tale` or `:plan` on an epic, `:epic` on a tale) becomes `ask` at all three call sites (shipped in `sase-1id`; its `%auto:tale` emission is superseded by the amendment above; its tier-mismatch → `ask` change stands) | **New** (medium) | `sase bead work <epic> --dry-run` shows `%auto:tale` on every phase and land segment. A fixture epic gate with argument `tale` parks. `tests/test_bead/test_work_epic_plan.py` flips its assertion. The changelog names the change |
 | Readers use agent meta live, so the env snapshot is no longer authoritative | `sase-15s` (small) | Launch bare `%auto`, press `A` off, and the next plan gate parks |
 | `docs/macros.md` and the core `macros.md` row describe observed behavior: bare `%auto` archives tales, launches epics, and answers questions; `:tale` answers questions | `sase-1hh` (small, memory) | `sase memory show macros.md` matches the contract rows |
 | `/sase_questions`: "put your recommended option first; under `%auto` it is chosen automatically" (D8) | **New** (small, generated skill) | A unit test on the bundled skill source |
@@ -194,7 +203,7 @@ instead; it carries the same content.
 - `A` writes the record and toggles Manual ↔ *this session's last profile*, so `:tale`
   users are never silently widened to `standard`.
 - **No other behavior changes.** The compatibility profiles reproduce the contract
-  exactly.
+  exactly, with one exception: the epic-worker default (see the amendment above).
 
 | Phase | Size | Content |
 | --- | --- | --- |
@@ -221,7 +230,12 @@ instead; it carries the same content.
   - automatic decisions per day, by kind and by creator role (human-typed, epic worker,
     workflow worker);
   - top-level epic auto-launches;
-  - parked nested epics and how long they wait.
+  - nested epic auto-launches by epic workers (`creator_role: epic_worker`) and their nesting depth.
+- **Amendment: epic-worker roles.** A follow-up tale to E1
+  (`plan:202610/auto_e1_epic_worker_roles.md`) shipped: the `autonomy.roles`
+  config (`epic_phase` / `epic_land`, default `standard`), rendering worker
+  prompts from the roles, updated worker macro wording, `sase autonomy list`
+  roles, and the amended contract rows.
 - **Plan Decisions:**
   - `question_default`: **keep `first`** until E3 ships `recommended` | switch now;
   - `awareness_scope`: **every `%auto` agent** | unattended profiles only;
@@ -239,6 +253,8 @@ instead; it carries the same content.
   words from one core summary.
 - Epic launches (and, once E3 exists, declines) are announced in the TUI's `⚡ Auto`
   inbox tab and on Telegram, with **Manual** and **Pause all** actions.
+  Worker-launched nested epics are announced like any epic auto-launch. The
+  announcement names the role and how to change it (`autonomy.roles`).
 - Each completion message gains one autonomy line.
 - A host-wide **Pause autonomy** brake makes every future gate wait for a human without
   stopping any work. It never auto-resolves anything on resume.
@@ -263,7 +279,10 @@ instead; it carries the same content.
   - a later-launched worker sees an earlier pause;
   - a test requires the coverage line on every inspect view;
   - goldens pass for every new surface;
-  - Telegram tests cover stale, duplicate, and unreachable-host callbacks.
+  - Telegram tests cover stale, duplicate, and unreachable-host callbacks;
+  - an epic auto-launched by an epic worker rings with **Manual** and **Pause all**.
+
+The brake is now the stop for overnight nesting.
 - **Demo:**
   - `sase autonomy pause -t 5m`, and the next plan gate parks; resume, and it stays
     parked;
@@ -296,8 +315,9 @@ instead; it carries the same content.
 - **Selection:** `%auto:<profile>` and `%auto(<profile>, plan|epic|q=…)` select and
   narrow a profile. Unknown or privileged values fail at launch. A prompt can never grant
   `launch`, or exceed a role or parent ceiling.
-- **Roles:** generated launches select role profiles, replacing P0's `%auto:tale`
-  literal with identical behavior.
+- **Roles:** `autonomy.roles` already exists with built-in names (shipped as an E1
+  follow-up). E3 lets role values name user/project profiles, and worker
+  prompts then emit `%auto:<profile>`. Defaults stay `standard`.
 - **Vocabulary:** `deny`, `on_ask: deny`, `question: recommended | decide`, and
   `plan: approve | archive`.
 - **Discovery:** completion lists profiles with generated one-liners, plus hover, the
@@ -307,7 +327,7 @@ instead; it carries the same content.
 | --- | --- | --- |
 | E3.1 `core_profiles` | medium | sase-core: config schema v1; layering; single-level `extends`; the profile-id grammar; reserved `manual`/`off`/`plan`/`tale`/`epic`; the selector and override grammar with ceilings; editor metadata (the bare-`%auto` completion lists profiles; hover shows the matrix; diagnostics) for the TUI, LSP, and nvim. Then the pin |
 | E3.2 `vocabulary` | medium | `deny` and `on_ask: deny` as typed refusals the agent was warned about. `question: recommended` (a `recommended: true` schema flag plus `/sase_questions`) and `decide`. `plan: approve` and `archive`. `epic: approve(max_depth=N)` only if that Plan Decision says so |
-| E3.3 `roles` | medium | `autonomy.roles`. `bead/work_prompt.py` and workflow macros emit role profile names. Built-ins `standard`, `attended`, `overnight`, and `epic_worker`. Role and parent ceilings at launch. An agent-authored follow-up `%auto` may only narrow |
+| E3.3 `roles` | medium | `autonomy.roles` values name user/project profiles. Built-ins `standard`, `attended`, and `overnight` (no built-in `epic_worker` profile). Three rules: (1) a role is a config grant — a parent or planner ceiling never clamps an epic worker below its role, so a human-approved epic from a Manual planner still runs `standard` workers; (2) a project layer may only narrow a role relative to the user layer; (3) agent-authored `%auto` in worker follow-ups may only narrow |
 | E3.4 `compose` | medium | A prompt-bar autonomy chip, using live core parsing and blocking submit on an error. The first-use toast and the one-time notice. The awareness block covers the new values |
 | E3.5 `picker` | medium | The `,a` matrix picker: Manual first, digits apply, a coverage line, `p` to pause. A palette entry "Set autonomy…". Profile matrix and provenance in the Admin pane. Goldens |
 | E3.6 `docs_acceptance` | small | `docs/macros.md`, the `macros.md` row (memory decision), a decision record "prompts select autonomy; only config grants", profile and layering contract rows, and a live check |
@@ -315,6 +335,8 @@ instead; it carries the same content.
 - **Exit criteria:**
   - **contract:**
     - `standard` reproduces E1's bare rows exactly;
+  - a project layer that widens a role is clamped;
+  - default roles reproduce E1's worker rows;
     - `attended` and `overnight` rows match their generated one-liners;
     - a project layer that widens a field is clamped, and the clamp is shown;
     - `%auto(launch=allow)` is a launch error;
@@ -331,10 +353,11 @@ instead; it carries the same content.
   - `%auto:` completion lists your profiles;
   - `,a` switches a live agent.
 - **Plan Decisions (five, the cap):**
-  - `epic_worker`: **`epic: ask`** | `approve(max_depth=1)` (use E1's parked-nested-epic
-    data);
+  - `epic_depth`: **offer `approve(max_depth=N)` as opt-in vocabulary; default roles stay unbounded** | defer to E5;
   - `standard_epics`: **keep auto-launch** | ask (21 of 26 October auto-epics came from
-    top-level agents, so this is the high-volume default);
+    top-level agents, so this is the high-volume default). If `standard` stops
+    auto-launching epics, the default roles must move to a profile that still
+    launches — the user requires that epic workers launch by default;
   - `standard_plans`: **approve + archive** | approve only;
   - `memory_plans`: **ask when a plan carries memory decisions** | take the defaults.
     This is option (a) of `sase-1i1`. If you prefer its option (b), a provenance change,
@@ -441,13 +464,14 @@ reading the plan cold does not have to rediscover them:
 
 | Risk | Mitigation |
 | --- | --- |
-| E1's own epic workers still run with a literal `%auto` | Land the [D7 tale](#safety-tales-before-the-epics) before E1's planner starts |
+| E1's own epic workers still run with a literal `%auto` (historical) | Landed the [D7 tale](#safety-tales-before-the-epics) before E1's planner started; the E1 amendment then moved workers to `autonomy.roles` |
 | E1's "no behavior change" hides drift around Plan Decisions defaults | The contract suite plus the UI-default-independence test, and E1 starts only after `sase-1hi`/`1hi.10` close |
 | A collision with in-flight epics (`sase-18i`, `sase-11t`, `sase-1ab.10`, `sase-10h`) | Land them or rebase onto them before E1.4 and E1.5 |
 | The Telegram phase spawns a repair epic (52% nesting for Telegram epics, small n) | One Telegram phase per epic, scoped to knowing and stopping |
 | Declines and `on_ask` exist only after E3, yet E2 announces declines | E2 tests the decline and park paths through core fixtures, and E3 re-verifies them through real profiles |
 | Golden churn across E2, E3, and E4 | Each epic owns distinct surfaces: status (E2), compose and picker (E3), steering (E4) |
 | Epic backlog (98 in progress) | Commit only E1–E3. E4 and E5 are trigger-based |
+| Unbounded nested epics overnight are now the default | `autonomy.roles` per user/project; `sase autonomy log` filtered to epic workers; E2's announcements and brake; E3's opt-in depth bound |
 
 ## What would change this recommendation
 
@@ -459,6 +483,8 @@ reading the plan cold does not have to rediscover them:
   picker to Manual, `standard`, and that profile.
 - **If tool-level risk shows up in real incidents,** start the hard-permissions research
   ahead of E4 and E5, still as a separate section on the same profile object.
+- **If worker-authored "Finish…" epics start chaining more than about two deep,**
+  set `autonomy.roles.epic_land: tale` or adopt E3's opt-in depth bound.
 
 ## If you want fewer epics
 
@@ -482,6 +508,7 @@ reading the plan cold does not have to rediscover them:
 | One epic per surface (gem) | The same words drift between surfaces, and profiles ship without discovery |
 | A pre-filed chain of every epic | It commits to E4 and E5 before the data exists. File E1 and E2 now, E3 after its log, and the rest on their triggers |
 | Hard permissions inside this program | A different decision. Every provider still runs with a bypass flag |
+| Keep epic workers on `tale` (the D7 stopgap) | It leaves overnight work parked until a human wakes up, and the user rejected it on 2026-10-09 |
 
 ## Evidence that shapes the cut
 
@@ -574,6 +601,9 @@ Two corrections to the researchers on this point:
     log**.
   - Generated `%auto` comes from more than `bead/work_prompt.py`, so **roles must be
     plain profile names that any macro can emit** (cld).
+
+  After the amendment, epic-worker volume is expected to rise, and E1's log separates
+  it by `creator_role`.
 - **Existing beads belong to this program:**
 
   | Bead | Size | Belongs in |
