@@ -15,7 +15,18 @@
 > epics they author. `autonomy.roles.epic_phase` / `epic_land` narrows them
 > (set a role to `tale` to make nested epics wait again). This landed as a
 > follow-up tale to E1 (`plan:202610/auto_e1_epic_worker_roles.md`). The
-> infographic predates it.
+> infographic predates both amendments.
+
+> **Amendment (2026-10-09): agents are not told their autonomy.** The user
+> reversed the policy baseline's R8 "agent awareness" requirement, and with it
+> E1.5's awareness block. SASE adds no autonomy text to agent prompts. Generated
+> worker macros and skills no longer mention `%auto` or autonomy. Agents learn
+> only each gate's result; humans still see autonomy on every inspect surface.
+> This avoids spending tokens every turn and drawing the agent's attention to
+> autonomy; agents should do the same work either way. See
+> @plan:202610/auto_e1_no_agent_autonomy_text.md. This amendment and the first
+> override the `__final` source report and both accepted baselines wherever they
+> disagree.
 
 ## Bottom line
 
@@ -134,6 +145,8 @@ None of them holds:
   diagnostics, so Python, Rust, and the LSP cannot disagree.
 - **After E1,** a property test asserts that `sase autonomy explain -p "<prompt>" --json`
   equals the decision the runtime actually makes, for every row.
+- **Prompt silence.** For every row, the agent's prompt carries no autonomy text;
+  this tale's regression test is the seed.
 
 Target behavior once the P0 tales and E1 have landed. **Bold** marks a deliberate change.
 
@@ -165,7 +178,7 @@ Ship these now, as tales, before E1's planner starts. Three are already filed an
 | Epic phase and land workers emit `%auto:tale`. A tier mismatch (`:tale` or `:plan` on an epic, `:epic` on a tale) becomes `ask` at all three call sites (shipped in `sase-1id`; its `%auto:tale` emission is superseded by the amendment above; its tier-mismatch → `ask` change stands) | **New** (medium) | `sase bead work <epic> --dry-run` shows `%auto:tale` on every phase and land segment. A fixture epic gate with argument `tale` parks. `tests/test_bead/test_work_epic_plan.py` flips its assertion. The changelog names the change |
 | Readers use agent meta live, so the env snapshot is no longer authoritative | `sase-15s` (small) | Launch bare `%auto`, press `A` off, and the next plan gate parks |
 | `docs/macros.md` and the core `macros.md` row describe observed behavior: bare `%auto` archives tales, launches epics, and answers questions; `:tale` answers questions | `sase-1hh` (small, memory) | `sase memory show macros.md` matches the contract rows |
-| `/sase_questions`: "put your recommended option first; under `%auto` it is chosen automatically" (D8) | **New** (small, generated skill) | A unit test on the bundled skill source |
+| `/sase_questions`: "put your recommended option first; under `%auto` it is chosen automatically" (D8; the `%auto` clause was removed by the amendment, and autonomy-neutral "recommended option first" guidance stands) | **New** (small, generated skill) | A unit test on the bundled skill source |
 
 **Why tales and not a small epic (resolving cld and mus):**
 
@@ -198,7 +211,8 @@ instead; it carries the same content.
 - Selection uses explicit option IDs, never `primary_branch` or `default_selected` (the
   root-cause fix for D3).
 - Every automatic outcome leaves a decision record, auto-answered questions included.
-- The agent is told its policy through the awareness block.
+- Agents are not told their policy; the awareness block E1.5 shipped was removed by
+  this amendment.
 - `sase autonomy explain`, `list`, `log`, and `show` expose all of it.
 - `A` writes the record and toggles Manual ↔ *this session's last profile*, so `:tale`
   users are never silently widened to `standard`.
@@ -211,7 +225,7 @@ instead; it carries the same content.
 | E1.2 `core_policy` | medium | sase-core: `EffectiveAutonomyPolicy` v1; compatibility translation (bare, `+` → `standard`; `:tale`/`:plan` and `:epic` → reserved profiles; `:manual`/`:off` → Manual); `evaluate(policy, request) → {auto\|ask\|deny, option_ids, rule, reason, digest}`; unknown gate kinds evaluate to `ask`; combined selections are all-or-nothing. Binding, then pin |
 | E1.3 `core_summary` | medium | sase-core: `AutonomySummaryWire` (profile, class, generated sentence, per-kind cells, coverage line, source, revision); `decision_sentence()`; `mutate_autonomy(record, selection, expected_revision, actor)`, which is tighten-only for agent actors |
 | E1.4 `record` | medium | Resolve the policy at launch and persist it. Every reader goes through the record. Structural inheritance for in-process, monitor, gate, pipe, and handoff successors replaces `auto_launch_prefix`. `A` writes through `mutate_autonomy`. `%dispatch` ships the resolved record. A `sunset` flag (`sase flag new`, both states tested) keeps the legacy meta triad and env vars as derived compatibility |
-| E1.5 `gates` | medium | Adapters declare capability sets. Plan, epic, and question auto-resolution goes through `evaluate`, preserving Plan Decisions' take-defaults behavior and quiet receipt. A `policy {profile, rule, decision, source, revision, digest}` block on every automatic outcome. The awareness block, labeled as soft |
+| E1.5 `gates` | medium | Adapters declare capability sets. Plan, epic, and question auto-resolution goes through `evaluate`, preserving Plan Decisions' take-defaults behavior and quiet receipt. A `policy {profile, rule, decision, source, revision, digest}` block on every automatic outcome. The awareness block (labeled as soft) shipped, then was removed by this amendment |
 | E1.6 `cli` | medium | `sase autonomy explain\|list\|log\|show` per `cli_rules.md`. An AUTO column and `--json` fields in `sase agent list`, an Autonomy section in `agent show`, a policy line in `gate show`. The `explain`-equals-runtime property test. A fakey lifecycle e2e: planner → coder → monitor → gate follow-up |
 
 - **Exit criteria:**
@@ -236,9 +250,12 @@ instead; it carries the same content.
   config (`epic_phase` / `epic_land`, default `standard`), rendering worker
   prompts from the roles, updated worker macro wording, `sase autonomy list`
   roles, and the amended contract rows.
+- **Amendment: no awareness block.** This tale shipped the removal of the prompt
+  hook and `gates.py` helpers; core `autonomy_awareness_text` and its binding; the
+  macro and skill wording; and the prompt-silence and skill/macro guard tests.
 - **Plan Decisions:**
   - `question_default`: **keep `first`** until E3 ships `recommended` | switch now;
-  - `awareness_scope`: **every `%auto` agent** | unattended profiles only;
+  - `awareness_scope`: **settled by the amendment: no agent gets a block**;
   - memory consent for a decision record, "autonomy is one record evaluated in core,
     never derived from gate UI defaults".
 - **Start condition:** [P0](#safety-tales-before-the-epics) has landed, and
@@ -249,8 +266,8 @@ instead; it carries the same content.
 
 **Result.**
 
-- Every agent names its profile on every surface, and every surface prints the same
-  words from one core summary.
+- Every agent names its profile on every human surface (never in the agent's own
+  prompt), and every human surface prints the same words from one core summary.
 - Epic launches (and, once E3 exists, declines) are announced in the TUI's `⚡ Auto`
   inbox tab and on Telegram, with **Manual** and **Pause all** actions.
   Worker-launched nested epics are announced like any epic auto-launch. The
@@ -262,7 +279,7 @@ instead; it carries the same content.
 | Phase | Size | Content |
 | --- | --- | --- |
 | E2.1 `core_brake_why` | medium | sase-core: the brake as an `evaluate` input. Host-wide, optional TTL, and it **fails closed**: every allow becomes `ask`, `on_ask` is forced to `park` once it exists, and an explicit `deny` stays a denial. Also `autonomy_why()` and the mobile projection fields. Then the pin |
-| E2.2 `tui_status` | medium | Row bolt colored by class. Header chip `⚡ <profile>` and the Auto strip. A Context-card Autonomy section: rules, provenance, the awareness text verbatim, and this session's decisions. "Why it asked" lines. An `A` footer that names its target. Glyph cleanup (U7). Visual goldens |
+| E2.2 `tui_status` | medium | Row bolt colored by class. Header chip `⚡ <profile>` and the Auto strip. A Context-card Autonomy section: rules, provenance, the core summary's per-kind cells and coverage line, and this session's decisions. "Why it asked" lines. An `A` footer that names its target. Glyph cleanup (U7). Visual goldens |
 | E2.3 `announce` | medium | `autonomy.announce` with inbox tags `autonomy`, `autonomy-epic`, and `autonomy-decline`. The completion line. A Child-autonomy row in Launch Review (`m` launches the child as Manual). A read-only Admin Center Autonomy pane |
 | E2.4 `brake_surfaces` | small | `sase autonomy pause\|resume [-t TTL] [-r REASON]`, a context-bar chip, palette entries. Agents may pause but never resume |
 | E2.5 `telegram` | medium | sase-telegram: a real receipt formatter; the epic alert `[📄 Plan] [✋ Manual] [⏸ Pause all]`; `/auto` (list, pause, resume); `auto_resolution` never shown as "you via Telegram" (U5); revision-bound `pending_actions` callbacks; the contradictory `docs/notifications.md` paragraph fixed (U4) |
@@ -278,6 +295,7 @@ instead; it carries the same content.
     - an `on_ask: deny` fixture policy parks rather than declines;
   - a later-launched worker sees an earlier pause;
   - a test requires the coverage line on every inspect view;
+  - prompt silence still holds;
   - goldens pass for every new surface;
   - Telegram tests cover stale, duplicate, and unreachable-host callbacks;
   - an epic auto-launched by an epic worker rings with **Manual** and **Pause all**.
@@ -326,9 +344,9 @@ The brake is now the stop for overnight nesting.
 | Phase | Size | Content |
 | --- | --- | --- |
 | E3.1 `core_profiles` | medium | sase-core: config schema v1; layering; single-level `extends`; the profile-id grammar; reserved `manual`/`off`/`plan`/`tale`/`epic`; the selector and override grammar with ceilings; editor metadata (the bare-`%auto` completion lists profiles; hover shows the matrix; diagnostics) for the TUI, LSP, and nvim. Then the pin |
-| E3.2 `vocabulary` | medium | `deny` and `on_ask: deny` as typed refusals the agent was warned about. `question: recommended` (a `recommended: true` schema flag plus `/sase_questions`) and `decide`. `plan: approve` and `archive`. `epic: approve(max_depth=N)` only if that Plan Decision says so |
+| E3.2 `vocabulary` | medium | `deny` and `on_ask: deny` as typed refusals the agent learns from the gate's response (it is never forewarned). `question: recommended` (a `recommended: true` schema flag plus `/sase_questions`, which tells agents to mark their recommended option without an autonomy condition) and `decide`. `plan: approve` and `archive`. `epic: approve(max_depth=N)` only if that Plan Decision says so |
 | E3.3 `roles` | medium | `autonomy.roles` values name user/project profiles. Built-ins `standard`, `attended`, and `overnight` (no built-in `epic_worker` profile). Three rules: (1) a role is a config grant — a parent or planner ceiling never clamps an epic worker below its role, so a human-approved epic from a Manual planner still runs `standard` workers; (2) a project layer may only narrow a role relative to the user layer; (3) agent-authored `%auto` in worker follow-ups may only narrow |
-| E3.4 `compose` | medium | A prompt-bar autonomy chip, using live core parsing and blocking submit on an error. The first-use toast and the one-time notice. The awareness block covers the new values |
+| E3.4 `compose` | medium | A prompt-bar autonomy chip, using live core parsing and blocking submit on an error. The first-use toast and the one-time notice. Agents still see no autonomy text; the prompt-silence test covers the new profiles |
 | E3.5 `picker` | medium | The `,a` matrix picker: Manual first, digits apply, a coverage line, `p` to pause. A palette entry "Set autonomy…". Profile matrix and provenance in the Admin pane. Goldens |
 | E3.6 `docs_acceptance` | small | `docs/macros.md`, the `macros.md` row (memory decision), a decision record "prompts select autonomy; only config grants", profile and layering contract rows, and a live check |
 
@@ -347,6 +365,7 @@ The brake is now the stop for overnight nesting.
   - **roles:** generated workers render their role, and a config edit changes their
     behavior with no code change;
   - **explain:** `explain` shows layer provenance.
+  - **prompt silence:** holds for every new profile.
 - **Demo:**
   - `sase autonomy explain -p '%auto:overnight'`;
   - `sase autonomy explain -p '%auto(attended, epic=deny)'`;
@@ -429,6 +448,8 @@ graph LR
   `/sase_new_task`.
 - **Chain E1 → E2 in one prompt** with `%wait`, so each planner starts only after the
   previous epic has closed.
+- E1's plan reference below stays on the final report as history. E2 and later use the
+  amended roadmap because only this file carries the amendments.
 - **Leave `%auto` off the planners.** Each plan's Plan Decisions should reach you.
 - **Name the memory edits you want in your typed launch prompt.** Auto-approval never
   establishes memory consent, but a `requested:` quote from your human-typed prompt does
@@ -442,11 +463,12 @@ Plan epic E1 "One autonomy record" exactly as scoped in
 I want the decision record "autonomy is one record evaluated in core" added to memory.
 ---
 +sase %id:auto_e2 %w:auto_e1 #epic
-Plan epic E2 "See it, stop it" as scoped in ... (same ref)
+Plan epic E2 "See it, stop it" as scoped in
+@research:202610/auto_autonomy_epic_roadmap/auto_autonomy_epic_roadmap.md.
 ```
 
-Launch E3 by hand after reading a week of `sase autonomy log`. Launch E4 and E5 only
-when their triggers fire.
+Launch E3 by hand after reading a week of `sase autonomy log`, using the amended
+roadmap above as its planning reference. Launch E4 and E5 only when their triggers fire.
 
 **Every epic plan should state these cross-cutting constraints**, so a phase worker
 reading the plan cold does not have to rediscover them:
@@ -457,6 +479,10 @@ reading the plan cold does not have to rediscover them:
 - **New CLI** follows `cli_rules.md`.
 - **Skill edits** follow `generated_skills.md`.
 - **Memory edits** go through `/sase_memory_write` with an accepted memory decision.
+- **Agents are never told their autonomy.** No prompt block, no skill or macro text
+  keyed on `%auto`; gate responses report results only. Pre-authorization ideas that
+  relied on the awareness block (the policy baseline's `preauthorized` list) must become
+  host-enforced gate rules or be dropped.
 - **The coverage line** ("host checkpoints only · the agent's shell is not restricted")
   appears on every inspect view. No padlock or "restricted" badge.
 
@@ -472,6 +498,7 @@ reading the plan cold does not have to rediscover them:
 | Golden churn across E2, E3, and E4 | Each epic owns distinct surfaces: status (E2), compose and picker (E3), steering (E4) |
 | Epic backlog (98 in progress) | Commit only E1–E3. E4 and E5 are trigger-based |
 | Unbounded nested epics overnight are now the default | `autonomy.roles` per user/project; `sase autonomy log` filtered to epic workers; E2's announcements and brake; E3's opt-in depth bound |
+| Agents cannot tailor work to their autonomy (they may ask questions that get auto-answered, or author epics that park) | The autonomy-neutral "recommended option first" rule; Plan Decisions defaults; gate results; E3's `question: recommended` / `decide` |
 
 ## What would change this recommendation
 
@@ -485,6 +512,8 @@ reading the plan cold does not have to rediscover them:
   ahead of E4 and E5, still as a separate section on the same profile object.
 - **If worker-authored "Finish…" epics start chaining more than about two deep,**
   set `autonomy.roles.epic_land: tale` or adopt E3's opt-in depth bound.
+- **If E1's log shows auto-answered questions routinely taking poor first options,**
+  adopt E3's `question: recommended` or `decide`. Do not re-add a prompt block.
 
 ## If you want fewer epics
 
@@ -509,6 +538,7 @@ reading the plan cold does not have to rediscover them:
 | A pre-filed chain of every epic | It commits to E4 and E5 before the data exists. File E1 and E2 now, E3 after its log, and the rest on their triggers |
 | Hard permissions inside this program | A different decision. Every provider still runs with a bypass flag |
 | Keep epic workers on `tale` (the D7 stopgap) | It leaves overnight work parked until a human wakes up, and the user rejected it on 2026-10-09 |
+| Tell agents their autonomy (the policy baseline's R8 awareness block, shipped in E1.5) | It costs tokens every turn and focuses agents on autonomy; the user rejected it on 2026-10-09 |
 
 ## Evidence that shapes the cut
 
@@ -694,7 +724,7 @@ _Consolidated research, 2026-10-08._
 
 **Inputs.** This report merges five independent reports (`__cdx`, `__cld`, `__grk`,
 `__mus`, `__gem`) with my own verification. It takes both accepted baselines as binding
-on **what** to build:
+on **what** to build, except where the 2026-10-09 amendments override them:
 
 - [`auto_directive_autonomy_policy.md`](../auto_directive_autonomy_policy/auto_directive_autonomy_policy.md)
   (defects D1–D8, requirements R1–R11, phases P0–P5);
