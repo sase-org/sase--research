@@ -16,11 +16,6 @@ when research is requested, keeping exploratory findings and generated media sep
 Research should record the question, evidence, alternatives, and a clear recommendation. Follow-up work from
 `#research/more` extends the existing report and preserves its established organization and source conventions.
 
-## Topic Tags
-
-Research reports can carry a `tags:` list in their YAML frontmatter. See [TAGS.md](TAGS.md) for tag definitions,
-inclusion and exclusion criteria, filename rules, and how to find related reports across monthly directories.
-
 ## Commands
 
 - `sase repo path research --ensure` materializes this clone and prints its root.
