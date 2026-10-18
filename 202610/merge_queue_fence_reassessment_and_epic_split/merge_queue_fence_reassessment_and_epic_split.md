@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # Reassessing the merge-queue-fenced `master` plan: revised requirements and a four-epic delivery
 
 > **Research query:** Reassess the solution proposed by

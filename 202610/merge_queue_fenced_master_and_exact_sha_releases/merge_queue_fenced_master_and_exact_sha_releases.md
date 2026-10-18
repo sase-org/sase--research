@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # Merge discipline for SASE: a merge-queue-fenced `master` and exact-SHA PyPI releases
 
 > **Research query:** After reading the `gastown_vs_sase_lessons_to_borrow.md` report in

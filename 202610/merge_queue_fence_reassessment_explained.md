@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # The merge-queue reassessment, explained simply
 
 > **Research query:** Summarize and simplify the work described by

@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # Will the merge queue make me wait hours to test an agent's fix?
 
 > **Question:** If I carry out

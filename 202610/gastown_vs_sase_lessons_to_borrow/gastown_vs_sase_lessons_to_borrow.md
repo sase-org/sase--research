@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # Gas Town vs. SASE: where Gas Town is ahead, and what SASE should borrow
 
 > **Research query:** How does SASE compare with Gas Town (the

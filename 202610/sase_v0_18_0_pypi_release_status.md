@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # sase v0.18.0 → PyPI: what is still blocking it?
 
 _Checked 2026-10-13 ~15:40 UTC against master `1a638eac95`._

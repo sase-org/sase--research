@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # Redesigning sase.sh: A Small, Diátaxis-Typed Guide in Front of a Generated Reference
 
 > **Research query:** How should SASE drastically simplify its documentation on sase.sh,

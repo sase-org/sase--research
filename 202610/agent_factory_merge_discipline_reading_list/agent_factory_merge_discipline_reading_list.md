@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # Merging in an agent software factory: what the last year of reading says, and what to read
 
 > **Research query:** What is the best way to handle merging for an agent software

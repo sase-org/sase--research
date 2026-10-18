@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # Google's release engineering vs. sase's planned merge-queue release program
 
 > **Research query:** How does sase's planned release-process overhaul (the merge-queue

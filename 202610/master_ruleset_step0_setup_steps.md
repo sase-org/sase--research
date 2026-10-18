@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # Steps to create the Step 0 `master` ruleset
 
 > **Question:** I'm getting ready to create the "master ruleset" described by

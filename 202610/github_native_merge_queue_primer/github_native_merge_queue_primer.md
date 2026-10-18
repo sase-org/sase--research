@@ -1,3 +1,8 @@
+---
+tags:
+  - pypi-release-reliability
+---
+
 # How GitHub's native merge queue works
 
 > **Research query:** Help me understand how GitHub's native merge queues work, using
