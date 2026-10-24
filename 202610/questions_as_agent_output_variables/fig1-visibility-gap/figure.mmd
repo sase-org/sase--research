@@ -1,0 +1,30 @@
+---
+title: "Where does session Q&A appear today?"
+accTitle: "Current Q&A visibility on the Agents tab"
+accDescr: "The asking turn hands off to a question gate bundle. Context shows output variables, which do not hold Q&A. Reply shows generic gate metadata and raw Option JSON."
+config:
+  flowchart:
+    htmlLabels: false
+    rankSpacing: 14
+    nodeSpacing: 18
+    wrappingWidth: 260
+---
+flowchart TD
+  ASK["`**Asking turn**<br/>runs sase questions`"]
+  MARK["`**Pending marker**<br/>then SIGTERM`"]
+  GATE["`**Question gate turn**<br/>session member, no LLM`"]
+  BUNDLE["`**Gate bundle**<br/>request.json and response.json`"]
+  CTX["`**Context card**<br/>OUTPUT VARIABLES`"]
+  RPL["`**Reply card**<br/>GATE fields plus Option JSON`"]
+  ASK ==> MARK
+  MARK ==> GATE
+  GATE ==> BUNDLE
+  BUNDLE -.->|"not copied"| CTX
+  BUNDLE -->|"generic metadata"| RPL
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  class ASK,MARK,GATE focus
+  class BUNDLE outcome
+  class CTX,RPL risk

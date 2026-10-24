@@ -1,0 +1,31 @@
+---
+title: "Where should the host publish Q&A for the deck?"
+accTitle: "Implementation choice for Q&A deck visibility"
+accDescr: "Skill-time variable writes cannot include answers. Host-managed variables on the gate turn reuse Context aggregation. A Context QUESTIONS section reads the gate bundle and is the recommended path."
+config:
+  flowchart:
+    htmlLabels: false
+    rankSpacing: 12
+    nodeSpacing: 14
+    wrappingWidth: 240
+---
+flowchart TD
+  Q1{{"`**Answers exist yet?**`"}}
+  Q2{{"`**Need Context card?**`"}}
+  SKILL["`**Skill-time var set**<br/>questions only, unreliable`"]
+  GATEVAR["`**Host var on gate turn**<br/>reuses OUTPUT VARIABLES`"]
+  SECTION["`**Context QUESTIONS**<br/>reads the gate bundle`"]
+  REPLY["`**Improve Reply GATE**<br/>still the wrong card`"]
+  Q1 -->|No| SKILL
+  Q1 -->|Yes| Q2
+  Q2 -->|No| REPLY
+  Q2 -->|Vars only| GATEVAR
+  Q2 -->|Best fit| SECTION
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  class Q1,Q2 decision
+  class SECTION outcome
+  class GATEVAR focus
+  class SKILL,REPLY risk
