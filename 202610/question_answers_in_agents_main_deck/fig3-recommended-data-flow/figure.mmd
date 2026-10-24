@@ -1,0 +1,38 @@
+---
+title: "Proposed: how the Agents deck shows question history without variables"
+accTitle: "Recommended question-history data flow"
+accDescr: "The asking turn hands off to a question gate turn; answers land in the gate bundle. The deck paints a summary from gate rows already in memory, then an off-thread lane runs a sase-core projection over the bundle to fill the full QUESTIONS section."
+config:
+  flowchart:
+    rankSpacing: 30
+    nodeSpacing: 22
+    wrappingWidth: 240
+---
+flowchart TB
+  ASK["`**Asking turn**<br/>runs sase questions, then ends`"]
+  ANS["`**Answerer**<br/>human channel or auto policy`"]
+  subgraph HOST["Host-owned records (canonical)"]
+    GATE["`**Question gate turn**<br/>state, label, creator in meta`"]
+    BUNDLE["`**Gate bundle**<br/>request.json + response.json`"]
+  end
+  subgraph TUI["Agents tab, Context card"]
+    STUB["`**QUESTIONS summary**<br/>first paint, no disk reads`"]
+    LANE["`**Questions lane**<br/>off-thread, mtime-cached`"]
+    FULL["`**QUESTIONS section**<br/>questions, ★, answers, how`"]
+  end
+  PROJ["`**sase-core projection**<br/>pure function, no file I/O`"]
+  ASK -->|"hands off to"| GATE
+  ANS -->|"submits answers to"| BUNDLE
+  GATE -->|"scan carries state"| STUB
+  BUNDLE -->|"read by"| LANE
+  LANE -->|"calls"| PROJ
+  PROJ ==>|"fills"| FULL
+  STUB -->|"expands into"| FULL
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef muted fill:#F3F4F6,stroke:#6B7280,stroke-width:1.5px,color:#1F2937
+  class ASK,ANS,GATE,BUNDLE muted
+  class PROJ,STUB,LANE focus
+  class FULL outcome
+  style HOST fill:none,stroke:#6B7280
+  style TUI fill:none,stroke:#3B78C2
