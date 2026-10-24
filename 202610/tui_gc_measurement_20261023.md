@@ -1,9 +1,11 @@
 # TUI GC attribution on Athena and Apollo — 23 October 2026
 
 Status updated 24 October 2026, after the r5 capture: **four-hour measurement
-complete on both hosts; representative busy-hour evidence still missing**. Phase
-`sase-1nf.13` remains open. Neither `sase-1f3` nor the parent epic is closed.
-`gc_soak=no` leaves the 24-hour soak to `gc-fix`.
+complete on both hosts; representative busy-hour evidence still missing**. The
+`gc_measure_scope=close_now` decision closes measurement phase `sase-1nf.13` on the
+existing evidence and moves the remaining acceptance requirements to `gc-fix`.
+Neither `sase-1f3` nor the parent epic is closed. `gc_soak=no` leaves the 24-hour soak
+to `gc-fix`.
 
 R5 preserves one uninterrupted census-enabled instance per host beyond four hours
 after warmup. Athena fails idle-GC latency, GC share, hitch share, late-hitch, RSS
@@ -460,9 +462,74 @@ window. If either instance has since restarted, do not combine it with r5 or sil
 relax the same-instance requirement.
 
 Actual target misses are findings for `gc-fix`; they are not a reason to delay closing
-a completed measurement phase. Here the representative workload requirement itself
-remains unproven, so `sase-1nf.13` stays open. `sase bead epic-symbols sase-1nf.13`
-reported no entries during r5 verification. No product source or memory edits and no
-new beads were made. Proposed follow-ups are recorded only on the assigned phase.
-Only that phase may close after the remaining measurement scope is satisfied;
-`sase-1f3` and ancestors stay open, and the 24-hour soak stays with `gc-fix`.
+the completed measurement work. The later `gc_measure_scope=close_now` decision moves
+the unproven representative-workload requirement into `gc-fix` acceptance. The
+measurement phase closes with that limitation recorded; `sase-1f3` and ancestors stay
+open, and the 24-hour soak stays with `gc-fix`.
+
+## Closure and handoff — 24 October 2026
+
+The `gc_measure_scope=close_now` decision closes the measurement phase on the evidence
+already collected. R5 supplies a gap-free, post-warmup four-hour window on each host:
+Athena on Python 3.14.7 and Apollo on Python 3.12.3. The report also records the
+ranked producer mechanisms, census type counts, and fault/swap correlation. These are
+measurement findings, not a pass of the `sase-1f3` targets. Athena misses several
+latency, GC-share, hitch, RSS, and swap targets; Apollo's quiet window does not establish
+busy-hour acceptance.
+
+The report does not contain a representative busy hour. R5 has only one actual Agents
+`prev` sample on Athena and no navigation samples on Apollo in the selected windows.
+Later capture attempts did not establish a qualifying replacement window: the r6
+instances provided only 1,206.768 seconds on Athena and 901.055 seconds on Apollo after
+warmup before full relaunches at 10:03 UTC. Those short segments contain three Athena
+and 31 Apollo next/previous actions, but are not a busy hour or four-hour acceptance
+window. The r6 interruption archive is
+`file:explicit:b5661e950a3aad343a5afdef`. The r7 probes at 10:21–10:22 UTC found the
+replacement instances still running without `SASE_TUI_GC_CENSUS` or `SASE_TUI_PERF`,
+with zero current-instance census rows; the probes and checkpoint are in
+`file:explicit:4c5a448c914d52aca463ecab`. Full relaunches lost the shell-only flags,
+and exec restarts created new measurement instances. No cause for those relaunches is
+inferred here.
+
+Existing pre-fix navigation evidence is useful as a baseline but is not representative
+acceptance: corrected r4 Athena Agents j/k p95 is 215.26 ms (n=52); Apollo's largest
+historical hour has 12 actual j/k actions; and the interrupted r6 segments have only
+three Athena and 31 Apollo next/previous actions. None establishes a representative
+hour or the required j/k distribution.
+
+### Requirements carried by gc-fix
+
+The `gc-fix` acceptance must capture a representative busy hour, a full Agents j/k p95
+distribution below 16 ms on the fixed code, per-tab latency on other tabs, and a
+prompt-active versus idle comparison. The 24-hour soak also remains there under
+`gc_soak=no`. This report makes no claim that these requirements passed.
+
+### Acceptance report and capture constraints
+
+Before trusting `tools/tui_freeze_report` acceptance output, `gc-fix` must fix or work
+around the defects recorded on `sase-1nf.13`:
+
+- Sort idle full-collection samples before calculating idle p95; the current unsorted
+  percentile can understate the result.
+- Treat incomplete coverage and late-hitch violations as insufficient or failing
+  acceptance. A short window with j/k marked n/a, or a late recovery outside idle
+  collection, must not produce an overall pass.
+- Report window-wide swap history or maximum as well as the endpoint. An endpoint that
+  has fallen after a peak can hide earlier swap pressure.
+- Align GC and hitch totals to paired heartbeat intervals and preserve raw timestamp
+  boundaries. Rounded upper-bound timestamps can drop a real endpoint and distort
+  coverage and RSS calculations.
+- Count only actual `next`/`prev` actions as j/k. Leader, prompt, and panel actions in
+  the shared perf file are separate activity.
+
+For capture, both `SASE_TUI_GC_CENSUS=1` and `SASE_TUI_PERF=1` must be present in the
+shell that launches `sase tui`; they survive in-app exec restarts, but a full relaunch
+loses them and every restart starts a new instance. Verify flags and early real j/k
+rows on both hosts before beginning a long window. Perf rows carry no PID or instance
+ID, so attribute them by wall-clock bounds and keep one observed TUI per host during
+the capture.
+
+The ranked investigation priorities remain Agent graph replacement and
+`copy_agent_graph` cycles; Textual Strip/FIFOCache render self-cycles; and large
+archive, event, and completion populations. The allocation experiments identify
+mechanisms and candidates, not shares of live allocation traffic or proof of leaks.
