@@ -1,0 +1,33 @@
+---
+title: "What should happen on stitch CONFLICT?"
+accTitle: "Stitch conflict repair decision"
+accDescr: "A content conflict gets one nested repair turn after the SDD resolver has already failed. A second conflict or a continuation-bound conflict fails the run."
+config:
+  flowchart:
+    rankSpacing: 12
+    nodeSpacing: 14
+    wrappingWidth: 240
+---
+flowchart TD
+  Q1{{"`**Repair allowed?**`"}}
+  Q2{{"`**Repair already spent?**`"}}
+  Q3{{"`**Resume still CONFLICT?**`"}}
+  BOUND["`**Fail continuation bound**`"]
+  SPENT["`**Fail second conflict**`"]
+  RES["`**Resolve repair model**`"]
+  INV["`**One nested repair turn**`"]
+  DONE["`**Continue finalizer**`"]
+  Q1 -->|No| BOUND
+  Q1 -->|Yes| Q2
+  Q2 -->|Yes| SPENT
+  Q2 -->|No| RES
+  RES ==> INV
+  INV --> Q3
+  Q3 -->|Yes| SPENT
+  Q3 -->|No| DONE
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  class Q1,Q2,Q3 decision
+  class RES,INV,DONE outcome
+  class BOUND,SPENT risk

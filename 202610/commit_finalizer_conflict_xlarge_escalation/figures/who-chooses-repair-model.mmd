@@ -1,0 +1,42 @@
+---
+title: "Who chooses the conflict-repair model?"
+accTitle: "Conflict-repair model selection today versus proposed"
+accDescr: "Today the repair invoke reuses the worker provider and resolved model. The proposal re-resolves the at-xlarge alias, skips usage-sparing providers, and may instantiate a different provider."
+config:
+  layout: dagre
+  flowchart:
+    rankSpacing: 14
+    nodeSpacing: 20
+    wrappingWidth: 240
+---
+flowchart TB
+  subgraph TODAY["Today"]
+    direction TB
+    TC["`**Stitch CONFLICT**`"]
+    TP["`**Same provider object**`"]
+    TM["`**Worker model and effort**`"]
+    TI["`**Nested repair invoke**`"]
+    TC --> TP
+    TP --> TM
+    TM --> TI
+  end
+  subgraph PROPOSED["Proposed"]
+    direction TB
+    PC["`**Stitch CONFLICT**`"]
+    PR["`**Resolve @xlarge**`"]
+    PS["`**Skip usage-sparing**`"]
+    PN["`**Matching provider**`"]
+    PI["`**Nested repair invoke**`"]
+    PC --> PR
+    PR --> PS
+    PS --> PN
+    PN --> PI
+  end
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef muted fill:#F3F4F6,stroke:#6B7280,stroke-width:1.5px,color:#1F2937
+  class TC,PC focus
+  class TI,PI outcome
+  class TP,TM,PR,PS,PN muted
+  style TODAY fill:none,stroke:#6B7280
+  style PROPOSED fill:none,stroke:#2E7D4F
