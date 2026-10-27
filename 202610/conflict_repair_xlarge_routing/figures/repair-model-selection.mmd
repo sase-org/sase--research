@@ -1,0 +1,38 @@
+---
+title: "Which model runs the conflict-repair turn?"
+accTitle: "Recommended conflict-repair model selection"
+accDescr: "A stitch conflict that survives deterministic resolvers reaches model selection only if its one repair is unspent. Opt-out, execution override, or an earlier same-alias turn keeps the turn's selection. Otherwise the configured alias is re-resolved, and the repair falls back to the turn's selection only if the repair provider cannot be built before the repair is spent."
+config:
+  flowchart:
+    rankSpacing: 14
+    nodeSpacing: 16
+    wrappingWidth: 230
+---
+flowchart TD
+  Q1{{"`**Repair unspent?**`"}}
+  FAIL["`**Run fails**<br/>rebase stays paused`"]
+  Q2{{"`**Keep turn's model?**`"}}
+  RESOLVE["`**Re-resolve alias**<br/>default @xlarge`"]
+  Q3{{"`**Same model?**`"}}
+  Q4{{"`**Provider builds?**`"}}
+  TURN["`**Repair on turn's model**<br/>today's path, never lower effort`"]
+  NEW["`**Repair on resolved model**<br/>own ceilings, usage, quota`"]
+  Q1 -->|No| FAIL
+  Q1 ==>|Yes| Q2
+  Q2 -->|"Yes: inherit, exec<br/>override, same alias"| TURN
+  Q2 -.->|"No: proposed"| RESOLVE
+  RESOLVE -.-> Q3
+  Q3 -.->|"Yes: higher effort"| TURN
+  Q3 -.->|No| Q4
+  Q4 -.->|"No: logged fallback"| TURN
+  Q4 -.->|Yes| NEW
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  classDef proposed stroke-dasharray:5 3
+  class Q1,Q2,Q3,Q4 decision
+  class TURN outcome
+  class NEW outcome
+  class NEW proposed
+  class RESOLVE proposed
+  class FAIL risk
