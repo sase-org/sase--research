@@ -1,0 +1,32 @@
+---
+title: "Which host-completion path should a handoff turn take?"
+accTitle: "Handoff completion path routing"
+accDescr: "A bound prepared monitor defers commit until the check is green. Dirty obligations still need a commit declaration. A clean tree runs the controller with no payload, then the runner consumes the marker."
+config:
+  flowchart:
+    rankSpacing: 14
+    nodeSpacing: 16
+    wrappingWidth: 260
+---
+flowchart TD
+  START["`**Handoff marker written**`"]
+  Q1{{"`**Prepared -f monitor?**`"}}
+  Q2{{"`**Dirty repo obligations?**`"}}
+  PREP["`**Defer commit**<br/>host completes on green`"]
+  DECL["`**Require declaration**<br/>commit or typed deferral`"]
+  CLEAN["`**No payload required**<br/>controller still runs`"]
+  HAND["`**Runner consumes marker**`"]
+  START --> Q1
+  Q1 -->|Yes| PREP
+  Q1 -->|No| Q2
+  Q2 -->|Yes| DECL
+  Q2 -->|No| CLEAN
+  DECL --> HAND
+  CLEAN --> HAND
+  PREP -.->|"later"| HAND
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  class START focus
+  class Q1,Q2 decision
+  class PREP,DECL,CLEAN,HAND outcome

@@ -1,0 +1,39 @@
+---
+title: "When does a plan-propose turn commit its dirty tree?"
+accTitle: "Current versus proposed plan-propose completion"
+accDescr: "Today propose kills the agent and skips host completion, so sidecar edits strand. The proposal writes a marker, runs the commit finalizer, then starts the gate."
+config:
+  flowchart:
+    rankSpacing: 14
+    nodeSpacing: 18
+    wrappingWidth: 260
+---
+flowchart TD
+  subgraph TODAY["Today"]
+    direction TB
+    T_EDIT["`**Agent edits files**`"]
+    T_PROP["`**plan propose SIGTERM**`"]
+    T_SKIP["`**Finalizers skipped**`"]
+    T_GATE["`**Gate turn starts**`"]
+    T_LOST["`**Dirty tree stranded**`"]
+    T_EDIT --> T_PROP --> T_SKIP --> T_GATE --> T_LOST
+  end
+  subgraph NEXT["Proposed"]
+    direction TB
+    P_EDIT["`**Agent edits files**`"]
+    P_PROP["`**propose writes marker**`"]
+    P_DECL["`**/sase_final submits**`"]
+    P_COMMIT["`**builtin@commit stitches**`"]
+    P_GATE["`**Gate turn starts**`"]
+    P_EDIT --> P_PROP --> P_DECL --> P_COMMIT --> P_GATE
+  end
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  classDef proposed stroke-dasharray:5 3
+  class T_EDIT,T_PROP,P_EDIT,P_PROP,P_DECL focus
+  class T_GATE,P_COMMIT,P_GATE outcome
+  class T_SKIP,T_LOST risk
+  class P_EDIT,P_PROP,P_DECL,P_COMMIT,P_GATE proposed
+  style TODAY fill:none,stroke:#C0392B
+  style NEXT fill:none,stroke:#2E7D4F
