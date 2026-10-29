@@ -28,8 +28,8 @@ swarm.
 `*.steps.jsonl` files, `finalizers/progress.jsonl`); the rotated drain log
 `~/.sase/logs/agent_publication_drains.jsonl` (197 rows); live outbox files
 on this host. Prior independent research on the same machinery:
-[Publication drain measurement](pub_drain_measurement.md) (2026-10-20) and
-[Ending stitch_timeout agent failures](../202609/stitch_timeout_hardening/stitch_timeout_hardening.md)
+[Publication drain measurement](../pub_drain_measurement.md) (2026-10-20) and
+[Ending stitch_timeout agent failures](../../202609/stitch_timeout_hardening/stitch_timeout_hardening.md)
 (2026-09-04).
 
 ## Bottom line
