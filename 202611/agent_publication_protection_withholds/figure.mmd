@@ -1,0 +1,37 @@
+---
+title: "Why does agent_publication keep failing for bob-cli?"
+accTitle: "Publication protection withhold retry loop"
+accDescr: "Kebab-case task filenames match the openai-key regex, withhold the run or prompt archive without charging quarantine, and the publication chop records check_error on every retry."
+config:
+  flowchart:
+    rankSpacing: 14
+    nodeSpacing: 16
+    wrappingWidth: 260
+---
+flowchart TD
+  BYTES["`**Agent bytes**<br/>task-* names in meta or prompt`"]
+  SCAN{{"`**openai-key regex hit?**`"}}
+  KIND{{"`**Which file kind?**`"}}
+  RUN["`**Withhold whole run**<br/>meta.json is structural`"]
+  ARCH["`**Withhold prompt archive**`"]
+  PARK["`**Park outbox item**<br/>attempts stay 0`"]
+  CHOP["`**Chop status check_error**`"]
+  AXE["`**Axe digest row**`"]
+  RETRY["`**Doorbell retry next tick**`"]
+  BYTES ==> SCAN
+  SCAN -->|Yes| KIND
+  SCAN -->|No| OK["`**Publish clean bytes**`"]
+  KIND -->|meta.json| RUN
+  KIND -->|prompt archive| ARCH
+  RUN ==> PARK
+  ARCH ==> PARK
+  PARK ==> CHOP
+  CHOP ==> AXE
+  AXE -.-> RETRY
+  RETRY -.-> BYTES
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  class BYTES,PARK,RETRY,OK focus
+  class SCAN,KIND decision
+  class RUN,ARCH,CHOP,AXE risk
