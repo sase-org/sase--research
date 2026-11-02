@@ -1,0 +1,28 @@
+---
+title: "Which recovery action keeps the workspace?"
+accTitle: "Hijack recovery routing"
+accDescr: "Keep-tree actions start a new sase turn on the pinned workspace. Release actions archive the node or relaunch on a fresh clone."
+config:
+  flowchart:
+    rankSpacing: 12
+    nodeSpacing: 16
+    wrappingWidth: 240
+---
+flowchart TD
+  HELD["`**HIJACKED node**<br/>Enter opens recover`"]
+  KEEP{{"`**Keep the tree?**`"}}
+  SAME["`**Keep workspace**<br/>r restart, e escalate, x edit`"]
+  REL["`**Release workspace**<br/>d dismiss, optional c clean`"]
+  SUCC["`**New sase turn**<br/>same numbered clone`"]
+  GONE["`**Node archived**<br/>workspace free`"]
+  HELD ==> KEEP
+  KEEP -->|yes| SAME
+  KEEP -->|no| REL
+  SAME --> SUCC
+  REL --> GONE
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  class HELD,SAME,SUCC focus
+  class KEEP decision
+  class REL,GONE risk

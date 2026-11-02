@@ -1,0 +1,31 @@
+---
+title: "What does a hijack change versus a kill?"
+accTitle: "Kill versus hijack"
+accDescr: "A kill dismisses the Agents-tab node and releases the workspace. A hijack kills the process, keeps the node, and pins the workspace claim as HIJACKED."
+config:
+  flowchart:
+    rankSpacing: 14
+    nodeSpacing: 18
+    wrappingWidth: 260
+---
+flowchart TD
+  LIVE["`**RUNNING agent**<br/>process, node, claim`"]
+  FATE{{"`**How to stop it?**`"}}
+  KILL["`**Kill**<br/>today's x`"]
+  HIJ["`**Hijack**<br/>proposed`"]
+  ARCH["`**Node dismissed**<br/>workspace released`"]
+  HELD["`**HIJACKED node**<br/>workspace pinned`"]
+  LIVE ==> FATE
+  FATE -->|confirm kill| KILL
+  FATE -.->|chooser h| HIJ
+  KILL ==> ARCH
+  HIJ ==> HELD
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  classDef proposed stroke-dasharray:5 3
+  class LIVE,HIJ,HELD focus
+  class FATE decision
+  class KILL,ARCH risk
+  class HIJ proposed
+  class HELD proposed
