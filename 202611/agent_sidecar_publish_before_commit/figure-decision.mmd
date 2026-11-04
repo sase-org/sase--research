@@ -1,0 +1,28 @@
+---
+title: "Should async agent-sidecar publication be reverted?"
+accTitle: "Revert versus exists-before-push"
+accDescr: "A full revert cannot put the commit SHA on the page before git commit, still pushes the primary before the page exists, and puts minutes of hood drain back on every stitch. Keep background refresh, publish a stub before the primary push, and repair the stuck clone plus publisher liveness."
+config:
+  flowchart:
+    rankSpacing: 14
+    nodeSpacing: 16
+    wrappingWidth: 220
+---
+flowchart TD
+  Q1{{"`**SHA on the page first?**`"}}
+  IMPOSS["`**Impossible**<br/>The SHA does not exist yet`"]
+  Q2{{"`**Must the URL resolve?**`"}}
+  Q3{{"`**Revert to inline drain?**`"}}
+  STUB["`**Stub before push**<br/>Then async full hood`"]
+  SLOW["`**Slows commits**<br/>Push still precedes the page`"]
+  Q1 -->|Yes| IMPOSS
+  Q1 -->|No| Q2
+  Q2 -->|Yes| Q3
+  Q3 -->|Yes| SLOW
+  Q3 -->|No| STUB
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  class Q1,Q2,Q3 decision
+  class STUB outcome
+  class IMPOSS,SLOW risk

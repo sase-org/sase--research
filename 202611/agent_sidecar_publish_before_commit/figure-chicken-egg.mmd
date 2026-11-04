@@ -1,0 +1,20 @@
+---
+title: "Why can the agent page not name the commit before the commit exists?"
+accTitle: "Dual-write chicken and egg"
+accDescr: "The commit footer needs a live agent-page URL. That URL is a branch plus path, so a stub page can exist before git commit. The finished hood that lists the SHA can be written only after the SHA exists."
+config:
+  flowchart:
+    rankSpacing: 16
+    nodeSpacing: 24
+    wrappingWidth: 220
+---
+flowchart TD
+  STUB["`**Stub agent page**<br/>Path exists, SHA absent`"]
+  COMMIT["`**Primary commit**<br/>Footer URL is valid`"]
+  FULL["`**Hood update**<br/>Page lists the SHA`"]
+  STUB -->|"page exists"| COMMIT
+  COMMIT -->|"SHA now known"| FULL
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  class STUB,COMMIT focus
+  class FULL outcome
