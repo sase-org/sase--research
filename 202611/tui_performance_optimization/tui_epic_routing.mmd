@@ -1,0 +1,33 @@
+---
+title: "Where should the next TUI performance epic spend its effort?"
+accTitle: "TUI performance epic routing"
+accDescr: "Keep Textual. If the freeze is gen2 GC, slim the inbox. If construct is slow, defer it. Paint j/k only after the heap is small."
+config:
+  flowchart:
+    rankSpacing: 12
+    nodeSpacing: 12
+    wrappingWidth: 260
+---
+flowchart TD
+  Q0{{"`**Keep Textual?**`"}}
+  Q1{{"`**Is the freeze gen2 GC?**`"}}
+  Q2{{"`**Is construct over 2s?**`"}}
+  Q3{{"`**Is the heap already small?**`"}}
+  REJECT["`**Reject rewrite**<br/>Port data, not widgets`"]
+  HEAP["`**Slim inbox**<br/>Drop fat wires`"]
+  START["`**Defer construct**<br/>Keep import ratchet`"]
+  PAINT["`**j/k paint**<br/>OptionList patch`"]
+  Q0 -->|No| REJECT
+  Q0 -->|Yes| Q1
+  Q1 -->|Yes| HEAP
+  Q1 -->|No| Q2
+  Q2 -->|Yes| START
+  Q2 -->|No| Q3
+  Q3 -->|Yes| PAINT
+  Q3 -->|No| HEAP
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  class Q0,Q1,Q2,Q3 decision
+  class HEAP,START,PAINT outcome
+  class REJECT risk

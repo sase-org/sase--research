@@ -1,0 +1,29 @@
+---
+title: "How does a 131-row Agents inbox freeze the TUI?"
+accTitle: "Agents inbox heap spiral"
+accDescr: "A bounded index query still decodes fat nested wires, the heap grows, gen2 GC pauses the UI thread, and the same decode then takes longer."
+config:
+  flowchart:
+    rankSpacing: 12
+    nodeSpacing: 12
+    wrappingWidth: 260
+---
+flowchart TD
+  IDX["`**SQLite index**<br/>23k fat record_json`"]
+  T1["`**Tier 1 query**<br/>131 Agent rows`"]
+  DEC["`**Python decode**<br/>nested Wire objects`"]
+  HEAP["`**Process heap**<br/>5 GB then 35 GB`"]
+  GC["`**gen2 collect**<br/>on the UI thread`"]
+  SLOW["`**Same 131 rows**<br/>decode 2s to 22s`"]
+  IDX ==> T1
+  T1 ==> DEC
+  DEC ==> HEAP
+  HEAP ==> GC
+  GC ==> SLOW
+  SLOW -->|"next refresh"| DEC
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  class IDX,T1 focus
+  class DEC,HEAP focus
+  class GC,SLOW risk
