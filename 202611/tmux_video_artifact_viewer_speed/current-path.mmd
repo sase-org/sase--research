@@ -1,0 +1,28 @@
+---
+title: "Where does time go when opening a video from the Agents tab?"
+accTitle: "Current video artifact viewer path"
+accDescr: "Selecting a video after a on the Agents tab splits a tmux pane, cold-starts a Python viewer, then streams uncompressed kitty frames through tmux and SSH."
+config:
+  flowchart:
+    rankSpacing: 12
+    nodeSpacing: 12
+    wrappingWidth: 260
+---
+flowchart TD
+  SEL["`**Select video**<br/>Agents tab after a`"]
+  SPLIT["`**tmux split-window -h**<br/>new pane every open`"]
+  PY["`**python -m viewer**<br/>about 400 ms import`"]
+  MPV["`**mpv --vo=kitty**<br/>no sw-fast, no shm`"]
+  WIRE["`**RGB24 base64 frames**<br/>tmux then SSH`"]
+  DRAW["`**Slideshow in kitty**<br/>physics-limited`"]
+  SEL ==> SPLIT
+  SPLIT --> PY
+  PY --> MPV
+  MPV --> WIRE
+  WIRE --> DRAW
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef muted fill:#F3F4F6,stroke:#6B7280,stroke-width:1.5px,color:#1F2937
+  classDef risk fill:#FDECEC,stroke:#C0392B,stroke-width:1.5px,color:#5F1414
+  class SEL focus
+  class SPLIT,PY,MPV muted
+  class WIRE,DRAW risk

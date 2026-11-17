@@ -1,0 +1,28 @@
+---
+title: "Which viewer path should a video artifact take?"
+accTitle: "Recommended video artifact viewer routing"
+accDescr: "Inspect with a still or contact sheet first. Play motion only on demand, using shared memory when kitty is local and a hard cap or local open when the TUI is over SSH."
+config:
+  flowchart:
+    rankSpacing: 12
+    nodeSpacing: 12
+    wrappingWidth: 260
+---
+flowchart TD
+  OPEN["`**Open video**<br/>a then select`"]
+  Q1{{"`**Need motion now?**`"}}
+  Q2{{"`**Kitty on this host?**`"}}
+  STILL["`**Still or contact sheet**<br/>ffmpeg then kitten icat`"]
+  LOCAL["`**Capped mpv plus shm**<br/>sw-fast and pixel cap`"]
+  REMOTE["`**Capped mpv or local open**<br/>SSH cannot use shm`"]
+  OPEN ==> Q1
+  Q1 -->|No| STILL
+  Q1 -->|Yes| Q2
+  Q2 -->|Yes| LOCAL
+  Q2 -->|No| REMOTE
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  class OPEN focus
+  class Q1,Q2 decision
+  class STILL,LOCAL,REMOTE outcome
