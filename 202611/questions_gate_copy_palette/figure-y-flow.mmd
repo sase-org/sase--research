@@ -1,0 +1,43 @@
+---
+title: "What should y do in the questions modal?"
+accTitle: "Questions copy key flow"
+accDescr: "Today y copies every question and answer at once. The proposal opens the existing Copy as palette so a second key copies an agent snippet, a derived path, or a built-in such as all Q and A."
+config:
+  layout: dagre
+  flowchart:
+    rankSpacing: 12
+    nodeSpacing: 12
+    wrappingWidth: 200
+---
+flowchart TD
+  subgraph TODAY["Today"]
+    direction TB
+    Y1["`**y key**`"]
+    ALL1["`**Clipboard**<br/>all questions and answers`"]
+    Y1 -->|copies immediately| ALL1
+  end
+  subgraph PROPOSED["Proposed"]
+    direction TB
+    Y2["`**y key**`"]
+    PAL["`**Copy as palette**`"]
+    KEY{{"`**Second key?**`"}}
+    SNIP["`**Agent snippet**<br/>keys 1 to 9`"]
+    PATH["`**Derived path or URL**<br/>keys p and u`"]
+    BUILTIN["`**Built-in**<br/>y all Q and A, s snapshot`"]
+    Y2 ==>|opens| PAL
+    PAL --> KEY
+    KEY -->|"1 to 9"| SNIP
+    KEY -->|p or u| PATH
+    KEY -->|y or s| BUILTIN
+  end
+  ALL1 -.->|"replace"| Y2
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef muted fill:#F3F4F6,stroke:#6B7280,stroke-width:1.5px,color:#1F2937
+  class Y1,ALL1 muted
+  class Y2,PAL focus
+  class KEY decision
+  class SNIP,PATH,BUILTIN outcome
+  style TODAY fill:none,stroke:#6B7280
+  style PROPOSED fill:none,stroke:#3B78C2

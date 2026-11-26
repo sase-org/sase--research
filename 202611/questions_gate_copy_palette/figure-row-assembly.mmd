@@ -1,0 +1,36 @@
+---
+title: "Where do the copy-palette rows come from?"
+accTitle: "Questions copy row assembly"
+accDescr: "The current question feeds an agent copy array and a derived-token extractor. Agent texts take digit keys first. Duplicate derived tokens are skipped. Leftover paths and URLs collapse to grouped rows. Built-in y, t, and s rows always remain."
+config:
+  flowchart:
+    rankSpacing: 14
+    nodeSpacing: 16
+    wrappingWidth: 240
+---
+flowchart TD
+  Q["`**Current question**`"]
+  AGENT["`**copy array**<br/>agent-authored snippets`"]
+  EXTRACT["`**Extractor**<br/>paths, URLs, refs`"]
+  DEDUP{{"`**Already authored?**`"}}
+  DIGITS["`**Digit keys 1 to 9**`"]
+  GROUP["`**Grouped p and u**`"]
+  BUILTIN["`**Built-ins y, t, s**`"]
+  PALETTE["`**Copy as palette**`"]
+  Q --> AGENT
+  Q --> EXTRACT
+  AGENT --> DIGITS
+  EXTRACT --> DEDUP
+  DEDUP -->|No, slot free| DIGITS
+  DEDUP -->|Yes or full| GROUP
+  DIGITS ==> PALETTE
+  GROUP --> PALETTE
+  BUILTIN --> PALETTE
+  classDef focus fill:#E8F1FB,stroke:#3B78C2,stroke-width:1.5px,color:#0F2E52
+  classDef decision fill:#FFF7E6,stroke:#C77C02,stroke-width:1.5px,color:#4A3000
+  classDef outcome fill:#E7F5EC,stroke:#2E7D4F,stroke-width:1.5px,color:#123D24
+  classDef muted fill:#F3F4F6,stroke:#6B7280,stroke-width:1.5px,color:#1F2937
+  class Q,AGENT,EXTRACT focus
+  class DEDUP decision
+  class DIGITS,PALETTE outcome
+  class GROUP,BUILTIN muted
